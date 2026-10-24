@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Moonlit Sinus Log</title>
+<meta name="description" content="Daily sinus log with moon phase and Hout Bay weather, synced to a private GitHub repo.">
+<meta name="theme-color" content="#2C5C8C" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F141B" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single working column — tonight's moon, then the log form, then history and the full-moon test */
+:root{
+  --bg:#EEF1F4; --surface:#FFFFFF; --sunk:#E4E9EE; --fg:#18212C; --muted:#5A6676; --line:#D3DAE2;
+  --accent:#2C5C8C; --accent-ink:#FFFFFF; --moon:#EDE6CF; --moon-dark:#C6CDD6; --halo:rgba(44,92,140,.10);
+  --ok:#3F8A6B; --warn:#C08A1E; --bad:#BE4A38;
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0F141B; --surface:#171E27; --sunk:#1E2732; --fg:#E4E9EF; --muted:#95A2B3; --line:#2A3442;
+  --accent:#86ADD8; --accent-ink:#0F141B; --moon:#E9E1C6; --moon-dark:#2B3441; --halo:rgba(134,173,216,.12);
+  --ok:#6CBB98; --warn:#E0AE4C; --bad:#E57B68; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0F141B; --surface:#171E27; --sunk:#1E2732; --fg:#E4E9EF; --muted:#95A2B3; --line:#2A3442;
+  --accent:#86ADD8; --accent-ink:#0F141B; --moon:#E9E1C6; --moon-dark:#2B3441; --halo:rgba(134,173,216,.12);
+  --ok:#6CBB98; --warn:#E0AE4C; --bad:#E57B68; color-scheme:dark }
+
+*{box-sizing:border-box}
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html,body{margin:0}
+[hidden]{display:none!important}
+img{max-width:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.5}
+.wrap{max-width:760px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));display:flex;flex-direction:column;gap:22px}
+h1,h2{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:1.9rem;font-weight:700;line-height:1.1}
+h2{font-size:1.2rem;font-weight:700}
+.eyebrow{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+p{margin:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0}
+
+/* Moon header */
+.sky{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center}
+.moonbox{width:132px;height:132px;border-radius:50%;background:radial-gradient(circle, var(--halo) 55%, transparent 72%);display:grid;place-items:center}
+.moon-facts{display:flex;flex-direction:column;gap:6px;min-width:0}
+.phase-name{font-family:var(--f-display);font-size:1.5rem;font-weight:700;line-height:1.15}
+.facts{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.9rem}
+.facts b{font-weight:600}
+.window-flag{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:.8rem;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--sunk);color:var(--fg)}
+.window-flag.on{background:var(--accent);color:var(--accent-ink)}
+@media (max-width:460px){ .sky{grid-template-columns:1fr;justify-items:start} .moonbox{width:112px;height:112px} }
+
+/* Week strip */
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.day{border:1px solid var(--line);border-radius:8px;padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--surface);color:var(--fg);font:inherit;cursor:pointer;min-width:0}
+.day:hover{border-color:var(--accent)}
+.day:focus-visible,.chip:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.day .dn{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.day .dd{font-family:var(--f-mono);font-size:.85rem}
+.day .sev{font-family:var(--f-mono);font-size:.8rem;font-weight:500;min-height:1.2em}
+.day.sel{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.day.empty .sev{color:var(--muted)}
+
+/* Form */
+form{display:flex;flex-direction:column;gap:16px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+label.lbl{font-size:.82rem;font-weight:600;display:block;margin-bottom:6px}
+input[type=date],textarea,select{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
+textarea{min-height:70px;resize:vertical}
+.sevwrap{display:flex;flex-direction:column;gap:6px}
+.sevtop{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.sevnum{font-family:var(--f-display);font-size:2rem;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.sevword{font-size:.9rem;color:var(--muted)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.scale{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:.7rem;color:var(--muted)}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+legend{font-size:.82rem;font-weight:600;padding:0;margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;font-size:.84rem;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--fg);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn{font:inherit;font-weight:600;padding:9px 18px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--fg);border-color:var(--line)}
+.btn.danger{background:transparent;color:var(--bad);border-color:var(--bad)}
+.btn:disabled{opacity:.5;cursor:default}
+.status{font-size:.85rem;color:var(--muted)}
+.status.err{color:var(--bad)}
+.confirm{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.88rem;padding:8px 10px;border-radius:8px;background:var(--sunk)}
+
+/* Analysis */
+.statgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--sunk);border-radius:8px;padding:10px 12px;min-width:0}
+.stat .v{font-family:var(--f-display);font-size:1.4rem;font-weight:700;font-variant-numeric:tabular-nums}
+.stat .k{font-size:.76rem;color:var(--muted)}
+@media (max-width:460px){ .statgrid{grid-template-columns:1fr 1fr} }
+.chartbox{overflow-x:auto}
+.chartbox svg{display:block;width:100%;min-width:320px;height:auto}
+.wx{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px}
+.wx .cell{background:var(--sunk);border-radius:8px;padding:8px 10px;min-width:0}
+.wx .cell .v{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:.95rem;font-weight:500}
+.wx .cell .k{font-size:.72rem;color:var(--muted)}
+.wx .tagline{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px}
+.wx .tag{font-size:.76rem;font-weight:600;padding:2px 9px;border-radius:999px;background:var(--accent);color:var(--accent-ink)}
+.wx .none{grid-column:1/-1;font-size:.85rem;color:var(--muted)}
+.tblwrap{overflow-x:auto}
+table.sus{width:100%;border-collapse:collapse;font-size:.88rem;min-width:340px}
+table.sus th{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;text-align:right;padding:6px 8px;border-bottom:1px solid var(--line)}
+table.sus th:first-child,table.sus td:first-child{text-align:left}
+table.sus td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+table.sus td:first-child{font-family:var(--f-body)}
+table.sus tr.hot td{background:var(--halo)}
+table.sus tr.hot td:first-child{font-weight:600}
+.lift{display:inline-block;min-width:3.2em;padding:1px 6px;border-radius:5px;background:var(--sunk)}
+tr.hot .lift{background:var(--bad);color:#fff}
+.verdict{font-size:.92rem;padding:10px 12px;border-left:3px solid var(--accent);background:var(--sunk);border-radius:0 8px 8px 0}
+
+/* History */
+.hist{display:flex;flex-direction:column}
+.hrow{display:grid;grid-template-columns:5.8rem 2.2rem 1.6rem 1fr;gap:10px;align-items:center;padding:9px 4px;border-top:1px solid var(--line);background:none;border-left:0;border-right:0;border-bottom:0;color:var(--fg);font:inherit;text-align:left;cursor:pointer;width:100%}
+.hrow:hover{background:var(--sunk)}
+.hrow .tags{font-size:.8rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.pill{font-family:var(--f-mono);font-size:.8rem;font-weight:500;text-align:center;border-radius:6px;padding:1px 0;color:#fff}
+.empty-state{padding:14px;border:1px dashed var(--line);border-radius:8px;color:var(--muted);font-size:.9rem}
+.note{font-size:.84rem;color:var(--muted)}
+.banner{font-size:.85rem;padding:8px 12px;border-radius:8px;background:var(--sunk);border:1px solid var(--line)}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important} }
+.syncbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.syncpill{font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--sunk);color:var(--fg)}
+.syncpill.ok{background:var(--ok);color:#fff}
+.syncpill.warn{background:var(--warn);color:#fff}
+.syncpill.err{background:var(--bad);color:#fff}
+.errtext{color:var(--bad)}
+.linkbtn{font:inherit;font-size:.85rem;background:none;border:0;padding:4px 2px;color:var(--accent);text-decoration:underline;cursor:pointer}
+.field{display:flex;flex-direction:column;gap:4px;flex:1 1 180px;min-width:0}
+.field input{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
+.filebtn{position:relative;overflow:hidden}
+.filebtn input{position:absolute;inset:0;opacity:0;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:6px">
+    <span class="eyebrow">Hout Bay · 34.0° S</span>
+    <h1>Moonlit Sinus Log</h1>
+    <p class="muted">Log congestion each evening. Moon phase and Hout Bay weather are added to every entry automatically, and after a few lunar cycles the tests below show what actually lines up with your flares.</p>
+  </header>
+
+  <div class="syncbar">
+    <span class="syncpill" id="syncPill">On this device only</span>
+    <button class="linkbtn" type="button" id="syncNow">Sync now</button>
+    <button class="linkbtn" type="button" id="setBtn" aria-expanded="false" aria-controls="settings">Settings</button>
+  </div>
+  <p class="note" id="syncMsg" style="margin-top:-12px"></p>
+
+  <section class="panel" id="settings" hidden aria-labelledby="seth">
+    <h2 id="seth">Sync and backup</h2>
+    <form id="ghForm" style="gap:12px" novalidate>
+      <div class="row">
+        <label class="field"><span class="lbl" style="margin:0">GitHub username</span><input id="ghOwner" autocomplete="username" autocapitalize="off" spellcheck="false"></label>
+        <label class="field"><span class="lbl" style="margin:0">Data repo</span><input id="ghRepo" autocapitalize="off" spellcheck="false"></label>
+      </div>
+      <label class="field"><span class="lbl" style="margin:0">Access token</span><input id="ghToken" type="password" autocomplete="off" placeholder="github_pat_…" spellcheck="false"></label>
+      <p class="note" id="tokenState"></p>
+      <div class="actions">
+        <button class="btn" type="submit">Connect</button>
+        <button class="btn ghost" type="button" id="disconnectBtn">Remove token</button>
+      </div>
+      <p class="note" id="connMsg" role="status"></p>
+      <p class="note">The token is stored only on this device and is sent only to GitHub. Use a fine-grained token limited to the data repo.</p>
+    </form>
+    <div class="actions">
+      <button class="btn ghost" type="button" id="backupBtn">Download backup</button>
+      <span class="btn ghost filebtn">Restore backup<input type="file" id="restoreFile" accept="application/json,.json" aria-label="Restore from a backup file"></span>
+      <button class="btn ghost" type="button" id="csvBtn2">Download CSV</button>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="tonight">
+    <div class="sky">
+      <div class="moonbox"><svg id="moonSvg" viewBox="0 0 100 100" width="100" height="100" role="img" aria-label="Current moon phase"></svg></div>
+      <div class="moon-facts">
+        <span class="eyebrow" id="tonight">The moon right now, as seen from the Southern Hemisphere</span>
+        <span class="phase-name" id="phaseName">Waxing gibbous</span>
+        <div class="facts">
+          <span><b class="mono" id="illum">—</b> lit</span>
+          <span>Lunar day <b class="mono" id="age">—</b></span>
+          <span>Next full moon <b class="mono" id="nextFull">—</b></span>
+        </div>
+        <span class="window-flag" id="windowFlag">Outside the full-moon window</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="logh">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap">
+      <h2 id="logh">Log a day</h2>
+      <span class="note">Tap a day to fill or edit it</span>
+    </div>
+    <div class="week" id="week"></div>
+
+    <form id="form" novalidate>
+      <div class="row">
+        <div style="flex:1 1 160px;min-width:0">
+          <label class="lbl" for="date">Date</label>
+          <input type="date" id="date" required>
+        </div>
+        <div style="flex:2 1 220px;min-width:0" class="mono note" id="dateMoon"></div>
+      </div>
+
+      <div class="sevwrap">
+        <label class="lbl" for="sev" style="margin:0">Congestion today</label>
+        <div class="sevtop"><span class="sevnum" id="sevNum">0</span><span class="sevword" id="sevWord">Clear</span></div>
+        <input type="range" id="sev" min="0" max="10" step="1" value="0" aria-describedby="sevWord">
+        <div class="scale"><span>0 clear</span><span>5 struggling</span><span>10 floored</span></div>
+      </div>
+
+      <fieldset><legend>Symptoms</legend><div class="chips" data-group="symptoms"></div></fieldset>
+      <div>
+        <span class="lbl">Weather in Hout Bay <span class="muted" style="font-weight:400">· filled in automatically</span></span>
+        <div class="wx" id="wxBox"></div>
+      </div>
+      <fieldset><legend>Exposures in the last 24 hours</legend><div class="chips" data-group="exposures"></div></fieldset>
+      <fieldset><legend>What you took or did</legend><div class="chips" data-group="treatment"></div></fieldset>
+
+      <div>
+        <label class="lbl" for="notes">Notes</label>
+        <textarea id="notes" placeholder="Sleep, which side, anything unusual"></textarea>
+      </div>
+
+      <div class="actions">
+        <button class="btn" type="submit" id="saveBtn">Save entry</button>
+        <button class="btn ghost" type="button" id="newBtn">Clear form</button>
+        <button class="btn danger" type="button" id="delBtn" hidden>Delete</button>
+        <span class="status" id="status" role="status"></span>
+      </div>
+      <div class="confirm" id="confirm" hidden>
+        <span>Delete the entry for <b id="confirmDate"></b>?</span>
+        <button class="btn danger" type="button" id="confirmYes">Delete</button>
+        <button class="btn ghost" type="button" id="confirmNo">Keep it</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="panel" aria-labelledby="testh">
+    <h2 id="testh">The full-moon test</h2>
+    <p class="note">The full-moon window is the 3 days either side of full moon, about 20% of every cycle. If the moon has nothing to do with it, roughly 1 in 5 flare days will land in the window by chance.</p>
+    <div class="statgrid">
+      <div class="stat"><div class="v mono" id="sIn">—</div><div class="k">Avg in window</div></div>
+      <div class="stat"><div class="v mono" id="sOut">—</div><div class="k">Avg outside</div></div>
+      <div class="stat"><div class="v mono" id="sFlare">—</div><div class="k">Flare days in window</div></div>
+    </div>
+    <div class="chartbox"><svg id="scatter" viewBox="0 0 640 260" aria-label="Congestion against days from full moon"></svg></div>
+    <div class="chartbox"><svg id="timeline" viewBox="0 0 640 150" aria-label="Congestion over the last 90 days with full moons marked"></svg></div>
+    <p class="verdict" id="verdict">Log at least 60 days across two full moons before reading anything into this.</p>
+  </section>
+
+  <section class="panel" aria-labelledby="sush">
+    <h2 id="sush">Suspects</h2>
+    <p class="note">How often each factor was present on your flare days (6 or higher) compared with your other logged days. Weather counts if it hit on the day or the day before, since sinuses often react with a lag. A factor needs at least 4 flare days and a clear gap before it gets highlighted.</p>
+    <div class="tblwrap"><table class="sus" id="sus"><thead><tr><th>Factor</th><th>Flare days</th><th>Other days</th><th>Gap</th></tr></thead><tbody></tbody></table></div>
+    <p class="note" id="wxSource">Weather: Open-Meteo model data for Hout Bay (34.04° S, 18.36° E), added each morning for the day before.</p>
+    <div class="actions"><button class="btn ghost" type="button" id="csvBtn" hidden>Download as CSV</button></div>
+  </section>
+
+  <section class="panel" aria-labelledby="histh">
+    <h2 id="histh">History</h2>
+    <div class="hist" id="hist"></div>
+  </section>
+</div>
+
+<script>
+(function(){
+"use strict";
+var SYN = 29.530588853;
+var GROUPS = {
+  symptoms:["Blocked nose","Facial pressure","Headache","Post-nasal drip","Discoloured mucus","Reduced smell","Ear pressure","Ache behind eyes","Fever"],
+  exposures:["Sawdust / sanding","Acetate / solvent fumes","Welding fumes","Garden / pollen","Dust (Landy, roads)","Alcohol","Poor sleep","Aircon"],
+  treatment:["Saline rinse","Steroid spray","Decongestant","Antihistamine","Painkiller","Antibiotic","Steam"]
+};
+var WORDS = ["Clear","Barely there","Mild","Noticeable","Annoying","Struggling","Rough","Bad","Very bad","Severe","Floored"];
+var FLARE = 6, WINDOW = 3;
+
+/* ---------- Astronomy: Sun–Moon elongation, low-precision Meeus terms ---------- */
+function rad(d){return d*Math.PI/180}
+function norm(a){a%=360;return a<0?a+360:a}
+function elongation(date){
+  var jd = date.getTime()/86400000 + 2440587.5;
+  var T = (jd-2451545.0)/36525;
+  var Lm = 218.3164477 + 481267.88123421*T;
+  var D  = 297.8501921 + 445267.1114034*T;
+  var M  = 357.5291092 + 35999.0502909*T;
+  var Mp = 134.9633964 + 477198.8675055*T;
+  var F  = 93.2720950 + 483202.0175233*T;
+  var lm = Lm + 6.289*Math.sin(rad(Mp)) + 1.274*Math.sin(rad(2*D-Mp)) + 0.658*Math.sin(rad(2*D))
+            + 0.214*Math.sin(rad(2*Mp)) - 0.186*Math.sin(rad(M)) - 0.114*Math.sin(rad(2*F));
+  var L0 = 280.46646 + 36000.76983*T;
+  var ls = L0 + 1.914602*Math.sin(rad(M)) + 0.019993*Math.sin(rad(2*M));
+  return norm(lm-ls);
+}
+function moonAt(date){
+  var e = elongation(date);
+  var illum = (1-Math.cos(rad(e)))/2;
+  var age = e/360*SYN;
+  var fromFull = (e-180)/360*SYN; /* signed days from full moon, -14.8..+14.8 */
+  return {e:e, illum:illum, age:age, fromFull:fromFull, name:phaseName(e)};
+}
+function phaseName(e){
+  if(e<6||e>=354) return "New moon";
+  if(e<84) return "Waxing crescent";
+  if(e<96) return "First quarter";
+  if(e<174) return "Waxing gibbous";
+  if(e<186) return "Full moon";
+  if(e<264) return "Waning gibbous";
+  if(e<276) return "Last quarter";
+  return "Waning crescent";
+}
+/* Find the next time elongation crosses 180° (full) after `from` */
+function nextFull(from){
+  var t = from.getTime(), step = 3600000, prev = elongation(new Date(t));
+  for(var i=0;i<24*31;i++){
+    t += step; var cur = elongation(new Date(t));
+    if(prev<180 && cur>=180){
+      var lo=t-step, hi=t;
+      for(var j=0;j<20;j++){ var mid=(lo+hi)/2; if(elongation(new Date(mid))<180) lo=mid; else hi=mid; }
+      return new Date(hi);
+    }
+    prev = cur;
+  }
+  return null;
+}
+function fullMoonsBetween(a,b){
+  var out=[], t=new Date(a.getTime()-86400000);
+  while(true){ var f=nextFull(t); if(!f||f>b) break; out.push(f); t=new Date(f.getTime()+86400000*2); }
+  return out;
+}
+
+/* ---------- Moon drawing (Southern Hemisphere: waxing side lit on the left) ---------- */
+function drawMoon(svg, m){
+  var r=44, cx=50, cy=50;
+  var waxing = m.e < 180;
+  var litRight = !waxing;            /* southern hemisphere flip */
+  var rx = r*Math.abs(1-2*m.illum);
+  var gibbous = m.illum > 0.5;
+  var outer = litRight?1:0;
+  var term = gibbous?outer:1-outer;
+  var d = "M"+cx+","+(cy-r)+" A"+r+","+r+" 0 0,"+outer+" "+cx+","+(cy+r)+" A"+rx.toFixed(2)+","+r+" 0 0,"+term+" "+cx+","+(cy-r)+" Z";
+  svg.innerHTML = '<circle cx="50" cy="50" r="44" fill="var(--moon-dark)"/>' +
+    (m.illum>0.005?'<path d="'+d+'" fill="var(--moon)"/>':'') +
+    '<circle cx="50" cy="50" r="44" fill="none" stroke="var(--line)" stroke-width="1"/>';
+}
+
+/* ---------- Dates ---------- */
+function pad(n){return (n<10?"0":"")+n}
+function ymd(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+function parseYmd(s){var p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2],21,0,0)} /* 9pm local, a typical logging time */
+var DOW=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"], MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function nice(d){return DOW[d.getDay()]+" "+d.getDate()+" "+MON[d.getMonth()]}
+function sevColor(v){return v>=FLARE?"var(--bad)":v>=3?"var(--warn)":"var(--ok)"}
+
+/* ---------- Weather ---------- */
+var weather = {};   /* date -> Open-Meteo daily row */
+var COMPASS=["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
+function compass(deg){return COMPASS[Math.round(((deg%360)+360)%360/22.5)%16]}
+function prevDay(ds){var d=parseYmd(ds);d.setDate(d.getDate()-1);return ymd(d)}
+function wxFlags(ds){
+  var w=weather[ds]; if(!w) return null;
+  var p=weather[prevDay(ds)], dir=w.wind_dir_deg, gust=w.gust_max_kmh||0, rain=w.rain_mm||0;
+  var dp=(p&&typeof p.pressure_hpa==="number"&&typeof w.pressure_hpa==="number")?w.pressure_hpa-p.pressure_hpa:null;
+  return {
+    southeaster: dir>=100&&dir<=190&&gust>=40,
+    front: dir>=260&&dir<=350&&(rain>=1||gust>=45),
+    rain: rain>=1,
+    gusty: gust>=55,
+    humid: (w.rh_mean||0)>=85,
+    pdrop: dp!==null&&dp<=-4,
+    lowp: typeof w.pressure_hpa==="number"&&w.pressure_hpa<1012,
+    dp: dp
+  };
+}
+var WXF=[
+  ["southeaster","Southeaster (gusts 40+ km/h)"],
+  ["front","Northwester / cold front"],
+  ["rain","Rain (1 mm+)"],
+  ["gusty","Strong gusts (55+ km/h)"],
+  ["humid","Humid (85%+)"],
+  ["pdrop","Pressure drop (4+ hPa in a day)"],
+  ["lowp","Low pressure (under 1012 hPa)"]
+];
+/* true if the flag held on the day or the day before */
+function wxHit(ds,key){var a=wxFlags(ds),b=wxFlags(prevDay(ds));return !!((a&&a[key])||(b&&b[key]))}
+function wxKnown(ds){return !!weather[ds]}
+function wxShort(ds){
+  var w=weather[ds]; if(!w) return "";
+  return (w.rain_mm>=0.5?w.rain_mm.toFixed(0)+"mm · ":"")+compass(w.wind_dir_deg)+" "+Math.round(w.gust_max_kmh)+" · "+Math.round(w.pressure_hpa)+"hPa";
+}
+function renderWx(ds){
+  var box=$("wxBox"), w=weather[ds];
+  if(!w){box.innerHTML='<div class="none">'+(ds>=ymd(new Date())?"Weather for this day is added the next morning.":"No weather on record for this day.")+'</div>';return}
+  var f=wxFlags(ds), dp=f.dp;
+  var cells=[
+    [w.rain_mm.toFixed(1)+" mm","Rain"],
+    [compass(w.wind_dir_deg)+" "+Math.round(w.wind_max_kmh),"Wind km/h"],
+    [Math.round(w.gust_max_kmh)+" km/h","Max gust"],
+    [w.pressure_hpa.toFixed(0)+(dp===null?"":" ("+(dp>0?"+":"")+dp.toFixed(1)+")"),"Pressure hPa"],
+    [Math.round(w.rh_mean)+"%","Humidity"],
+    [Math.round(w.tmin)+"–"+Math.round(w.tmax)+"°","Temp °C"]
+  ];
+  var tags=WXF.filter(function(x){return f[x[0]]}).map(function(x){return '<span class="tag">'+x[1].replace(/ \(.*\)/,"")+'</span>'}).join("");
+  box.innerHTML=cells.map(function(c){return '<div class="cell"><div class="v">'+c[0]+'</div><div class="k">'+c[1]+'</div></div>'}).join("")+(tags?'<div class="tagline">'+tags+'</div>':"");
+}
+
+/* ---------- State ---------- */
+var entries = {};   /* date -> record */
+var editing = null;
+var $ = function(id){return document.getElementById(id)};
+
+/* Chips */
+Object.keys(GROUPS).forEach(function(g){
+  var box = document.querySelector('[data-group="'+g+'"]');
+  GROUPS[g].forEach(function(name,i){
+    var b=document.createElement("button"); b.type="button"; b.className="chip"; b.textContent=name;
+    b.id="chip-"+g+"-"+i; b.setAttribute("aria-pressed","false"); b.dataset.value=name;
+    b.addEventListener("click",function(){b.setAttribute("aria-pressed", b.getAttribute("aria-pressed")==="true"?"false":"true")});
+    box.appendChild(b);
+  });
+});
+function readChips(g){return Array.prototype.map.call(document.querySelectorAll('[data-group="'+g+'"] .chip[aria-pressed="true"]'),function(b){return b.dataset.value})}
+function setChips(g,vals){vals=vals||[];document.querySelectorAll('[data-group="'+g+'"] .chip').forEach(function(b){b.setAttribute("aria-pressed", vals.indexOf(b.dataset.value)>=0?"true":"false")})}
+
+/* Severity slider */
+function syncSev(){var v=+$("sev").value;$("sevNum").textContent=v;$("sevNum").style.color=sevColor(v);$("sevWord").textContent=WORDS[v]}
+$("sev").addEventListener("input",syncSev);
+
+function showDateMoon(){
+  var s=$("date").value; if(!s){$("dateMoon").textContent="";return}
+  var m=moonAt(parseYmd(s));
+  var off=m.fromFull; var rel = Math.abs(off)<0.5?"on full moon":(Math.abs(off).toFixed(1)+" days "+(off<0?"before":"after")+" full moon");
+  $("dateMoon").textContent = m.name+" · "+Math.round(m.illum*100)+"% lit · "+rel;
+  renderWx(s);
+}
+$("date").addEventListener("change",function(){loadForm($("date").value)});
+
+function loadForm(dateStr){
+  $("date").value=dateStr; var e=entries[dateStr]; editing = e?dateStr:null;
+  $("sev").value = e?e.severity:0; syncSev();
+  Object.keys(GROUPS).forEach(function(g){setChips(g, e?e[g]:[])});
+  $("notes").value = e&&e.notes?e.notes:"";
+  $("delBtn").hidden = !e; $("confirm").hidden=true;
+  $("saveBtn").textContent = e?"Update entry":"Save entry";
+  $("status").textContent=""; $("status").className="status";
+  showDateMoon(); renderWeek();
+}
+$("newBtn").addEventListener("click",function(){loadForm(ymd(new Date()))});
+
+/* Save */
+$("form").addEventListener("submit",function(ev){
+  ev.preventDefault();
+  var ds=$("date").value; if(!ds){setStatus("Pick a date first.",true);return}
+  var m=moonAt(parseYmd(ds));
+  var rec={date:ds, severity:+$("sev").value, notes:$("notes").value.trim(),
+    moonPhase:m.name, illumination:Math.round(m.illum*1000)/1000, lunarDay:Math.round(m.age*10)/10,
+    daysFromFull:Math.round(m.fromFull*10)/10, updatedAt:new Date().toISOString()};
+  Object.keys(GROUPS).forEach(function(g){rec[g]=readChips(g)});
+  commit(rec); loadForm(ds);
+  setStatus(cfg.token?"Saved. Syncing to GitHub…":"Saved on this device.");
+});
+function setStatus(t,err){$("status").textContent=t;$("status").className="status"+(err?" err":"")}
+
+/* Delete with in-page confirmation */
+$("delBtn").addEventListener("click",function(){$("confirmDate").textContent=nice(parseYmd($("date").value));$("confirm").hidden=false});
+$("confirmNo").addEventListener("click",function(){$("confirm").hidden=true});
+$("confirmYes").addEventListener("click",function(){
+  var ds=$("date").value; $("confirm").hidden=true;
+  commit({date:ds,deleted:true,updatedAt:new Date().toISOString()}); loadForm(ds); setStatus("Deleted.");
+});
+
+/* ---------- Rendering ---------- */
+function renderTonight(){
+  var now=new Date(), m=moonAt(now); drawMoon($("moonSvg"),m);
+  $("phaseName").textContent=m.name; $("illum").textContent=Math.round(m.illum*100)+"%";
+  $("age").textContent=m.age.toFixed(1)+" / 29.5";
+  var f=nextFull(now); if(f){var days=(f-now)/86400000;
+    $("nextFull").textContent=nice(f)+" "+pad(f.getHours())+":"+pad(f.getMinutes())+(days<1.5?" (tomorrow-ish)":" (in "+days.toFixed(1)+" d)");}
+  var inW=Math.abs(m.fromFull)<=WINDOW; var flag=$("windowFlag");
+  flag.textContent = inW?"Inside the full-moon window":"Outside the full-moon window"; flag.className="window-flag"+(inW?" on":"");
+}
+function renderWeek(){
+  var box=$("week"); box.innerHTML=""; var today=new Date();
+  for(var i=6;i>=0;i--){
+    var d=new Date(today.getFullYear(),today.getMonth(),today.getDate()-i), s=ymd(d), e=entries[s];
+    var b=document.createElement("button"); b.type="button"; b.id="day-"+s;
+    b.className="day"+(e?"":" empty")+($("date").value===s?" sel":"");
+    b.innerHTML='<span class="dn">'+DOW[d.getDay()]+'</span><span class="dd">'+d.getDate()+'</span><span class="sev">'+(e?e.severity:"—")+'</span>';
+    if(e) b.querySelector(".sev").style.color=sevColor(e.severity);
+    b.setAttribute("aria-label",nice(d)+(e?", logged "+e.severity+" of 10":", not logged"));
+    (function(s){b.addEventListener("click",function(){loadForm(s)})})(s);
+    box.appendChild(b);
+  }
+}
+function list(){return Object.keys(entries).sort().map(function(k){return entries[k]})}
+function renderHistory(){
+  var box=$("hist"), rows=list().reverse(); box.innerHTML="";
+  if(!rows.length){box.innerHTML='<div class="empty-state">No entries yet. Start by back-filling the last few days of this flare in the week strip above, then log each evening. Every entry gets its moon phase stamped automatically.</div>';return}
+  rows.forEach(function(e){
+    var b=document.createElement("button"); b.type="button"; b.className="hrow"; b.id="h-"+e.date;
+    var m=moonAt(parseYmd(e.date)), wx=wxShort(e.date), tags=(wx?wx+" — ":"")+[].concat(e.symptoms||[],e.exposures||[]).join(", ");
+    b.innerHTML='<span class="mono" style="font-size:.85rem">'+nice(parseYmd(e.date))+'</span><span class="pill" style="background:'+sevColor(e.severity)+'">'+e.severity+'</span>'+
+      '<svg viewBox="0 0 100 100" width="22" height="22" aria-hidden="true"></svg><span class="tags"></span>';
+    b.querySelector(".tags").textContent = tags || (e.notes||"");
+    drawMoon(b.querySelector("svg"),m);
+    b.addEventListener("click",function(){loadForm(e.date);window.scrollTo({top:$("logh").getBoundingClientRect().top+window.scrollY-20,behavior:"smooth"})});
+    box.appendChild(b);
+  });
+}
+function renderAnalysis(){
+  var rows=list(), inW=[], outW=[], flares=0, flaresIn=0;
+  rows.forEach(function(e){var off=moonAt(parseYmd(e.date)).fromFull; (Math.abs(off)<=WINDOW?inW:outW).push(e.severity);
+    if(e.severity>=FLARE){flares++; if(Math.abs(off)<=WINDOW) flaresIn++;}});
+  var avg=function(a){return a.length?(a.reduce(function(x,y){return x+y},0)/a.length):null};
+  var ai=avg(inW), ao=avg(outW);
+  $("sIn").textContent = ai===null?"—":ai.toFixed(1); $("sOut").textContent = ao===null?"—":ao.toFixed(1);
+  $("sFlare").textContent = flares?(flaresIn+" / "+flares):"—";
+  $("csvBtn").hidden = !rows.length;
+
+  /* Scatter: severity vs days from full moon */
+  var W=640,H=260,L=36,R=12,T=14,B=34, x=function(v){return L+(v+15)/30*(W-L-R)}, y=function(v){return T+(10-v)/10*(H-T-B)};
+  var s='<rect x="'+x(-WINDOW)+'" y="'+T+'" width="'+(x(WINDOW)-x(-WINDOW))+'" height="'+(H-T-B)+'" fill="var(--halo)"/>';
+  [0,5,10].forEach(function(v){s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="var(--line)" stroke-width="1"/><text x="'+(L-8)+'" y="'+(y(v)+4)+'" text-anchor="end" font-size="11" font-family="IBM Plex Mono, monospace" fill="var(--muted)">'+v+'</text>'});
+  [-14,-7,0,7,14].forEach(function(v){s+='<text x="'+x(v)+'" y="'+(H-14)+'" text-anchor="middle" font-size="11" font-family="IBM Plex Mono, monospace" fill="var(--muted)">'+(v===0?"full":(v>0?"+":"")+v)+'</text>'});
+  s+='<line x1="'+x(0)+'" x2="'+x(0)+'" y1="'+T+'" y2="'+(H-B)+'" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3 3"/>';
+  s+='<text x="'+(W-R)+'" y="'+(H-2)+'" text-anchor="end" font-size="10.5" fill="var(--muted)" font-family="IBM Plex Sans, sans-serif">days from full moon</text>';
+  rows.forEach(function(e){var off=moonAt(parseYmd(e.date)).fromFull; s+='<circle cx="'+x(off).toFixed(1)+'" cy="'+y(e.severity).toFixed(1)+'" r="5" fill="'+sevColor(e.severity)+'" fill-opacity=".8" stroke="var(--surface)" stroke-width="1"><title>'+e.date+': '+e.severity+'/10</title></circle>'});
+  if(!rows.length) s+='<text x="'+(W/2)+'" y="'+(H/2)+'" text-anchor="middle" font-size="13" fill="var(--muted)" font-family="IBM Plex Sans, sans-serif">Each entry lands here by how far it was from full moon</text>';
+  $("scatter").innerHTML=s;
+
+  /* Timeline: last 90 days */
+  var H2=150,T2=12,B2=26, end=new Date(), start=new Date(end.getFullYear(),end.getMonth(),end.getDate()-89);
+  var xt=function(d){return L+((d-start)/86400000)/90*(W-L-R)}, yt=function(v){return T2+(10-v)/10*(H2-T2-B2)};
+  var t='';
+  fullMoonsBetween(start,end).forEach(function(f){var cx=xt(f);
+    t+='<rect x="'+(cx-WINDOW/90*(W-L-R))+'" y="'+T2+'" width="'+(2*WINDOW/90*(W-L-R))+'" height="'+(H2-T2-B2)+'" fill="var(--halo)"/>'+
+       '<circle cx="'+cx+'" cy="'+(H2-10)+'" r="5" fill="var(--moon)" stroke="var(--line)"/><title>Full moon '+nice(f)+'</title>';});
+  t+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+yt(0)+'" y2="'+yt(0)+'" stroke="var(--line)"/>';
+  [0,10].forEach(function(v){t+='<text x="'+(L-8)+'" y="'+(yt(v)+4)+'" text-anchor="end" font-size="11" font-family="IBM Plex Mono, monospace" fill="var(--muted)">'+v+'</text>'});
+  var bw=Math.max(2,(W-L-R)/90-1.5);
+  rows.forEach(function(e){var d=parseYmd(e.date); if(d<start||d>end) return; var h=yt(0)-yt(e.severity);
+    t+='<rect x="'+(xt(d)-bw/2).toFixed(1)+'" y="'+yt(e.severity).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+Math.max(h,1).toFixed(1)+'" rx="1" fill="'+sevColor(e.severity)+'"><title>'+e.date+': '+e.severity+'/10</title></rect>'});
+  t+='<text x="'+L+'" y="'+(H2-2)+'" font-size="10.5" fill="var(--muted)" font-family="IBM Plex Sans, sans-serif">'+nice(start)+'</text><text x="'+(W-R)+'" y="'+(H2-2)+'" text-anchor="end" font-size="10.5" fill="var(--muted)" font-family="IBM Plex Sans, sans-serif">today</text>';
+  $("timeline").innerHTML=t;
+
+  /* Verdict */
+  var span = rows.length?((parseYmd(rows[rows.length-1].date)-parseYmd(rows[0].date))/86400000+1):0;
+  var cycles = rows.length?fullMoonsBetween(parseYmd(rows[0].date),parseYmd(rows[rows.length-1].date)).length:0;
+  var v;
+  if(rows.length<30||cycles<2) v="Not enough data yet: "+rows.length+" entries across "+cycles+" full moon"+(cycles===1?"":"s")+". Aim for 60+ logged days covering at least two full moons, ideally three, before reading anything into this.";
+  else if(flares<4) v="Only "+flares+" flare day"+(flares===1?"":"s")+" (6 or higher) so far. The pattern only shows once you have several flares to compare.";
+  else{ var share=flaresIn/flares;
+    if(share>=0.4 && ai-ao>=1.5) v="Flares are clustering near full moon: "+Math.round(share*100)+"% of flare days fall in the window, against about 20% expected by chance. Before crediting the moon, check whether the same days also share a weather or exposure tag.";
+    else if(share<=0.3) v="No full-moon effect so far: "+Math.round(share*100)+"% of flare days fall in the window, close to the 20% you'd get by chance. Look at the weather and exposure tags on your flare days instead.";
+    else v="Inconclusive: "+Math.round(share*100)+"% of flare days fall in the window (20% expected by chance). Keep logging.";}
+  $("verdict").textContent=v;
+  renderSuspects(rows);
+}
+function renderSuspects(rows){
+  var factors=[["moon","Full-moon window (±3 days)",function(e){return Math.abs(moonAt(parseYmd(e.date)).fromFull)<=WINDOW},function(){return true}]];
+  WXF.forEach(function(x){factors.push([x[0],x[1],function(e){return wxHit(e.date,x[0])},function(e){return wxKnown(e.date)}])});
+  GROUPS.exposures.forEach(function(name){factors.push(["x-"+name,name,function(e){return (e.exposures||[]).indexOf(name)>=0},function(){return true}])});
+  var out=factors.map(function(f){
+    var fl=0,flN=0,ot=0,otN=0;
+    rows.forEach(function(e){ if(!f[3](e)) return; var hit=f[2](e); if(e.severity>=FLARE){flN++; if(hit) fl++;} else {otN++; if(hit) ot++;} });
+    var pf=flN?fl/flN:null, po=otN?ot/otN:null, gap=(pf!==null&&po!==null)?pf-po:null;
+    return {name:f[1],fl:fl,flN:flN,ot:ot,otN:otN,pf:pf,po:po,gap:gap,hot:gap!==null&&flN>=4&&fl>=3&&gap>=0.25};
+  }).filter(function(r){return r.fl+r.ot>0||r.name.indexOf("Full-moon")===0||WXF.some(function(x){return x[1]===r.name})});
+  out.sort(function(a,b){return (b.gap===null?-9:b.gap)-(a.gap===null?-9:a.gap)});
+  var pct=function(n,d){return d?Math.round(n/d*100)+"% <span class=\"muted\">("+n+"/"+d+")</span>":"—"};
+  var body=$("sus").querySelector("tbody");
+  if(!rows.length){body.innerHTML='<tr><td colspan="4" class="muted" style="font-family:var(--f-body)">Once you have logged a few flare days and some clear days, each factor is ranked here by how much more often it shows up on bad days.</td></tr>';return}
+  body.innerHTML=out.map(function(r){
+    return '<tr class="'+(r.hot?"hot":"")+'"><td>'+r.name+'</td><td>'+pct(r.fl,r.flN)+'</td><td>'+pct(r.ot,r.otN)+'</td><td><span class="lift">'+(r.gap===null?"—":(r.gap>0?"+":"")+Math.round(r.gap*100))+'</span></td></tr>';
+  }).join("");
+}
+function renderAll(){renderWeek();renderHistory();renderAnalysis()}
+
+/* ---------- Files out and in ---------- */
+function download(name,text,type){
+  try{var url=URL.createObjectURL(new Blob([text],{type:type}));var a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(url);a.remove()},1000)}
+  catch(e){setSync("Couldn't create the file on this device.","err")}
+}
+function csvText(){
+  var head=["date","severity","moonPhase","illumination","daysFromFull","rain_mm","wind_dir","gust_kmh","pressure_hpa","humidity","symptoms","exposures","treatment","notes"];
+  var esc=function(v){v=Array.isArray(v)?v.join("; "):(v===undefined||v===null?"":String(v));return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+  return head.join(",")+"\n"+list().map(function(e){var m=moonAt(parseYmd(e.date));var w=weather[e.date]||{};e=Object.assign({},e,{moonPhase:m.name,illumination:Math.round(m.illum*100)+"%",daysFromFull:m.fromFull.toFixed(1),rain_mm:w.rain_mm,wind_dir:w.wind_dir_deg===undefined?"":compass(w.wind_dir_deg),gust_kmh:w.gust_max_kmh,pressure_hpa:w.pressure_hpa,humidity:w.rh_mean});return head.map(function(h){return esc(e[h])}).join(",")}).join("\n");
+}
+$("csvBtn").addEventListener("click",function(){download("sinus-moon-log-"+ymd(new Date())+".csv",csvText(),"text/csv")});
+$("csvBtn2").addEventListener("click",function(){download("sinus-moon-log-"+ymd(new Date())+".csv",csvText(),"text/csv")});
+$("backupBtn").addEventListener("click",function(){download("sinus-log-backup-"+ymd(new Date())+".json",JSON.stringify({format:"moonlit-sinus-log/1",exportedAt:new Date().toISOString(),entries:recs,weather:{days:weather}},null,1),"application/json")});
+$("restoreFile").addEventListener("change",function(){
+  var f=this.files&&this.files[0]; if(!f) return; var rd=new FileReader();
+  rd.onload=function(){try{
+    var j=JSON.parse(rd.result), inc=j.entries||{}, n=0;
+    Object.keys(inc).forEach(function(k){var r=inc[k]; if(!r||!r.date) return; if(!recs[k]||(r.updatedAt||"")>(recs[k].updatedAt||"")){recs[k]=r;dirty[k]=true;n++}});
+    if(j.weather&&j.weather.days){Object.keys(j.weather.days).forEach(function(k){if(!weather[k]) weather[k]=j.weather.days[k]});lsSet("weather",weather)}
+    persist(); rebuild(); renderAll(); showDateMoon(); setSync("Restored "+n+" entr"+(n===1?"y":"ies")+" from the backup."); scheduleSync();
+  }catch(e){setSync("That file isn't a Sinus Log backup.","err")}};
+  rd.readAsText(f); this.value="";
+});
+
+/* ---------- Device storage + GitHub sync ---------- */
+var LS="msl:";
+function lsGet(k,d){try{var v=localStorage.getItem(LS+k);return v?JSON.parse(v):d}catch(e){return d}}
+function lsSet(k,v){try{localStorage.setItem(LS+k,JSON.stringify(v))}catch(e){}}
+var recs=lsGet("recs",{});            /* date -> entry, or {date,deleted:true} */
+var dirty=lsGet("dirty",{});          /* dates changed since the last push */
+var cfg=lsGet("cfg",{owner:"theRustyFarEye",repo:"sinus-log-data",token:""});
+weather=lsGet("weather",{});
+var lastSync=lsGet("lastSync",null), syncing=false, syncTimer=null;
+function rebuild(){entries={};Object.keys(recs).forEach(function(k){if(recs[k]&&!recs[k].deleted) entries[k]=recs[k]})}
+function persist(){lsSet("recs",recs);lsSet("dirty",dirty)}
+function commit(rec){recs[rec.date]=rec;dirty[rec.date]=true;persist();rebuild();renderAll();scheduleSync()}
+function pending(){return Object.keys(dirty).length}
+function ago(iso){if(!iso) return "never";var s=(Date.now()-new Date(iso))/1000;if(s<90) return "just now";if(s<3600) return Math.round(s/60)+" min ago";if(s<86400) return Math.round(s/3600)+" h ago";return nice(new Date(iso))}
+function setSync(msg,kind){
+  var pill=$("syncPill"), p=pending();
+  var label=!cfg.token?"On this device only":syncing?"Syncing…":kind==="err"?"Sync problem":p?p+" waiting":"Synced";
+  pill.textContent=label; pill.className="syncpill"+(kind==="err"?" err":(!cfg.token||p)?" warn":" ok");
+  $("syncMsg").textContent=msg||(!cfg.token?"Entries are saved on this device. Connect GitHub in Settings to sync between your phone and PC.":"Last synced "+ago(lastSync)+" with "+cfg.owner+"/"+cfg.repo+".");
+  $("syncMsg").className="note"+(kind==="err"?" errtext":"");
+}
+function b64e(s){var b=new TextEncoder().encode(s),out="";for(var i=0;i<b.length;i+=0x8000) out+=String.fromCharCode.apply(null,b.subarray(i,i+0x8000));return btoa(out)}
+function b64d(s){var bin=atob(s.replace(/\s/g,"")),b=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++) b[i]=bin.charCodeAt(i);return new TextDecoder().decode(b)}
+function gh(path,opt){
+  opt=opt||{};
+  var h={"Authorization":"Bearer "+cfg.token,"Accept":opt.raw?"application/vnd.github.raw+json":"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28"};
+  return fetch("https://api.github.com/repos/"+encodeURIComponent(cfg.owner)+"/"+encodeURIComponent(cfg.repo)+(path?"/contents/"+path:""),
+    {method:opt.method||"GET",headers:h,body:opt.body?JSON.stringify(opt.body):undefined,cache:"no-store"});
+}
+function fail(res){var e=new Error("http "+res.status);e.status=res.status;throw e}
+function getFile(path){
+  return gh(path).then(function(res){
+    if(res.status===404) return {data:null,sha:null};
+    if(!res.ok) fail(res);
+    return res.json().then(function(j){
+      if(j.encoding==="base64"&&j.content) return {data:JSON.parse(b64d(j.content)),sha:j.sha};
+      return gh(path,{raw:true}).then(function(r2){if(!r2.ok) fail(r2);return r2.json()}).then(function(d){return {data:d,sha:j.sha}});
+    });
+  });
+}
+function sorted(o){var r={};Object.keys(o).sort().forEach(function(k){r[k]=o[k]});return r}
+function pushLogs(attempt){
+  return getFile("logs.json").then(function(r){
+    var remote=(r.data&&r.data.entries)||{}, merged={};
+    Object.keys(remote).forEach(function(k){merged[k]=remote[k]});
+    Object.keys(recs).forEach(function(k){if(!merged[k]||(recs[k].updatedAt||"")>(merged[k].updatedAt||"")) merged[k]=recs[k]});
+    var changed=Object.keys(merged).some(function(k){return JSON.stringify(merged[k])!==JSON.stringify(remote[k])});
+    recs=merged; rebuild();
+    if(!changed){dirty={};persist();return}
+    var n=pending();
+    var body={message:(n?"Log "+Object.keys(dirty).sort().join(", "):"Merge entries")+" (from "+(/Android/i.test(navigator.userAgent)?"phone":"browser")+")",
+      content:b64e(JSON.stringify({format:"moonlit-sinus-log/1",updatedAt:new Date().toISOString(),entries:sorted(merged)},null,1)+"\n")};
+    if(r.sha) body.sha=r.sha;
+    return gh("logs.json",{method:"PUT",body:body}).then(function(res){
+      if((res.status===409||res.status===422)&&attempt<2) return pushLogs(attempt+1);
+      if(!res.ok) fail(res);
+      dirty={}; persist();
+    });
+  });
+}
+function errText(e){
+  if(!navigator.onLine) return "You're offline. Changes are saved here and will sync when you're back online.";
+  if(e&&e.status===401) return "GitHub rejected the token. It may have expired: create a new one and paste it in Settings.";
+  if(e&&(e.status===403||e.status===404)) return "The token can't reach "+cfg.owner+"/"+cfg.repo+". Check the repo name, and that the token has Contents: Read and write on that repo.";
+  if(e&&e.status===409) return "Another device saved at the same moment. Tap Sync now to merge.";
+  return "Couldn't reach GitHub. Your changes are safe on this device; tap Sync now to retry.";
+}
+function scheduleSync(){clearTimeout(syncTimer);syncTimer=setTimeout(sync,1200)}
+function sync(){
+  if(!cfg.token){setSync();return Promise.resolve()}
+  if(syncing){scheduleSync();return Promise.resolve()}
+  syncing=true; setSync("Syncing with GitHub…");
+  return pushLogs(0)
+    .then(function(){return getFile("weather.json")})
+    .then(function(w){if(w.data&&w.data.days){weather=w.data.days;lsSet("weather",weather)}})
+    .then(function(){syncing=false;lastSync=new Date().toISOString();lsSet("lastSync",lastSync);renderAll();showDateMoon();updateWxSource();setSync();
+       if($("status").textContent.indexOf("Syncing")>=0) setStatus("Saved and synced.");})
+    .catch(function(e){syncing=false;setSync(errText(e),"err");if($("status").textContent.indexOf("Syncing")>=0) setStatus("Saved on this device. GitHub sync will retry.",true)});
+}
+function updateWxSource(){
+  var ds=Object.keys(weather).sort();
+  $("wxSource").textContent=ds.length?"Weather: Open-Meteo model data for Hout Bay (34.04° S, 18.36° E), "+ds.length+" days on record, latest "+nice(parseYmd(ds[ds.length-1]))+". A GitHub Action adds the day before each morning.":"Weather arrives from your GitHub data repo once sync is connected.";
+}
+
+/* Settings */
+$("setBtn").addEventListener("click",function(){var s=$("settings");s.hidden=!s.hidden;this.setAttribute("aria-expanded",String(!s.hidden));if(!s.hidden){$("ghOwner").value=cfg.owner;$("ghRepo").value=cfg.repo;$("ghToken").value="";$("tokenState").textContent=cfg.token?"A token is saved on this device.":"No token saved yet."}});
+$("syncNow").addEventListener("click",function(){sync()});
+$("ghForm").addEventListener("submit",function(ev){
+  ev.preventDefault();
+  var next={owner:$("ghOwner").value.trim(),repo:$("ghRepo").value.trim(),token:$("ghToken").value.trim()||cfg.token};
+  if(!next.owner||!next.repo||!next.token){$("connMsg").textContent="Fill in the username, repo and token.";return}
+  $("connMsg").textContent="Checking access…";
+  var old=cfg; cfg=next;
+  gh("").then(function(res){
+    if(!res.ok) fail(res);
+    return res.json().then(function(j){
+      if(j.permissions&&j.permissions.push===false) throw {status:403};
+      lsSet("cfg",cfg); $("ghToken").value=""; $("tokenState").textContent="A token is saved on this device.";
+      $("connMsg").textContent="Connected to "+j.full_name+(j.private?" (private).":". Warning: this repo is public, so your log would be visible to anyone.");
+      sync();
+    });
+  }).catch(function(e){cfg=old;$("connMsg").textContent=errText(e)});
+});
+$("disconnectBtn").addEventListener("click",function(){cfg={owner:cfg.owner,repo:cfg.repo,token:""};lsSet("cfg",cfg);$("tokenState").textContent="Token removed from this device. Your entries stay here.";setSync()});
+
+/* ---------- Boot ---------- */
+rebuild();
+renderTonight(); loadForm(ymd(new Date())); renderAll(); updateWxSource(); setSync();
+setInterval(renderTonight, 10*60*1000);
+sync();
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible") sync()});
+window.addEventListener("online",function(){sync()});
+setInterval(function(){if(document.visibilityState==="visible") sync()}, 10*60*1000);
+if("serviceWorker" in navigator) window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});
+
+})();
+</script>
+</body>
+</html>
