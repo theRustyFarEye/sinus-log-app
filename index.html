@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Moonlit Sinus Log</title>
-<meta name="description" content="Daily sinus log with moon phase and Hout Bay weather, synced to a private GitHub repo.">
+<meta name="description" content="Daily sinus and hay fever log with moon phase, local weather and UCT pollen counts. Your entries stay on your device.">
 <meta name="theme-color" content="#2C5C8C" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0F141B" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.webmanifest">
@@ -53,6 +53,9 @@ p{margin:0}
 .moonbox{width:132px;height:132px;border-radius:50%;background:radial-gradient(circle, var(--halo) 55%, transparent 72%);display:grid;place-items:center}
 .moon-facts{display:flex;flex-direction:column;gap:6px;min-width:0}
 .phase-name{font-family:var(--f-display);font-size:1.5rem;font-weight:700;line-height:1.15}
+.byline{font-family:var(--f-mono);font-size:.78rem;font-weight:400;letter-spacing:.02em;color:var(--muted);white-space:nowrap;vertical-align:middle;margin-left:6px}
+@media (max-width:460px){ .byline{display:block;margin:4px 0 0} }
+#fbForm .field{flex:none}
 .facts{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.9rem}
 .facts b{font-weight:600}
 .window-flag{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:.8rem;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--sunk);color:var(--fg)}
@@ -169,6 +172,17 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
 .field{display:flex;flex-direction:column;gap:4px;flex:1 1 180px;min-width:0}
 .field input{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
 .filebtn{position:relative;overflow:hidden}
+.onboard{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.townpick{display:flex;flex-direction:column;gap:10px}
+.townrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.townrow input{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;flex:1 1 160px;min-width:0}
+.townres{display:flex;flex-direction:column;gap:4px}
+.townres button{font:inherit;text-align:left;background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:8px 10px;color:var(--fg);cursor:pointer}
+.townres button:hover{border-color:var(--accent)}
+.ghbox summary{cursor:pointer;font-weight:600;font-size:.9rem}
+.ghbox{border-top:1px solid var(--line);padding-top:12px}
+.faq summary{cursor:pointer;font-weight:600;font-size:.92rem;padding:4px 0}
+.faq p{font-size:.9rem;color:var(--muted);margin:4px 0 6px;max-width:65ch}
 .filebtn input{position:absolute;inset:0;opacity:0;cursor:pointer}
 </style>
 </head>
@@ -176,21 +190,69 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
 
 <div class="wrap">
   <header style="display:flex;flex-direction:column;gap:6px">
-    <span class="eyebrow">Hout Bay · 34.0° S</span>
-    <h1>Moonlit Sinus Log</h1>
-    <p class="muted">Log congestion each evening. Moon phase, weather (Hout Bay, or wherever you are) and pollen from the nearest UCT site are added to every entry automatically, and after a few lunar cycles the tests below show what actually lines up with your flares.</p>
+    <span class="eyebrow" id="eyebrowPlace">Cape Town · 33.9° S</span>
+    <h1>Moonlit Sinus Log <span class="byline">by theRustyFarEye</span></h1>
+    <p class="muted">Log congestion each evening. Moon phase, weather for your home town (or wherever you are) and pollen from the nearest UCT site are added to every entry automatically, and after a few lunar cycles the tests below show what actually lines up with your flares.</p>
   </header>
 
   <div class="syncbar">
     <span class="syncpill" id="syncPill">On this device only</span>
     <button class="linkbtn" type="button" id="syncNow">Sync now</button>
     <button class="linkbtn" type="button" id="setBtn" aria-expanded="false" aria-controls="settings">Settings</button>
+    <button class="linkbtn" type="button" id="helpBtn" aria-expanded="false" aria-controls="help">Help &amp; feedback</button>
   </div>
   <p class="note" id="syncMsg" style="margin-top:-12px"></p>
 
+  <section class="panel" id="help" hidden aria-labelledby="helph">
+    <h2 id="helph">Help &amp; feedback</h2>
+    <details class="faq"><summary>How do I install it?</summary><p>Android: open the link in Chrome, tap the menu, then <b>Install app</b>. iPhone: open it in Safari, tap Share, then <b>Add to Home Screen</b>. On iPhone, adding it to the Home Screen also stops Safari clearing your entries.</p></details>
+    <details class="faq"><summary>Where are my entries saved?</summary><p>On this device only. Nobody else can see them, including the person who made the app. Use Settings, then <b>Download backup</b> now and then, and keep the file somewhere safe.</p></details>
+    <details class="faq"><summary>Where do the weather and pollen come from?</summary><p>Weather is Open-Meteo model data for your home town, or for wherever you are when the arrow button is on. Pollen is the weekly count from the nearest UCT Lung Institute sampling site within 100 km. Some areas have no site nearby.</p></details>
+    <details class="faq"><summary>What does the Suspects table mean?</summary><p>For each factor it compares how often it was present on your bad days (6 or higher) with your other days. A big gap is worth a closer look. It shows patterns, not causes, and isn't medical advice: see your doctor about symptoms that worry you.</p></details>
+    <form id="fbForm" novalidate style="gap:12px;border-top:1px solid var(--line);padding-top:14px">
+      <span class="lbl" style="margin:0">Send an idea, a bug or a question</span>
+      <div class="chips" role="radiogroup" aria-label="Type of message" id="fbType">
+        <button type="button" class="chip" role="radio" aria-checked="true" aria-pressed="true" data-v="Idea">Idea</button>
+        <button type="button" class="chip" role="radio" aria-checked="false" aria-pressed="false" data-v="Bug">Bug</button>
+        <button type="button" class="chip" role="radio" aria-checked="false" aria-pressed="false" data-v="Question">Question</button>
+      </div>
+      <label class="field"><span class="lbl" style="margin:0">Your message</span><textarea id="fbText" placeholder="What would make the app more useful, or what went wrong? For a bug, say what you tapped and what happened."></textarea></label>
+      <label class="field"><span class="lbl" style="margin:0">Your name or contact (optional)</span><input id="fbFrom" autocomplete="name" placeholder="So we can reply"></label>
+      <p class="note">The app version and your device type are added so bugs can be fixed. Your log entries are never sent.</p>
+      <div class="actions">
+        <button class="btn" type="submit" id="fbSend">Send</button>
+        <button class="btn ghost" type="button" id="fbCopy">Copy message</button>
+      </div>
+      <p class="note" id="fbMsg" role="status"></p>
+    </form>
+  </section>
+
+  <section class="panel onboard" id="onboard" hidden aria-labelledby="obh">
+    <h2 id="obh">Welcome. Where's home?</h2>
+    <p class="note">Weather and pollen come from your home town. You can change it later in Settings, and the arrow button at the top switches to wherever you are.</p>
+    <div class="townpick" data-prefix="ob"></div>
+    <button class="linkbtn" type="button" id="obSkip" style="align-self:flex-start">Skip for now (use Cape Town)</button>
+  </section>
+
   <section class="panel" id="settings" hidden aria-labelledby="seth">
-    <h2 id="seth">Sync and backup</h2>
-    <form id="ghForm" style="gap:12px" novalidate>
+    <h2 id="seth">Settings</h2>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <span class="lbl" style="margin:0">Home town</span>
+      <p id="homeName" style="font-weight:600"></p>
+      <div class="townpick" data-prefix="st"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <span class="lbl" style="margin:0">Backup</span>
+      <p class="note">Your entries are saved on this device. Download a backup now and then, and keep it somewhere safe such as Google Drive.</p>
+      <div class="actions">
+        <button class="btn ghost" type="button" id="backupBtn">Download backup</button>
+        <span class="btn ghost filebtn">Restore backup<input type="file" id="restoreFile" accept="application/json,.json" aria-label="Restore from a backup file"></span>
+        <button class="btn ghost" type="button" id="csvBtn2">Download CSV</button>
+      </div>
+    </div>
+    <details id="ghDetails" class="ghbox">
+    <summary>Sync between devices with your own GitHub (optional)</summary>
+    <form id="ghForm" style="gap:12px;margin-top:12px" novalidate>
       <div class="row">
         <label class="field"><span class="lbl" style="margin:0">GitHub username</span><input id="ghOwner" autocomplete="username" autocapitalize="off" spellcheck="false"></label>
         <label class="field"><span class="lbl" style="margin:0">Data repo</span><input id="ghRepo" autocapitalize="off" spellcheck="false"></label>
@@ -202,13 +264,9 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
         <button class="btn ghost" type="button" id="disconnectBtn">Remove token</button>
       </div>
       <p class="note" id="connMsg" role="status"></p>
-      <p class="note">The token is stored only on this device and is sent only to GitHub. Use a fine-grained token limited to the data repo.</p>
+      <p class="note">For people with their own private GitHub repo. The token is stored only on this device and is sent only to GitHub. Use a fine-grained token limited to that one repo.</p>
     </form>
-    <div class="actions">
-      <button class="btn ghost" type="button" id="backupBtn">Download backup</button>
-      <span class="btn ghost filebtn">Restore backup<input type="file" id="restoreFile" accept="application/json,.json" aria-label="Restore from a backup file"></span>
-      <button class="btn ghost" type="button" id="csvBtn2">Download CSV</button>
-    </div>
+    </details>
   </section>
 
   <section class="panel" aria-labelledby="tonight">
@@ -225,8 +283,8 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
         <span class="window-flag" id="windowFlag">Outside the full-moon window</span>
       </div>
     </div>
-    <div class="now" aria-label="Hout Bay right now">
-      <div class="nowrow"><span class="nowk"><button type="button" class="locbtn" id="locBtn" aria-pressed="false" aria-label="Use my current location for the weather" title="Use my current location"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="21,3 3,10.5 10.5,13.5 13.5,21" fill="currentColor"/></svg></button><span id="nowWxK">Hout Bay now</span><button type="button" class="homebtn" id="homeBtn" hidden>Back to Hout Bay</button></span><span class="nowv" id="nowWx"><span class="sub">Loading the weather…</span></span></div>
+    <div class="now" aria-label="Weather and pollen right now">
+      <div class="nowrow"><span class="nowk"><button type="button" class="locbtn" id="locBtn" aria-pressed="false" aria-label="Use my current location for the weather" title="Use my current location"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="21,3 3,10.5 10.5,13.5 13.5,21" fill="currentColor"/></svg></button><span id="nowWxK">Weather now</span><button type="button" class="homebtn" id="homeBtn" hidden>Back to home</button></span><span class="nowv" id="nowWx"><span class="sub">Loading the weather…</span></span></div>
       <div class="nowrow"><span class="nowk" id="nowPolK">Pollen this week</span><span class="nowv" id="nowPol"><span class="sub">Arrives once sync is connected.</span></span></div>
     </div>
   </section>
@@ -257,7 +315,7 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
       <fieldset><legend>Sinus symptoms</legend><div class="chips" data-group="symptoms"></div></fieldset>
       <fieldset><legend>Hay fever symptoms</legend><div class="chips" data-group="hayfever"></div></fieldset>
       <div>
-        <span class="lbl"><span id="wxLbl">Weather in Hout Bay</span> <span class="muted" style="font-weight:400">· filled in automatically</span></span>
+        <span class="lbl"><span id="wxLbl">Weather</span> <span class="muted" style="font-weight:400">· filled in automatically</span></span>
         <div class="wx" id="wxBox"></div>
       </div>
       <div>
@@ -303,7 +361,7 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
     <h2 id="sush">Suspects</h2>
     <p class="note">How often each factor was present on your flare days (6 or higher) compared with your other logged days. Weather counts if it hit on the day or the day before, since sinuses often react with a lag. A factor needs at least 4 flare days and a clear gap before it gets highlighted.</p>
     <div class="tblwrap"><table class="sus" id="sus"><thead><tr><th>Factor</th><th>Flare days</th><th>Other days</th><th>Gap</th></tr></thead><tbody></tbody></table></div>
-    <p class="note" id="wxSource">Weather: Open-Meteo model data for Hout Bay (34.04° S, 18.36° E), added each morning for the day before.</p>
+    <p class="note" id="wxSource">Weather: Open-Meteo model data for your home town.</p>
     <p class="note" id="polSource">Pollen: weekly counts from the <a href="https://pollencount.co.za/report/" target="_blank" rel="noopener">UCT Lung Institute</a> sampling site nearest to where each day was logged (within 100 km). Each report covers the 7 days up to its date; weeks a site wasn't sampled are left out of this table.</p>
     <div class="actions"><button class="btn ghost" type="button" id="csvBtn" hidden>Download as CSV</button></div>
   </section>
@@ -409,7 +467,7 @@ var weather = {};   /* date -> Open-Meteo daily row */
 var COMPASS=["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
 function compass(deg){return COMPASS[Math.round(((deg%360)+360)%360/22.5)%16]}
 function prevDay(ds){var d=parseYmd(ds);d.setDate(d.getDate()-1);return ymd(d)}
-/* An entry logged with location on carries its own weather; otherwise Hout Bay's. */
+/* An entry logged with location on carries its own weather; otherwise the home town's. */
 function wxDay(ds){var e=entries[ds];return (e&&e.wx)?e.wx:weather[ds]}
 function wxFlags(ds){
   var w=wxDay(ds); if(!w) return null;
@@ -444,7 +502,7 @@ function wxShort(ds){
 }
 function renderWx(ds){
   var box=$("wxBox"), w=wxDay(ds), en=entries[ds];
-  $("wxLbl").textContent="Weather in "+(en&&en.place?(en.place.name||"your location"):"Hout Bay");
+  $("wxLbl").textContent="Weather in "+(en&&en.place?(en.place.name||"your location"):HOME.name);
   if(!w){box.innerHTML='<div class="none">'+(ds>=ymd(new Date())?"Weather for this day is added the next morning.":"No weather on record for this day.")+'</div>';return}
   var f=wxFlags(ds), dp=f.dp;
   var cells=[
@@ -498,7 +556,7 @@ var SITE_XY={"Cape Town":{lat:-33.95,lon:18.47},"Johannesburg":{lat:-26.19,lon:2
 var SITE_RANGE_KM=100;
 function kmBetween(a,b){var R=6371,dLa=(b.lat-a.lat)*Math.PI/180,dLo=(b.lon-a.lon)*Math.PI/180,x=Math.sin(dLa/2)*Math.sin(dLa/2)+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLo/2)*Math.sin(dLo/2);return 2*R*Math.asin(Math.sqrt(x))}
 function placeFor(ds){var e=entries[ds];return (e&&e.place)?e.place:HOME}
-function placeLabel(pt){return pt===HOME?"Hout Bay":(pt.name||"your location")}
+function placeLabel(pt){return pt===HOME?HOME.name:(pt.name||"your location")}
 function sitesOf(r){
   if(r.sites) return r.sites;
   return r.capeTown?{"Cape Town":{tree:r.tree,grass:r.grass,weed:r.weed,mould:r.mould,dominant:r.dominant,text:r.capeTown}}:{};
@@ -709,7 +767,7 @@ function download(name,text,type){
 function csvText(){
   var head=["date","place","severity","moonPhase","illumination","daysFromFull","rain_mm","wind_dir","gust_kmh","pressure_hpa","humidity","pollen_site","tree_pollen","grass_pollen","weed_pollen","mould","symptoms","hayfever","exposures","treatment","notes"];
   var esc=function(v){v=Array.isArray(v)?v.join("; "):(v===undefined||v===null?"":String(v));return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
-  return head.join(",")+"\n"+list().map(function(e){var m=moonAt(parseYmd(e.date));var w=wxDay(e.date)||{};e=Object.assign({},e,{place:e.place?(e.place.name||(e.place.lat+","+e.place.lon)):"Hout Bay",moonPhase:m.name,illumination:Math.round(m.illum*100)+"%",daysFromFull:m.fromFull.toFixed(1),rain_mm:w.rain_mm,wind_dir:w.wind_dir_deg===undefined?"":compass(w.wind_dir_deg),gust_kmh:w.gust_max_kmh,pressure_hpa:w.pressure_hpa,humidity:w.rh_mean});var pr=pollenFor(e.date)||{};e.pollen_site=pr.site?(pr.site+(pr.estimated?" (typical)":"")):"";e.tree_pollen=pr.tree;e.grass_pollen=pr.grass;e.weed_pollen=pr.weed;e.mould=pr.mould;return head.map(function(h){return esc(e[h])}).join(",")}).join("\n");
+  return head.join(",")+"\n"+list().map(function(e){var m=moonAt(parseYmd(e.date));var w=wxDay(e.date)||{};e=Object.assign({},e,{place:e.place?(e.place.name||(e.place.lat+","+e.place.lon)):HOME.name,moonPhase:m.name,illumination:Math.round(m.illum*100)+"%",daysFromFull:m.fromFull.toFixed(1),rain_mm:w.rain_mm,wind_dir:w.wind_dir_deg===undefined?"":compass(w.wind_dir_deg),gust_kmh:w.gust_max_kmh,pressure_hpa:w.pressure_hpa,humidity:w.rh_mean});var pr=pollenFor(e.date)||{};e.pollen_site=pr.site?(pr.site+(pr.estimated?" (typical)":"")):"";e.tree_pollen=pr.tree;e.grass_pollen=pr.grass;e.weed_pollen=pr.weed;e.mould=pr.mould;return head.map(function(h){return esc(e[h])}).join(",")}).join("\n");
 }
 $("csvBtn").addEventListener("click",function(){download("sinus-moon-log-"+ymd(new Date())+".csv",csvText(),"text/csv")});
 $("csvBtn2").addEventListener("click",function(){download("sinus-moon-log-"+ymd(new Date())+".csv",csvText(),"text/csv")});
@@ -731,7 +789,7 @@ function lsGet(k,d){try{var v=localStorage.getItem(LS+k);return v?JSON.parse(v):
 function lsSet(k,v){try{localStorage.setItem(LS+k,JSON.stringify(v))}catch(e){}}
 var recs=lsGet("recs",{});            /* date -> entry, or {date,deleted:true} */
 var dirty=lsGet("dirty",{});          /* dates changed since the last push */
-var cfg=lsGet("cfg",{owner:"theRustyFarEye",repo:"sinus-log-data",token:""});
+var cfg=lsGet("cfg",{owner:"",repo:"sinus-log-data",token:""});
 weather=lsGet("weather",{});
 var pollen=lsGet("pollen",{});
 var lastSync=lsGet("lastSync",null), syncing=false, syncTimer=null;
@@ -742,9 +800,10 @@ function pending(){return Object.keys(dirty).length}
 function ago(iso){if(!iso) return "never";var s=(Date.now()-new Date(iso))/1000;if(s<90) return "just now";if(s<3600) return Math.round(s/60)+" min ago";if(s<86400) return Math.round(s/3600)+" h ago";return nice(new Date(iso))}
 function setSync(msg,kind){
   var pill=$("syncPill"), p=pending();
-  var label=!cfg.token?"On this device only":syncing?"Syncing…":kind==="err"?"Sync problem":p?p+" waiting":"Synced";
-  pill.textContent=label; pill.className="syncpill"+(kind==="err"?" err":(!cfg.token||p)?" warn":" ok");
-  $("syncMsg").textContent=msg||(!cfg.token?"Entries are saved on this device. Connect GitHub in Settings to sync between your phone and PC.":"Last synced "+ago(lastSync)+" with "+cfg.owner+"/"+cfg.repo+".");
+  $("syncNow").hidden=!cfg.token;
+  var label=!cfg.token?"Saved on this device":syncing?"Syncing…":kind==="err"?"Sync problem":p?p+" waiting":"Synced";
+  pill.textContent=label; pill.className="syncpill"+(kind==="err"?" err":!cfg.token?"":p?" warn":" ok");
+  $("syncMsg").textContent=msg||(!cfg.token?"Your entries stay on this device. Download a backup now and then from Settings.":"Last synced "+ago(lastSync)+" with "+cfg.owner+"/"+cfg.repo+".");
   $("syncMsg").className="note"+(kind==="err"?" errtext":"");
 }
 function b64e(s){var b=new TextEncoder().encode(s),out="";for(var i=0;i<b.length;i+=0x8000) out+=String.fromCharCode.apply(null,b.subarray(i,i+0x8000));return btoa(out)}
@@ -799,17 +858,104 @@ function sync(){
   if(syncing){scheduleSync();return Promise.resolve()}
   syncing=true; setSync("Syncing with GitHub…");
   return pushLogs(0)
-    .then(function(){return getFile("weather.json")})
+    .then(function(){return useRepoWeather()?getFile("weather.json"):{data:null}})
     .then(function(w){if(w.data&&w.data.days){weather=w.data.days;lsSet("weather",weather)}})
     .then(function(){return getFile("pollen.json").catch(function(){return {data:null}})})
-    .then(function(p){if(p.data&&p.data.reports){pollen=p.data.reports;lsSet("pollen",pollen)}
+    .then(function(p){if(p.data&&p.data.reports){pollen=p.data.reports;lsSet("pollen",pollen)} else return loadPublicPollen(true);
       if(p.data&&p.data.sites){Object.keys(p.data.sites).forEach(function(n){SITE_XY[n]=p.data.sites[n]})}})
     .then(function(){syncing=false;lastSync=new Date().toISOString();lsSet("lastSync",lastSync);renderAll();showDateMoon();updateWxSource();renderNowPollen();renderNow();setSync();fillPlaceWx();
        if($("status").textContent.indexOf("Syncing")>=0) setStatus("Saved and synced.");})
     .catch(function(e){syncing=false;setSync(errText(e),"err");if($("status").textContent.indexOf("Syncing")>=0) setStatus("Saved on this device. GitHub sync will retry.",true)});
 }
-/* ---------- Hout Bay right now (live weather + this week's pollen) ---------- */
-var HOME={lat:-34.04,lon:18.36,name:"Hout Bay"};
+/* ---------- Home town, and right now (live weather + this week's pollen) ---------- */
+var HB={lat:-34.04,lon:18.36,name:"Hout Bay"}, CT={lat:-33.92,lon:18.42,name:"Cape Town"};
+var HOME=lsGet("home",null);
+if(!HOME&&cfg.token){HOME=HB;lsSet("home",HOME)}      /* an existing synced device keeps Hout Bay */
+var homeChosen=!!HOME;
+if(!HOME) HOME=CT;
+function useRepoWeather(){return !!cfg.token&&kmBetween(HOME,HB)<5}
+function renderHomeUi(){
+  $("eyebrowPlace").textContent=HOME.name+" · "+Math.abs(HOME.lat).toFixed(1)+"° "+(HOME.lat<0?"S":"N");
+  $("homeName").textContent=HOME.name+(homeChosen?"":" (not set yet)");
+  $("onboard").hidden=homeChosen||!!cfg.token;
+  renderLocUi();
+}
+function setHome(h){
+  HOME={lat:Math.round(h.lat*1000)/1000,lon:Math.round(h.lon*1000)/1000,name:h.name}; lsSet("home",HOME); homeChosen=true;
+  renderHomeUi(); nowWx=null; fetchNow(); fetchHomeWeather(true); renderNowPollen(); renderAll(); showDateMoon(); updateWxSource();
+}
+/* Town picker: "use my location" or search by name (Open-Meteo geocoding). Used in the welcome card and in Settings. */
+function buildTownPick(box){
+  var px=box.getAttribute("data-prefix");
+  box.innerHTML='<div class="townrow"><button class="btn" type="button" id="'+px+'Here">Use my location</button></div>'+
+    '<div class="townrow"><input id="'+px+'Q" type="search" placeholder="Or search for a town" autocomplete="off" aria-label="Search for a town"><button class="btn ghost" type="button" id="'+px+'Go">Search</button></div>'+
+    '<div class="townres" id="'+px+'Res" role="list"></div><p class="note" id="'+px+'Msg" role="status"></p>';
+  var msg=$(px+"Msg"), res=$(px+"Res");
+  $(px+"Here").addEventListener("click",function(){
+    if(!("geolocation" in navigator)){msg.textContent="This device can't share its location. Search for your town instead.";return}
+    msg.textContent="Finding you…";
+    navigator.geolocation.getCurrentPosition(function(pos){
+      var lat=pos.coords.latitude, lon=pos.coords.longitude;
+      reverseName(lat.toFixed(3),lon.toFixed(3)).then(function(n){msg.textContent="";setHome({lat:lat,lon:lon,name:n||(lat.toFixed(2)+", "+lon.toFixed(2))})});
+    },function(err){msg.textContent=err&&err.code===1?"Location is blocked for this app. Search for your town instead.":"Couldn't get your location. Search for your town instead."},{enableHighAccuracy:false,timeout:15000,maximumAge:0});
+  });
+  function search(){
+    var q=$(px+"Q").value.trim(); if(q.length<2){msg.textContent="Type at least two letters.";return}
+    msg.textContent="Searching…"; res.innerHTML="";
+    fetch("https://geocoding-api.open-meteo.com/v1/search?count=6&language=en&format=json&name="+encodeURIComponent(q))
+      .then(function(r){if(!r.ok) throw 0;return r.json()}).then(function(j){
+        var list=(j.results||[]); msg.textContent=list.length?"":"No towns found. Try another spelling.";
+        list.forEach(function(t){
+          var b=document.createElement("button"); b.type="button"; b.setAttribute("role","listitem");
+          b.textContent=[t.name,t.admin1,t.country].filter(Boolean).join(", ");
+          b.addEventListener("click",function(){res.innerHTML="";$(px+"Q").value="";setHome({lat:t.latitude,lon:t.longitude,name:t.name})});
+          res.appendChild(b);
+        });
+      }).catch(function(){msg.textContent="Couldn't search just now. Check your connection and try again."});
+  }
+  $(px+"Go").addEventListener("click",search);
+  $(px+"Q").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();search()}});
+}
+document.querySelectorAll(".townpick").forEach(buildTownPick);
+$("obSkip").addEventListener("click",function(){setHome(CT)});
+/* Daily weather history for the home town, fetched on the device (synced Hout Bay devices use the repo's copy). */
+var WXQ="&daily=precipitation_sum,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant,temperature_2m_max,temperature_2m_min,relative_humidity_2m_mean,pressure_msl_mean";
+function fetchHomeWeather(force){
+  if(useRepoWeather()) return;
+  var key=HOME.lat.toFixed(2)+","+HOME.lon.toFixed(2), meta=lsGet("wxMeta",{});
+  if(!force&&meta.key===key&&Date.now()-meta.at<6*3600*1000) return;
+  fetch("https://api.open-meteo.com/v1/forecast?latitude="+HOME.lat+"&longitude="+HOME.lon+WXQ+"&past_days=92&forecast_days=1&timezone=auto",{cache:"no-store"})
+    .then(function(r){if(!r.ok) throw 0;return r.json()}).then(function(j){
+      var d=j.daily, today=ymd(new Date()), days={};
+      d.time.forEach(function(t,i){
+        if(t>=today) return;
+        var row={date:t,source:"Open-Meteo",lat:HOME.lat,lon:HOME.lon,rain_mm:d.precipitation_sum[i],wind_max_kmh:d.wind_speed_10m_max[i],gust_max_kmh:d.wind_gusts_10m_max[i],
+          wind_dir_deg:d.wind_direction_10m_dominant[i],tmax:d.temperature_2m_max[i],tmin:d.temperature_2m_min[i],rh_mean:d.relative_humidity_2m_mean[i],pressure_hpa:d.pressure_msl_mean[i]};
+        if([row.rain_mm,row.gust_max_kmh,row.wind_dir_deg,row.pressure_hpa].some(function(v){return v==null})) return;
+        days[t]=row;
+      });
+      if(key!==HOME.lat.toFixed(2)+","+HOME.lon.toFixed(2)) return;
+      /* keep older days already stored for this town; the API only goes back 92 days */
+      if(meta.key===key) Object.keys(weather).forEach(function(k){if(!days[k]) days[k]=weather[k]});
+      weather=days; lsSet("weather",weather); lsSet("wxMeta",{key:key,at:Date.now()});
+      renderAll(); showDateMoon(); updateWxSource(); renderNow();
+    }).catch(function(){});
+}
+/* Pollen levels published in the public app repo, for devices without their own data repo. */
+var PUB_POLLEN=["https://raw.githubusercontent.com/theRustyFarEye/sinus-log-app/main/data/pollen.json","data/pollen.json"];
+function loadPublicPollen(force){
+  var meta=lsGet("polMeta",{}); if(!force&&Date.now()-(meta.at||0)<6*3600*1000&&Object.keys(pollen||{}).length) return Promise.resolve();
+  function tryAt(i){
+    if(i>=PUB_POLLEN.length) return Promise.resolve();
+    return fetch(PUB_POLLEN[i],{cache:"no-store"}).then(function(r){if(!r.ok) throw 0;return r.json()}).then(function(j){
+      if(!j.reports) throw 0;
+      pollen=j.reports; lsSet("pollen",pollen); lsSet("polMeta",{at:Date.now()});
+      if(j.sites) Object.keys(j.sites).forEach(function(n){SITE_XY[n]=j.sites[n]});
+      renderAll(); showDateMoon(); renderNowPollen();
+    }).catch(function(){return tryAt(i+1)});
+  }
+  return tryAt(0);
+}
 var loc=lsGet("loc",{mode:"home"});
 function nowUrl(){var p=loc.mode==="here"&&loc.lat!=null?loc:HOME;
   return "https://api.open-meteo.com/v1/forecast?latitude="+p.lat.toFixed(3)+"&longitude="+p.lon.toFixed(3)+"&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m,is_day&daily=precipitation_sum,temperature_2m_max,temperature_2m_min,pressure_msl_mean&past_days=1&forecast_days=1&timezone=auto"}
@@ -819,8 +965,8 @@ function renderLocUi(){
   var here=loc.mode==="here"&&loc.lat!=null;
   $("locBtn").setAttribute("aria-pressed",String(here));
   $("locBtn").setAttribute("aria-label",here?"Refresh my location":"Use my current location for the weather");
-  $("nowWxK").textContent=(here?(loc.name||"Your location"):"Hout Bay")+" now";
-  $("homeBtn").hidden=!here;
+  $("nowWxK").textContent=(here?(loc.name||"Your location"):HOME.name)+" now";
+  $("homeBtn").hidden=!here; $("homeBtn").textContent="Back to "+HOME.name;
 }
 function setNowNote(t){var box=$("nowWx");box.innerHTML="";box.appendChild(el("span","sub",t))}
 function reverseName(lat,lon){
@@ -837,14 +983,14 @@ function locate(prompted){
     lsSet("loc",loc); renderLocUi(); renderNowPollen(); nowWx=null; fetchNow();
     (moved||!loc.name?reverseName(lat.toFixed(3),lon.toFixed(3)):Promise.resolve(loc.name)).then(function(n){
       if(loc.mode!=="here") return;
-      if(n&&kmBetween({lat:lat,lon:lon},HOME)<4) n="Hout Bay";
+      if(n&&kmBetween({lat:lat,lon:lon},HOME)<4) n=HOME.name;
       loc.name=n||(lat.toFixed(2)+", "+lon.toFixed(2)); lsSet("loc",loc); renderLocUi(); renderNowPollen(); showDateMoon();
     });
     btn.classList.remove("busy");
   },function(err){
     btn.classList.remove("busy");
     if(!prompted) return;
-    setNowNote(err&&err.code===1?"Location is blocked for this app. Allow it in your browser's site settings, or keep using Hout Bay.":"Couldn't get your location just now. Try again in a moment.");
+    setNowNote(err&&err.code===1?"Location is blocked for this app. Allow it in your browser's site settings, or keep using "+HOME.name+".":"Couldn't get your location just now. Try again in a moment.");
     setTimeout(function(){renderNow()},6000);
   },{enableHighAccuracy:false,timeout:15000,maximumAge:prompted?0:10*60*1000});
 }
@@ -855,7 +1001,7 @@ function refreshLocQuietly(){
   if(loc.mode!=="here"||!navigator.permissions||!navigator.permissions.query) return;
   navigator.permissions.query({name:"geolocation"}).then(function(st){if(st.state==="granted") locate(false)}).catch(function(){});
 }
-/* Daily weather for an entry logged away from Hout Bay. Today's values are provisional and refreshed later. */
+/* Daily weather for an entry logged away from home. Today's values are provisional and refreshed later. */
 var placeBusy={};
 function fillPlaceWx(only){
   var today=ymd(new Date()), limit=ymd(new Date(Date.now()-90*86400000));
@@ -916,7 +1062,7 @@ function fetchNow(){
 function renderNowPollen(){
   var box=$("nowPol"); if(!Object.keys(pollen||{}).length) return;
   var pt=(loc.mode==="here"&&loc.lat!=null)?loc:HOME, r=latestPollenNear(pt);
-  if(!r){$("nowPolK").textContent="Pollen";box.innerHTML="";box.appendChild(el("span","sub","No UCT pollen site within "+SITE_RANGE_KM+" km of "+(pt===HOME?"Hout Bay":(loc.name||"here"))+"."));return}
+  if(!r){$("nowPolK").textContent="Pollen";box.innerHTML="";box.appendChild(el("span","sub","No UCT pollen site within "+SITE_RANGE_KM+" km of "+(pt===HOME?HOME.name:(loc.name||"here"))+"."));return}
   var today=ymd(new Date()), cur=today>=r.periodStart&&today<=r.periodEnd;
   $("nowPolK").textContent=cur?"Pollen this week":"Pollen last week";
   var frag=document.createDocumentFragment();
@@ -929,11 +1075,12 @@ function renderNowPollen(){
 }
 function updateWxSource(){
   var ds=Object.keys(weather).sort();
-  $("wxSource").textContent=ds.length?"Weather: Open-Meteo model data for Hout Bay (34.04° S, 18.36° E), "+ds.length+" days on record, latest "+nice(parseYmd(ds[ds.length-1]))+". A GitHub Action adds the day before each morning.":"Weather arrives from your GitHub data repo once sync is connected.";
+  var where=HOME.name+" ("+Math.abs(HOME.lat).toFixed(2)+"° "+(HOME.lat<0?"S":"N")+", "+Math.abs(HOME.lon).toFixed(2)+"° "+(HOME.lon<0?"W":"E")+")";
+  $("wxSource").textContent=ds.length?"Weather: Open-Meteo model data for "+where+", "+ds.length+" days on record, latest "+nice(parseYmd(ds[ds.length-1]))+(useRepoWeather()?". A GitHub Action adds the day before each morning.":". Updated when you open the app."):"Weather for "+where+" loads when you're online.";
 }
 
 /* Settings */
-$("setBtn").addEventListener("click",function(){var s=$("settings");s.hidden=!s.hidden;this.setAttribute("aria-expanded",String(!s.hidden));if(!s.hidden){$("ghOwner").value=cfg.owner;$("ghRepo").value=cfg.repo;$("ghToken").value="";$("tokenState").textContent=cfg.token?"A token is saved on this device.":"No token saved yet."}});
+$("setBtn").addEventListener("click",function(){var s=$("settings");s.hidden=!s.hidden;this.setAttribute("aria-expanded",String(!s.hidden));if(!s.hidden){$("ghDetails").open=!!cfg.token;$("ghOwner").value=cfg.owner;$("ghRepo").value=cfg.repo;$("ghToken").value="";$("tokenState").textContent=cfg.token?"A token is saved on this device.":"No token saved yet."}});
 $("syncNow").addEventListener("click",function(){sync()});
 $("ghForm").addEventListener("submit",function(ev){
   ev.preventDefault();
@@ -951,15 +1098,55 @@ $("ghForm").addEventListener("submit",function(ev){
     });
   }).catch(function(e){cfg=old;$("connMsg").textContent=errText(e)});
 });
-$("disconnectBtn").addEventListener("click",function(){cfg={owner:cfg.owner,repo:cfg.repo,token:""};lsSet("cfg",cfg);$("tokenState").textContent="Token removed from this device. Your entries stay here.";setSync()});
+$("disconnectBtn").addEventListener("click",function(){cfg={owner:cfg.owner,repo:cfg.repo,token:""};lsSet("cfg",cfg);$("tokenState").textContent="Token removed from this device. Your entries stay here.";setSync();renderHomeUi();fetchHomeWeather(true);loadPublicPollen(true)});
+
+/* ---------- Help & feedback ---------- */
+var APP_VERSION="2026.10.25";
+/* Optional: a Web3Forms access key sends feedback straight to an inbox. Empty = use the share sheet. */
+var FEEDBACK_KEY="";
+$("helpBtn").addEventListener("click",function(){var h=$("help");h.hidden=!h.hidden;this.setAttribute("aria-expanded",String(!h.hidden));if(!h.hidden) h.scrollIntoView({behavior:"smooth",block:"start"})});
+var fbType="Idea";
+document.querySelectorAll("#fbType .chip").forEach(function(b){b.addEventListener("click",function(){
+  fbType=b.dataset.v; document.querySelectorAll("#fbType .chip").forEach(function(x){var on=x===b;x.setAttribute("aria-checked",String(on));x.setAttribute("aria-pressed",String(on))});
+})});
+function deviceKind(){var u=navigator.userAgent;return /iPhone|iPad/.test(u)?"iPhone/iPad":/Android/.test(u)?"Android":/Windows/.test(u)?"Windows":/Mac/.test(u)?"Mac":"Other"}
+function fbBody(){
+  var t=$("fbText").value.trim(), f=$("fbFrom").value.trim();
+  return "Moonlit Sinus Log: "+fbType+"\n\n"+t+"\n\n"+(f?"From: "+f+"\n":"")+"App "+APP_VERSION+" · "+deviceKind()+" · "+window.innerWidth+"px · "+(window.matchMedia("(display-mode: standalone)").matches?"installed":"browser");
+}
+function fbCopy(){
+  var text=fbBody();
+  if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function(){$("fbMsg").textContent="Copied. Paste it into WhatsApp or an email to whoever shared the app with you."},function(){selectFallback(text)});
+  else selectFallback(text);
+}
+function selectFallback(text){$("fbText").value=text;$("fbText").select();$("fbMsg").textContent="Select-all and copy the message above, then paste it into WhatsApp or an email."}
+$("fbCopy").addEventListener("click",function(){if(!$("fbText").value.trim()){$("fbMsg").textContent="Write your message first.";return}fbCopy()});
+$("fbForm").addEventListener("submit",function(ev){
+  ev.preventDefault();
+  var t=$("fbText").value.trim(); if(t.length<3){$("fbMsg").textContent="Write your message first.";return}
+  var done=function(){$("fbText").value="";$("fbMsg").textContent="Thanks, your "+fbType.toLowerCase()+" was sent."};
+  if(FEEDBACK_KEY){
+    $("fbSend").disabled=true; $("fbMsg").textContent="Sending…";
+    fetch("https://api.web3forms.com/submit",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},
+      body:JSON.stringify({access_key:FEEDBACK_KEY,subject:"Sinus Log "+fbType.toLowerCase(),from_name:$("fbFrom").value.trim()||"Sinus Log user",message:fbBody()})})
+      .then(function(r){return r.json()}).then(function(j){if(!j.success) throw 0;done()})
+      .catch(function(){$("fbMsg").textContent="Couldn't send just now. Tap Copy message and send it by WhatsApp or email instead."})
+      .then(function(){$("fbSend").disabled=false});
+    return;
+  }
+  if(navigator.share){
+    navigator.share({title:"Sinus Log "+fbType.toLowerCase(),text:fbBody()}).then(function(){$("fbText").value="";$("fbMsg").textContent="Thanks for the "+fbType.toLowerCase()+"."}).catch(function(e){if(!e||e.name!=="AbortError") fbCopy()});
+  } else fbCopy();
+});
 
 /* ---------- Boot ---------- */
 rebuild();
 renderTonight(); loadForm(ymd(new Date())); renderAll(); updateWxSource(); setSync();
 setInterval(renderTonight, 10*60*1000);
-renderLocUi(); renderNow(); renderNowPollen(); fetchNow(); refreshLocQuietly();
+renderHomeUi(); updateWxSource(); renderNow(); renderNowPollen(); fetchNow(); refreshLocQuietly();
+fetchHomeWeather(false); if(!cfg.token) loadPublicPollen(false);
 setInterval(function(){if(document.visibilityState==="visible") fetchNow()}, 15*60*1000);
-document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible"){refreshLocQuietly();fetchNow()}});
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible"){refreshLocQuietly();fetchNow();fetchHomeWeather(false);if(!cfg.token) loadPublicPollen(false)}});
 window.addEventListener("online",fetchNow);
 sync();
 document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible") sync()});

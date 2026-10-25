@@ -1,0 +1,7692 @@
+{
+ "format": "moonlit-sinus-pollen-levels/1",
+ "source": "Levels read from the UCT Lung Institute weekly pollen reports. Full reports: https://pollencount.co.za/report/",
+ "sites": {
+  "Cape Town": {
+   "lat": -33.95,
+   "lon": 18.47
+  },
+  "Johannesburg": {
+   "lat": -26.19,
+   "lon": 28.03
+  },
+  "Johannesburg South": {
+   "lat": -26.27,
+   "lon": 27.95
+  },
+  "Pretoria": {
+   "lat": -25.75,
+   "lon": 28.23
+  },
+  "Bloemfontein": {
+   "lat": -29.11,
+   "lon": 26.19
+  },
+  "Kimberley": {
+   "lat": -28.74,
+   "lon": 24.77
+  },
+  "Durban": {
+   "lat": -29.86,
+   "lon": 31.02
+  },
+  "Gqeberha": {
+   "lat": -33.96,
+   "lon": 25.6
+  },
+  "George": {
+   "lat": -33.96,
+   "lon": 22.46
+  },
+  "Potchefstroom": {
+   "lat": -26.69,
+   "lon": 27.09
+  },
+  "Vanderbijlpark": {
+   "lat": -26.71,
+   "lon": 27.84
+  },
+  "East London": {
+   "lat": -33.02,
+   "lon": 27.91
+  },
+  "Polokwane": {
+   "lat": -23.9,
+   "lon": 29.45
+  },
+  "Mbombela": {
+   "lat": -25.47,
+   "lon": 30.97
+  },
+  "Stellenbosch": {
+   "lat": -33.93,
+   "lon": 18.86
+  }
+ },
+ "reports": {
+  "2024-09-20": {
+   "date": "2024-09-20",
+   "periodStart": "2024-09-14",
+   "periodEnd": "2024-09-20",
+   "link": "https://pollencount.co.za/report/20-september-2024/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": "high",
+     "weed": null,
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": null,
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": null,
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Potchefstroom": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "high",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2024-09-27": {
+   "date": "2024-09-27",
+   "periodStart": "2024-09-21",
+   "periodEnd": "2024-09-27",
+   "link": "https://pollencount.co.za/report/27-september-2024/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": "pollen is now false olive",
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "moderate",
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2024-10-04": {
+   "date": "2024-10-04",
+   "periodStart": "2024-09-28",
+   "periodEnd": "2024-10-04",
+   "link": "https://pollencount.co.za/report/4-october-2024/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": null,
+     "weed": "high",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": null,
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": null,
+     "grass": "very low",
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": null,
+     "grass": null,
+     "weed": "low",
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "Potchefstroom": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2024-10-11": {
+   "date": "2024-10-11",
+   "periodStart": "2024-10-05",
+   "periodEnd": "2024-10-11",
+   "link": "https://pollencount.co.za/report/11-october-2024/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "moderate",
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2024-10-18": {
+   "date": "2024-10-18",
+   "periodStart": "2024-10-12",
+   "periodEnd": "2024-10-18",
+   "link": "https://pollencount.co.za/report/18-october-2024/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "moderate",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": "this week is olive",
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "high",
+     "weed": null,
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2024-10-25": {
+   "date": "2024-10-25",
+   "periodStart": "2024-10-19",
+   "periodEnd": "2024-10-25",
+   "link": "https://pollencount.co.za/report/25-october-2024/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": null,
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": "olive",
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "high",
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": "yellowwood",
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": "karee",
+     "estimated": false
+    },
+    "Potchefstroom": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "high",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2024-11-01": {
+   "date": "2024-11-01",
+   "periodStart": "2024-10-26",
+   "periodEnd": "2024-11-01",
+   "link": "https://pollencount.co.za/report/1-november-2024/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": "willow",
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2024-11-08": {
+   "date": "2024-11-08",
+   "periodStart": "2024-11-02",
+   "periodEnd": "2024-11-08",
+   "link": "https://pollencount.co.za/report/8-november-2024/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": null,
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Durban": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "high",
+     "dominant": null,
+     "estimated": true
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": null,
+     "grass": null,
+     "weed": "low",
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2024-11-15": {
+   "date": "2024-11-15",
+   "periodStart": "2024-11-09",
+   "periodEnd": "2024-11-15",
+   "link": "https://pollencount.co.za/report/15-november-2024/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": null,
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": null,
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": null,
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Johannesburg": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "moderate",
+     "grass": "moderate",
+     "weed": "moderate",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Potchefstroom": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2024-11-22": {
+   "date": "2024-11-22",
+   "periodStart": "2024-11-16",
+   "periodEnd": "2024-11-22",
+   "link": "https://pollencount.co.za/report/22-november-2024/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "moderate",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2024-11-29": {
+   "date": "2024-11-29",
+   "periodStart": "2024-11-23",
+   "periodEnd": "2024-11-29",
+   "link": "https://pollencount.co.za/report/29-november-2024/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "moderate",
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "moderate",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "high",
+     "grass": "high",
+     "weed": "high",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "moderate",
+     "grass": null,
+     "weed": "moderate",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": true
+    },
+    "Vanderbijlpark": {
+     "tree": "high",
+     "grass": "high",
+     "weed": "high",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2024-12-06": {
+   "date": "2024-12-06",
+   "periodStart": "2024-11-30",
+   "periodEnd": "2024-12-06",
+   "link": "https://pollencount.co.za/report/6-december-2024/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "moderate",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "moderate",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2024-12-13": {
+   "date": "2024-12-13",
+   "periodStart": "2024-12-07",
+   "periodEnd": "2024-12-13",
+   "link": "https://pollencount.co.za/report/13-december-2024/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": null,
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": null,
+     "grass": "moderate",
+     "weed": null,
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": null,
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": null,
+     "grass": "moderate",
+     "weed": null,
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2024-12-20": {
+   "date": "2024-12-20",
+   "periodStart": "2024-12-14",
+   "periodEnd": "2024-12-20",
+   "link": "https://pollencount.co.za/report/20-december-2024/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": null,
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "very high",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "high",
+     "grass": "high",
+     "weed": "high",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": null,
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": null,
+     "grass": "moderate",
+     "weed": null,
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-01-15": {
+   "date": "2025-01-15",
+   "periodStart": "2025-01-09",
+   "periodEnd": "2025-01-15",
+   "link": "https://pollencount.co.za/report/15-january-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "moderate",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "high",
+     "grass": "high",
+     "weed": "high",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2025-01-24": {
+   "date": "2025-01-24",
+   "periodStart": "2025-01-18",
+   "periodEnd": "2025-01-24",
+   "link": "https://pollencount.co.za/report/24-january-2024/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": null,
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "moderate",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "high",
+     "grass": "high",
+     "weed": null,
+     "mould": null,
+     "dominant": "elm",
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "high",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2025-01-31": {
+   "date": "2025-01-31",
+   "periodStart": "2025-01-25",
+   "periodEnd": "2025-01-31",
+   "link": "https://pollencount.co.za/report/31-january-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Durban": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "high",
+     "weed": "high",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "low",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-02-07": {
+   "date": "2025-02-07",
+   "periodStart": "2025-02-01",
+   "periodEnd": "2025-02-07",
+   "link": "https://pollencount.co.za/report/7-february-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "moderate",
+     "grass": "moderate",
+     "weed": "moderate",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "high",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "low",
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-02-14": {
+   "date": "2025-02-14",
+   "periodStart": "2025-02-08",
+   "periodEnd": "2025-02-14",
+   "link": "https://pollencount.co.za/report/14-february-2024/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "high",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Durban": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2025-02-21": {
+   "date": "2025-02-21",
+   "periodStart": "2025-02-15",
+   "periodEnd": "2025-02-21",
+   "link": "https://pollencount.co.za/report/21-february-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "high",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "high",
+     "dominant": null,
+     "estimated": true
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "very low",
+     "grass": "high",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": null,
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2025-02-28": {
+   "date": "2025-02-28",
+   "periodStart": "2025-02-22",
+   "periodEnd": "2025-02-28",
+   "link": "https://pollencount.co.za/report/28-february-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "high",
+     "weed": "low",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": null,
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2025-03-07": {
+   "date": "2025-03-07",
+   "periodStart": "2025-03-01",
+   "periodEnd": "2025-03-07",
+   "link": "https://pollencount.co.za/report/7-march-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": null,
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Durban": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "high",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "high",
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "moderate",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2025-03-14": {
+   "date": "2025-03-14",
+   "periodStart": "2025-03-08",
+   "periodEnd": "2025-03-14",
+   "link": "https://pollencount.co.za/report/14-march-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "low",
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": null,
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "moderate",
+     "grass": "moderate",
+     "weed": "moderate",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2025-03-21": {
+   "date": "2025-03-21",
+   "periodStart": "2025-03-15",
+   "periodEnd": "2025-03-21",
+   "link": "https://pollencount.co.za/report/21-march-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": null,
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Vanderbijlpark": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-03-28": {
+   "date": "2025-03-28",
+   "periodStart": "2025-03-22",
+   "periodEnd": "2025-03-28",
+   "link": "https://pollencount.co.za/report/27-march-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "low",
+     "grass": "high",
+     "weed": "low",
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "high",
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2025-04-04": {
+   "date": "2025-04-04",
+   "periodStart": "2025-03-29",
+   "periodEnd": "2025-04-04",
+   "link": "https://pollencount.co.za/report/4-april-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "moderate",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": true
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2025-04-11": {
+   "date": "2025-04-11",
+   "periodStart": "2025-04-05",
+   "periodEnd": "2025-04-11",
+   "link": "https://pollencount.co.za/report/11-april-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": null,
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "high",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2025-04-18": {
+   "date": "2025-04-18",
+   "periodStart": "2025-04-12",
+   "periodEnd": "2025-04-18",
+   "link": "https://pollencount.co.za/report/18-april-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": "moderate",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "low",
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": null,
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2025-04-25": {
+   "date": "2025-04-25",
+   "periodStart": "2025-04-19",
+   "periodEnd": "2025-04-25",
+   "link": "https://pollencount.co.za/report/25-april-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": null,
+     "grass": "low",
+     "weed": "moderate",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": "high",
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": null,
+     "grass": "moderate",
+     "weed": "moderate",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2025-05-02": {
+   "date": "2025-05-02",
+   "periodStart": "2025-04-26",
+   "periodEnd": "2025-05-02",
+   "link": "https://pollencount.co.za/report/2-may-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-05-09": {
+   "date": "2025-05-09",
+   "periodStart": "2025-05-03",
+   "periodEnd": "2025-05-09",
+   "link": "https://pollencount.co.za/report/9-may-20254/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": null,
+     "grass": "low",
+     "weed": "moderate",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-05-16": {
+   "date": "2025-05-16",
+   "periodStart": "2025-05-10",
+   "periodEnd": "2025-05-16",
+   "link": "https://pollencount.co.za/report/16-may-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": null,
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-05-23": {
+   "date": "2025-05-23",
+   "periodStart": "2025-05-17",
+   "periodEnd": "2025-05-23",
+   "link": "https://pollencount.co.za/report/23-may-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Johannesburg South": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": null,
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2025-05-30": {
+   "date": "2025-05-30",
+   "periodStart": "2025-05-24",
+   "periodEnd": "2025-05-30",
+   "link": "https://pollencount.co.za/report/30-may-2024/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "moderate",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Johannesburg South": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-06-06": {
+   "date": "2025-06-06",
+   "periodStart": "2025-05-31",
+   "periodEnd": "2025-06-06",
+   "link": "https://pollencount.co.za/report/6-june-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-06-13": {
+   "date": "2025-06-13",
+   "periodStart": "2025-06-07",
+   "periodEnd": "2025-06-13",
+   "link": "https://pollencount.co.za/report/2-8-june-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-06-20": {
+   "date": "2025-06-20",
+   "periodStart": "2025-06-14",
+   "periodEnd": "2025-06-20",
+   "link": "https://pollencount.co.za/report/20-june-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "very low",
+     "weed": null,
+     "mould": "very low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2025-06-22": {
+   "date": "2025-06-22",
+   "periodStart": "2025-06-16",
+   "periodEnd": "2025-06-22",
+   "link": "https://pollencount.co.za/report/22-june-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": null,
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2025-07-04": {
+   "date": "2025-07-04",
+   "periodStart": "2025-06-28",
+   "periodEnd": "2025-07-04",
+   "link": "https://pollencount.co.za/report/04-july-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "high",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": null,
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-07-11": {
+   "date": "2025-07-11",
+   "periodStart": "2025-07-05",
+   "periodEnd": "2025-07-11",
+   "link": "https://pollencount.co.za/report/11july-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-07-18": {
+   "date": "2025-07-18",
+   "periodStart": "2025-07-12",
+   "periodEnd": "2025-07-18",
+   "link": "https://pollencount.co.za/report/18-july-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Johannesburg South": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2025-07-25": {
+   "date": "2025-07-25",
+   "periodStart": "2025-07-19",
+   "periodEnd": "2025-07-25",
+   "link": "https://pollencount.co.za/report/25-july-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": null,
+     "grass": null,
+     "weed": "very low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": "very low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": null,
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2025-08-01": {
+   "date": "2025-08-01",
+   "periodStart": "2025-07-26",
+   "periodEnd": "2025-08-01",
+   "link": "https://pollencount.co.za/report/01-august-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "high",
+     "grass": null,
+     "weed": "very low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "moderate",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-08-08": {
+   "date": "2025-08-08",
+   "periodStart": "2025-08-02",
+   "periodEnd": "2025-08-08",
+   "link": "https://pollencount.co.za/report/08-august-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "high",
+     "grass": "high",
+     "weed": "high",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": null,
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Johannesburg": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": null,
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2025-08-15": {
+   "date": "2025-08-15",
+   "periodStart": "2025-08-09",
+   "periodEnd": "2025-08-15",
+   "link": "https://pollencount.co.za/report/15-august-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": "high",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": null,
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": null,
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2025-08-22": {
+   "date": "2025-08-22",
+   "periodStart": "2025-08-16",
+   "periodEnd": "2025-08-22",
+   "link": "https://pollencount.co.za/report/22-august-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": null,
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "high",
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2025-08-29": {
+   "date": "2025-08-29",
+   "periodStart": "2025-08-23",
+   "periodEnd": "2025-08-29",
+   "link": "https://pollencount.co.za/report/29-august-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": null,
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "very high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": "mulberry",
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-09-05": {
+   "date": "2025-09-05",
+   "periodStart": "2025-08-30",
+   "periodEnd": "2025-09-05",
+   "link": "https://pollencount.co.za/report/05-september-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "very high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": "plane",
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": "mulberry",
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2025-09-12": {
+   "date": "2025-09-12",
+   "periodStart": "2025-09-06",
+   "periodEnd": "2025-09-12",
+   "link": "https://pollencount.co.za/report/12-september/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "very high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": "pollen taxa were plane",
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": "mulberry",
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-09-19": {
+   "date": "2025-09-19",
+   "periodStart": "2025-09-13",
+   "periodEnd": "2025-09-19",
+   "link": "https://pollencount.co.za/report/19-september-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": "very low",
+     "weed": "moderate",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "moderate",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg South": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": null,
+     "weed": null,
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": null,
+     "grass": "moderate",
+     "weed": null,
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-09-26": {
+   "date": "2025-09-26",
+   "periodStart": "2025-09-20",
+   "periodEnd": "2025-09-26",
+   "link": "https://pollencount.co.za/report/26-september-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": "false olive",
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "high",
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": "oak",
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": null,
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-10-03": {
+   "date": "2025-10-03",
+   "periodStart": "2025-09-27",
+   "periodEnd": "2025-10-03",
+   "link": "https://pollencount.co.za/report/03-october-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "high",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "moderate",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-10-10": {
+   "date": "2025-10-10",
+   "periodStart": "2025-10-04",
+   "periodEnd": "2025-10-10",
+   "link": "https://pollencount.co.za/report/10-october-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "high",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "high",
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "moderate",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-10-17": {
+   "date": "2025-10-17",
+   "periodStart": "2025-10-11",
+   "periodEnd": "2025-10-17",
+   "link": "https://pollencount.co.za/report/17-october-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "high",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "high",
+     "dominant": null,
+     "estimated": true
+    },
+    "George": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-10-24": {
+   "date": "2025-10-24",
+   "periodStart": "2025-10-18",
+   "periodEnd": "2025-10-24",
+   "link": "https://pollencount.co.za/report/24-october-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "high",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": "pine",
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": "yellowwood",
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": "moderate",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-10-30": {
+   "date": "2025-10-30",
+   "periodStart": "2025-10-24",
+   "periodEnd": "2025-10-30",
+   "link": "https://pollencount.co.za/report/30-october-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "high",
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": null,
+     "grass": "moderate",
+     "weed": null,
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-11-07": {
+   "date": "2025-11-07",
+   "periodStart": "2025-11-01",
+   "periodEnd": "2025-11-07",
+   "link": "https://pollencount.co.za/report/07-november-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": null,
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": null,
+     "grass": "high",
+     "weed": null,
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-11-21": {
+   "date": "2025-11-21",
+   "periodStart": "2025-11-15",
+   "periodEnd": "2025-11-21",
+   "link": "https://pollencount.co.za/report/21-november-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "moderate",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": null,
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "high",
+     "dominant": null,
+     "estimated": true
+    },
+    "George": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-11-28": {
+   "date": "2025-11-28",
+   "periodStart": "2025-11-22",
+   "periodEnd": "2025-11-28",
+   "link": "https://pollencount.co.za/report/28-november-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "moderate",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "moderate",
+     "grass": null,
+     "weed": null,
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2025-12-05": {
+   "date": "2025-12-05",
+   "periodStart": "2025-11-29",
+   "periodEnd": "2025-12-05",
+   "link": "https://pollencount.co.za/report/05-december-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": true
+    },
+    "George": {
+     "tree": "high",
+     "grass": "high",
+     "weed": "high",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2025-12-19": {
+   "date": "2025-12-19",
+   "periodStart": "2025-12-13",
+   "periodEnd": "2025-12-19",
+   "link": "https://pollencount.co.za/report/19-december-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-01-23": {
+   "date": "2026-01-23",
+   "periodStart": "2026-01-17",
+   "periodEnd": "2026-01-23",
+   "link": "https://pollencount.co.za/report/23-january-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": null,
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-01-31": {
+   "date": "2026-01-31",
+   "periodStart": "2026-01-25",
+   "periodEnd": "2026-01-31",
+   "link": "https://pollencount.co.za/report/30-january-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2026-02-06": {
+   "date": "2026-02-06",
+   "periodStart": "2026-01-31",
+   "periodEnd": "2026-02-06",
+   "link": "https://pollencount.co.za/report/6-february-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "moderate",
+     "grass": "moderate",
+     "weed": "moderate",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": true
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": "olive",
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": true
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2026-02-13": {
+   "date": "2026-02-13",
+   "periodStart": "2026-02-07",
+   "periodEnd": "2026-02-13",
+   "link": "https://pollencount.co.za/report/13-february-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": null,
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": "cypress",
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": null,
+     "grass": "moderate",
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": true
+    },
+    "Pretoria": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2026-02-20": {
+   "date": "2026-02-20",
+   "periodStart": "2026-02-14",
+   "periodEnd": "2026-02-20",
+   "link": "https://pollencount.co.za/report/20-february-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-02-27": {
+   "date": "2026-02-27",
+   "periodStart": "2026-02-21",
+   "periodEnd": "2026-02-27",
+   "link": "https://pollencount.co.za/report/27-february-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "moderate",
+     "dominant": "mulberry",
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-03-06": {
+   "date": "2026-03-06",
+   "periodStart": "2026-02-28",
+   "periodEnd": "2026-03-06",
+   "link": "https://pollencount.co.za/report/6-march-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "high",
+     "dominant": "mulberry",
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-03-13": {
+   "date": "2026-03-13",
+   "periodStart": "2026-03-07",
+   "periodEnd": "2026-03-13",
+   "link": "https://pollencount.co.za/report/summary/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "high",
+     "grass": "low",
+     "weed": null,
+     "mould": "high",
+     "dominant": "mulberry",
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": "poplar",
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-03-20": {
+   "date": "2026-03-20",
+   "periodStart": "2026-03-14",
+   "periodEnd": "2026-03-20",
+   "link": "https://pollencount.co.za/report/20-march-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": "poplar",
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": "gum",
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Pretoria": {
+     "tree": null,
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-03-27": {
+   "date": "2026-03-27",
+   "periodStart": "2026-03-21",
+   "periodEnd": "2026-03-27",
+   "link": "https://pollencount.co.za/report/27-march-2026-2/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Durban": {
+     "tree": "high",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "high",
+     "dominant": "mulberry",
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": null,
+     "grass": "high",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-04-10": {
+   "date": "2026-04-10",
+   "periodStart": "2026-04-04",
+   "periodEnd": "2026-04-10",
+   "link": "https://pollencount.co.za/report/10-april-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "high",
+     "grass": null,
+     "weed": "high",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-04-19": {
+   "date": "2026-04-19",
+   "periodStart": "2026-04-13",
+   "periodEnd": "2026-04-19",
+   "link": "https://pollencount.co.za/report/19-april-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-04-24": {
+   "date": "2026-04-24",
+   "periodStart": "2026-04-18",
+   "periodEnd": "2026-04-24",
+   "link": "https://pollencount.co.za/report/24-april-2025/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "high",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": null,
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-05-01": {
+   "date": "2026-05-01",
+   "periodStart": "2026-04-25",
+   "periodEnd": "2026-05-01",
+   "link": "https://pollencount.co.za/report/01-may-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "high",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-05-09": {
+   "date": "2026-05-09",
+   "periodStart": "2026-05-03",
+   "periodEnd": "2026-05-09",
+   "link": "https://pollencount.co.za/report/9-may-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "very low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": "cypress",
+     "estimated": false
+    },
+    "George": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-05-15": {
+   "date": "2026-05-15",
+   "periodStart": "2026-05-09",
+   "periodEnd": "2026-05-15",
+   "link": "https://pollencount.co.za/report/15-may-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-05-22": {
+   "date": "2026-05-22",
+   "periodStart": "2026-05-16",
+   "periodEnd": "2026-05-22",
+   "link": "https://pollencount.co.za/report/22-may-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-05-29": {
+   "date": "2026-05-29",
+   "periodStart": "2026-05-23",
+   "periodEnd": "2026-05-29",
+   "link": "https://pollencount.co.za/report/29-may-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-06-05": {
+   "date": "2026-06-05",
+   "periodStart": "2026-05-30",
+   "periodEnd": "2026-06-05",
+   "link": "https://pollencount.co.za/report/5-june-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-06-12": {
+   "date": "2026-06-12",
+   "periodStart": "2026-06-06",
+   "periodEnd": "2026-06-12",
+   "link": "https://pollencount.co.za/report/12-june-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-06-18": {
+   "date": "2026-06-18",
+   "periodStart": "2026-06-12",
+   "periodEnd": "2026-06-18",
+   "link": "https://pollencount.co.za/report/18-june-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "very low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-06-26": {
+   "date": "2026-06-26",
+   "periodStart": "2026-06-20",
+   "periodEnd": "2026-06-26",
+   "link": "https://pollencount.co.za/report/26-june-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-07-03": {
+   "date": "2026-07-03",
+   "periodStart": "2026-06-27",
+   "periodEnd": "2026-07-03",
+   "link": "https://pollencount.co.za/report/3-july-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-07-10": {
+   "date": "2026-07-10",
+   "periodStart": "2026-07-04",
+   "periodEnd": "2026-07-10",
+   "link": "https://pollencount.co.za/report/10-july-202/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Kimberley": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-07-17": {
+   "date": "2026-07-17",
+   "periodStart": "2026-07-11",
+   "periodEnd": "2026-07-17",
+   "link": "https://pollencount.co.za/report/17-july-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-07-24": {
+   "date": "2026-07-24",
+   "periodStart": "2026-07-18",
+   "periodEnd": "2026-07-24",
+   "link": "https://pollencount.co.za/report/24-july-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "high",
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-07-31": {
+   "date": "2026-07-31",
+   "periodStart": "2026-07-25",
+   "periodEnd": "2026-07-31",
+   "link": "https://pollencount.co.za/report/31-july-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": "poplar",
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": "mulberry",
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "moderate",
+     "grass": null,
+     "weed": null,
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": "plane",
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": null,
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-08-07": {
+   "date": "2026-08-07",
+   "periodStart": "2026-08-01",
+   "periodEnd": "2026-08-07",
+   "link": "https://pollencount.co.za/report/7-august-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": "poplar",
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": "plane",
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-08-14": {
+   "date": "2026-08-14",
+   "periodStart": "2026-08-08",
+   "periodEnd": "2026-08-14",
+   "link": "https://pollencount.co.za/report/14-august-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": "plane",
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-08-21": {
+   "date": "2026-08-21",
+   "periodStart": "2026-08-15",
+   "periodEnd": "2026-08-21",
+   "link": "https://pollencount.co.za/report/21-august-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": null,
+     "grass": "very low",
+     "weed": "very low",
+     "mould": "very low",
+     "dominant": "pine",
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": "cypress",
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "very low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Potchefstroom": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": null,
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-08-28": {
+   "date": "2026-08-28",
+   "periodStart": "2026-08-22",
+   "periodEnd": "2026-08-28",
+   "link": "https://pollencount.co.za/report/28-august-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "very high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Kimberley": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Potchefstroom": {
+     "tree": "very high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-09-04": {
+   "date": "2026-09-04",
+   "periodStart": "2026-08-29",
+   "periodEnd": "2026-09-04",
+   "link": "https://pollencount.co.za/report/4-september-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "very high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "high",
+     "grass": "low",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "high",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Kimberley": {
+     "tree": "high",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Potchefstroom": {
+     "tree": "very high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-09-11": {
+   "date": "2026-09-11",
+   "periodStart": "2026-09-05",
+   "periodEnd": "2026-09-11",
+   "link": "https://pollencount.co.za/report/11-september-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "high",
+     "mould": "low",
+     "dominant": "plane",
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "very high",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "high",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Potchefstroom": {
+     "tree": "very high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": "mulberry",
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-09-18": {
+   "date": "2026-09-18",
+   "periodStart": "2026-09-12",
+   "periodEnd": "2026-09-18",
+   "link": "https://pollencount.co.za/report/18-september-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "high",
+     "grass": "moderate",
+     "weed": "high",
+     "mould": "low",
+     "dominant": "plane",
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": "plane",
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Potchefstroom": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": "plane",
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2026-09-25": {
+   "date": "2026-09-25",
+   "periodStart": "2026-09-19",
+   "periodEnd": "2026-09-25",
+   "link": "https://pollencount.co.za/report/25-september-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "very high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Cape Town": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": null,
+     "weed": null,
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": true
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Johannesburg": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Potchefstroom": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-10-02": {
+   "date": "2026-10-02",
+   "periodStart": "2026-09-26",
+   "periodEnd": "2026-10-02",
+   "link": "https://pollencount.co.za/report/02-october-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": "plane",
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": "yellowwood",
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": null,
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Potchefstroom": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": "mulberry",
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2026-10-09": {
+   "date": "2026-10-09",
+   "periodStart": "2026-10-03",
+   "periodEnd": "2026-10-09",
+   "link": "https://pollencount.co.za/report/09-october-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "high",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Potchefstroom": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": "pine",
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  },
+  "2026-10-16": {
+   "date": "2026-10-16",
+   "periodStart": "2026-10-10",
+   "periodEnd": "2026-10-16",
+   "link": "https://pollencount.co.za/report/16-october-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "high",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "high",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "very low",
+     "grass": "very low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Potchefstroom": {
+     "tree": "high",
+     "grass": null,
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
+  },
+  "2026-10-23": {
+   "date": "2026-10-23",
+   "periodStart": "2026-10-17",
+   "periodEnd": "2026-10-23",
+   "link": "https://pollencount.co.za/report/summary-2/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": "high",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": "pine",
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": true
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "moderate",
+     "dominant": null,
+     "estimated": true
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Potchefstroom": {
+     "tree": "high",
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": "pine",
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "high",
+     "grass": "low",
+     "weed": null,
+     "mould": null,
+     "dominant": null,
+     "estimated": true
+    }
+   }
+  }
+ }
+}
