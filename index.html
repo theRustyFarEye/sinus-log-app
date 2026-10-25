@@ -73,7 +73,7 @@ p{margin:0}
 /* Form */
 form{display:flex;flex-direction:column;gap:16px}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
-label.lbl{font-size:.82rem;font-weight:600;display:block;margin-bottom:6px}
+.lbl{font-size:.82rem;font-weight:600;display:block;margin-bottom:6px}
 input[type=date],textarea,select{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
 textarea{min-height:70px;resize:vertical}
 .sevwrap{display:flex;flex-direction:column;gap:6px}
@@ -111,6 +111,16 @@ legend{font-size:.82rem;font-weight:600;padding:0;margin-bottom:8px}
 .wx .tagline{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px}
 .wx .tag{font-size:.76rem;font-weight:600;padding:2px 9px;border-radius:999px;background:var(--accent);color:var(--accent-ink)}
 .wx .none{grid-column:1/-1;font-size:.85rem;color:var(--muted)}
+.pol{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media (max-width:520px){ .pol{grid-template-columns:repeat(2,1fr)} }
+.pol .cell{background:var(--sunk);border-radius:8px;padding:8px 10px;min-width:0;display:flex;flex-direction:column;gap:4px}
+.pol .k{font-size:.72rem;color:var(--muted)}
+.lvl{align-self:flex-start;font-size:.78rem;font-weight:600;padding:1px 8px;border-radius:999px;background:var(--line);color:var(--fg)}
+.lvl.l1,.lvl.l0{background:var(--ok);color:#fff}
+.lvl.l2{background:var(--warn);color:#fff}
+.lvl.l3,.lvl.l4{background:var(--bad);color:#fff}
+.pol .meta{grid-column:1/-1;font-size:.82rem;color:var(--muted)}
+.pol .meta a{color:var(--accent)}
 .tblwrap{overflow-x:auto}
 table.sus{width:100%;border-collapse:collapse;font-size:.88rem;min-width:340px}
 table.sus th{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;text-align:right;padding:6px 8px;border-bottom:1px solid var(--line)}
@@ -230,6 +240,10 @@ tr.hot .lift{background:var(--bad);color:#fff}
         <span class="lbl">Weather in Hout Bay <span class="muted" style="font-weight:400">· filled in automatically</span></span>
         <div class="wx" id="wxBox"></div>
       </div>
+      <div>
+        <span class="lbl">Pollen in Cape Town <span class="muted" style="font-weight:400">· weekly UCT count, filled in automatically</span></span>
+        <div class="pol" id="polBox"></div>
+      </div>
       <fieldset><legend>Exposures in the last 24 hours</legend><div class="chips" data-group="exposures"></div></fieldset>
       <fieldset><legend>What you took or did</legend><div class="chips" data-group="treatment"></div></fieldset>
 
@@ -270,6 +284,7 @@ tr.hot .lift{background:var(--bad);color:#fff}
     <p class="note">How often each factor was present on your flare days (6 or higher) compared with your other logged days. Weather counts if it hit on the day or the day before, since sinuses often react with a lag. A factor needs at least 4 flare days and a clear gap before it gets highlighted.</p>
     <div class="tblwrap"><table class="sus" id="sus"><thead><tr><th>Factor</th><th>Flare days</th><th>Other days</th><th>Gap</th></tr></thead><tbody></tbody></table></div>
     <p class="note" id="wxSource">Weather: Open-Meteo model data for Hout Bay (34.04° S, 18.36° E), added each morning for the day before.</p>
+    <p class="note" id="polSource">Pollen: weekly counts from the <a href="https://pollencount.co.za/report/" target="_blank" rel="noopener">UCT Lung Institute</a> sampling site in Cape Town. Each report covers the 7 days up to its date.</p>
     <div class="actions"><button class="btn ghost" type="button" id="csvBtn" hidden>Download as CSV</button></div>
   </section>
 
@@ -448,7 +463,40 @@ function showDateMoon(){
   var m=moonAt(parseYmd(s));
   var off=m.fromFull; var rel = Math.abs(off)<0.5?"on full moon":(Math.abs(off).toFixed(1)+" days "+(off<0?"before":"after")+" full moon");
   $("dateMoon").textContent = m.name+" · "+Math.round(m.illum*100)+"% lit · "+rel;
-  renderWx(s);
+  renderWx(s); renderPollen(s);
+}
+/* ---------- Pollen (UCT Lung Institute, weekly) ---------- */
+var PLV=["very low","low","moderate","high","very high"];
+function plv(x){return x?PLV.indexOf(x):-1}
+function pollenFor(ds){
+  var reps=pollen||{}, best=null;
+  Object.keys(reps).forEach(function(k){var r=reps[k]; if(r&&r.periodStart<=ds&&ds<=r.periodEnd&&(!best||r.date>best.date)) best=r});
+  return best;
+}
+function latestPollen(){var ks=Object.keys(pollen||{}).sort();return ks.length?pollen[ks[ks.length-1]]:null}
+function shortRange(a,b){var x=parseYmd(a),y=parseYmd(b);return x.getDate()+(x.getMonth()!==y.getMonth()?" "+MON[x.getMonth()]:"")+"–"+y.getDate()+" "+MON[y.getMonth()]}
+function polCells(r){
+  return [["tree","Trees"],["grass","Grass"],["weed","Weeds"],["mould","Moulds"]].map(function(c){
+    var v=r[c[0]], i=plv(v);
+    return '<div class="cell"><span class="k">'+c[1]+'</span><span class="lvl'+(i>=0?" l"+i:"")+'">'+(v?v.charAt(0).toUpperCase()+v.slice(1):"Not stated")+'</span></div>';
+  }).join("");
+}
+function polMeta(r,prefix){
+  var el=document.createElement("div"); el.className="meta";
+  el.appendChild(document.createTextNode(prefix+shortRange(r.periodStart,r.periodEnd)+(r.dominant?" · dominant tree: "+r.dominant:"")+" · "));
+  var a=document.createElement("a"); a.href=r.link; a.target="_blank"; a.rel="noopener"; a.textContent="Read the report"; el.appendChild(a);
+  return el;
+}
+function renderPollen(ds){
+  var box=$("polBox"); if(!box) return;
+  var r=pollenFor(ds);
+  if(r){box.innerHTML=polCells(r); box.appendChild(polMeta(r,"Week "));return}
+  var last=latestPollen();
+  if(!last){box.innerHTML='<div class="meta">Pollen reports arrive from your GitHub data repo once sync is connected.</div>';return}
+  if(ds>last.periodEnd){
+    box.innerHTML='<div class="meta">The report covering this day usually comes out on the Friday after. Last week for reference:</div>'+polCells(last);
+    box.appendChild(polMeta(last,"Week "));
+  } else box.innerHTML='<div class="meta">No UCT report covers this day.</div>';
 }
 $("date").addEventListener("change",function(){loadForm($("date").value)});
 
@@ -578,12 +626,15 @@ function renderSuspects(rows){
   WXF.forEach(function(x){factors.push([x[0],x[1],function(e){return wxHit(e.date,x[0])},function(e){return wxKnown(e.date)}])});
   GROUPS.exposures.forEach(function(name){factors.push(["x-"+name,name,function(e){return (e.exposures||[]).indexOf(name)>=0},function(){return true}])});
   factors.push(["hay","Hay fever symptoms (any)",function(e){return (e.hayfever||[]).length>0},function(){return true}]);
+  [["tree",3,"Tree pollen high (UCT week)"],["grass",2,"Grass pollen moderate or higher (UCT week)"],["weed",2,"Weed pollen moderate or higher (UCT week)"],["mould",2,"Moulds moderate or higher (UCT week)"]].forEach(function(x){
+    factors.push(["pol-"+x[0],x[2],function(e){var r=pollenFor(e.date);return !!r&&plv(r[x[0]])>=x[1]},function(e){return !!pollenFor(e.date)}]);
+  });
   var out=factors.map(function(f){
     var fl=0,flN=0,ot=0,otN=0;
     rows.forEach(function(e){ if(!f[3](e)) return; var hit=f[2](e); if(e.severity>=FLARE){flN++; if(hit) fl++;} else {otN++; if(hit) ot++;} });
     var pf=flN?fl/flN:null, po=otN?ot/otN:null, gap=(pf!==null&&po!==null)?pf-po:null;
     return {name:f[1],fl:fl,flN:flN,ot:ot,otN:otN,pf:pf,po:po,gap:gap,hot:gap!==null&&flN>=4&&fl>=3&&gap>=0.25};
-  }).filter(function(r){return r.fl+r.ot>0||r.name.indexOf("Full-moon")===0||WXF.some(function(x){return x[1]===r.name})});
+  }).filter(function(r){return r.fl+r.ot>0||r.name.indexOf("Full-moon")===0||r.name.indexOf("(UCT week)")>0||WXF.some(function(x){return x[1]===r.name})});
   out.sort(function(a,b){return (b.gap===null?-9:b.gap)-(a.gap===null?-9:a.gap)});
   var pct=function(n,d){return d?Math.round(n/d*100)+"% <span class=\"muted\">("+n+"/"+d+")</span>":"—"};
   var body=$("sus").querySelector("tbody");
@@ -600,9 +651,9 @@ function download(name,text,type){
   catch(e){setSync("Couldn't create the file on this device.","err")}
 }
 function csvText(){
-  var head=["date","severity","moonPhase","illumination","daysFromFull","rain_mm","wind_dir","gust_kmh","pressure_hpa","humidity","symptoms","hayfever","exposures","treatment","notes"];
+  var head=["date","severity","moonPhase","illumination","daysFromFull","rain_mm","wind_dir","gust_kmh","pressure_hpa","humidity","tree_pollen","grass_pollen","weed_pollen","mould","symptoms","hayfever","exposures","treatment","notes"];
   var esc=function(v){v=Array.isArray(v)?v.join("; "):(v===undefined||v===null?"":String(v));return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
-  return head.join(",")+"\n"+list().map(function(e){var m=moonAt(parseYmd(e.date));var w=weather[e.date]||{};e=Object.assign({},e,{moonPhase:m.name,illumination:Math.round(m.illum*100)+"%",daysFromFull:m.fromFull.toFixed(1),rain_mm:w.rain_mm,wind_dir:w.wind_dir_deg===undefined?"":compass(w.wind_dir_deg),gust_kmh:w.gust_max_kmh,pressure_hpa:w.pressure_hpa,humidity:w.rh_mean});return head.map(function(h){return esc(e[h])}).join(",")}).join("\n");
+  return head.join(",")+"\n"+list().map(function(e){var m=moonAt(parseYmd(e.date));var w=weather[e.date]||{};e=Object.assign({},e,{moonPhase:m.name,illumination:Math.round(m.illum*100)+"%",daysFromFull:m.fromFull.toFixed(1),rain_mm:w.rain_mm,wind_dir:w.wind_dir_deg===undefined?"":compass(w.wind_dir_deg),gust_kmh:w.gust_max_kmh,pressure_hpa:w.pressure_hpa,humidity:w.rh_mean});var pr=pollenFor(e.date)||{};e.tree_pollen=pr.tree;e.grass_pollen=pr.grass;e.weed_pollen=pr.weed;e.mould=pr.mould;return head.map(function(h){return esc(e[h])}).join(",")}).join("\n");
 }
 $("csvBtn").addEventListener("click",function(){download("sinus-moon-log-"+ymd(new Date())+".csv",csvText(),"text/csv")});
 $("csvBtn2").addEventListener("click",function(){download("sinus-moon-log-"+ymd(new Date())+".csv",csvText(),"text/csv")});
@@ -626,6 +677,7 @@ var recs=lsGet("recs",{});            /* date -> entry, or {date,deleted:true} *
 var dirty=lsGet("dirty",{});          /* dates changed since the last push */
 var cfg=lsGet("cfg",{owner:"theRustyFarEye",repo:"sinus-log-data",token:""});
 weather=lsGet("weather",{});
+var pollen=lsGet("pollen",{});
 var lastSync=lsGet("lastSync",null), syncing=false, syncTimer=null;
 function rebuild(){entries={};Object.keys(recs).forEach(function(k){if(recs[k]&&!recs[k].deleted) entries[k]=recs[k]})}
 function persist(){lsSet("recs",recs);lsSet("dirty",dirty)}
@@ -693,6 +745,8 @@ function sync(){
   return pushLogs(0)
     .then(function(){return getFile("weather.json")})
     .then(function(w){if(w.data&&w.data.days){weather=w.data.days;lsSet("weather",weather)}})
+    .then(function(){return getFile("pollen.json").catch(function(){return {data:null}})})
+    .then(function(p){if(p.data&&p.data.reports){pollen=p.data.reports;lsSet("pollen",pollen)}})
     .then(function(){syncing=false;lastSync=new Date().toISOString();lsSet("lastSync",lastSync);renderAll();showDateMoon();updateWxSource();setSync();
        if($("status").textContent.indexOf("Syncing")>=0) setStatus("Saved and synced.");})
     .catch(function(e){syncing=false;setSync(errText(e),"err");if($("status").textContent.indexOf("Syncing")>=0) setStatus("Saved on this device. GitHub sync will retry.",true)});
