@@ -104,6 +104,24 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 fieldset{border:0;margin:0;padding:0;min-width:0}
 legend{font-size:.82rem;font-weight:600;padding:0;margin-bottom:8px}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
+.fsecs{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.fsec{border-bottom:1px solid var(--line)}
+.fsec>summary,.fsub>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;min-width:0}
+.fsec>summary::-webkit-details-marker,.fsub>summary::-webkit-details-marker{display:none}
+.fsec>summary{padding:12px 2px}
+.fsec>summary::after,.fsub>summary::after{content:"";flex:none;width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);margin:-4px 4px 0 0;transition:transform .15s}
+.fsec[open]>summary::after,.fsub[open]>summary::after{transform:rotate(-135deg);margin-top:4px}
+.fsec-t{font-weight:600;font-size:.92rem;flex:none}
+.fsec-t .auto{font-family:var(--f-mono);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:0 4px;margin-left:4px;vertical-align:1px;font-weight:400}
+.fsec-s{flex:1 1 auto;min-width:0;text-align:right;font-size:.8rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fsec-s.on{color:var(--accent);font-weight:600}
+.fsec>:not(summary){margin:0 0 14px}
+.fsec>summary:focus-visible,.fsub>summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.subs{display:flex;flex-direction:column;gap:6px}
+.fsub{border:1px solid var(--line);border-radius:8px;padding:0 10px}
+.fsub>summary{padding:9px 0;font-size:.84rem;font-weight:600}
+.fsub>summary .cnt{margin-left:auto;font-size:.75rem;font-weight:600;color:var(--accent)}
+.fsub>.chips{padding:2px 0 10px}
 .chipsec{flex-basis:100%;font-family:var(--f-mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:4px}
 .chipsec:first-child{margin-top:0}
 .chip{font:inherit;font-size:.84rem;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--fg);cursor:pointer}
@@ -199,6 +217,9 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
 .sheet .calcell{width:11px;height:11px;border-radius:2px;background:var(--p-soft);border:1px solid var(--p-line)}
 .sheet .legend{display:flex;gap:10px;align-items:center;font-size:10.5px;color:var(--p-muted);flex-wrap:wrap}
 .sheet .legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.sheet .flags{border:1.5px solid #BE4A38;background:#FBEDEA;border-radius:6px;padding:8px 12px}
+.sheet .flags h4{color:#9A3426;margin-bottom:4px}
+.sheet .flags ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:2px}
 .sheet .foot{border-top:1px solid var(--p-line);padding-top:8px;font-size:10px;color:var(--p-muted)}
 .sheet .qs{white-space:pre-wrap;background:var(--p-soft);border-radius:6px;padding:8px 10px}
 .sheet .empty{color:var(--p-muted);font-style:italic}
@@ -416,27 +437,34 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
         <div class="scale"><span>0 clear</span><span>5 struggling</span><span>10 floored</span></div>
       </div>
 
-      <fieldset><legend>Sinus symptoms</legend><div class="chips" data-group="symptoms"></div></fieldset>
-      <fieldset><legend>Hay fever symptoms</legend><div class="chips" data-group="hayfever"></div></fieldset>
-      <fieldset><legend>Breathing and chest</legend><div class="chips" data-group="breathing"></div></fieldset>
-      <div>
-        <span class="lbl"><span id="wxLbl">Weather</span> <span class="muted" style="font-weight:400">· filled in automatically</span></span>
+      <div class="fsecs">
+      <details class="fsec" id="sec-symptoms"><summary><span class="fsec-t">Sinus symptoms</span><span class="fsec-s" id="sum-symptoms"></span></summary>
+        <div class="chips" data-group="symptoms"></div>
+      </details>
+      <details class="fsec" id="sec-hayfever"><summary><span class="fsec-t">Hay fever symptoms</span><span class="fsec-s" id="sum-hayfever"></span></summary>
+        <div class="chips" data-group="hayfever"></div>
+      </details>
+      <details class="fsec" id="sec-breathing"><summary><span class="fsec-t">Breathing and chest</span><span class="fsec-s" id="sum-breathing"></span></summary>
+        <div class="chips" data-group="breathing"></div>
+      </details>
+      <details class="fsec" id="sec-exposures"><summary><span class="fsec-t">Exposures in the last 24 hours</span><span class="fsec-s" id="sum-exposures"></span></summary>
+        <div class="subs" data-group="exposures"></div>
+      </details>
+      <details class="fsec" id="sec-treatment"><summary><span class="fsec-t">What you took or did</span><span class="fsec-s" id="sum-treatment"></span></summary>
+        <div class="subs" data-group="treatment"></div>
+      </details>
+      <details class="fsec" id="sec-wx"><summary><span class="fsec-t"><span id="wxLbl">Weather</span> <span class="auto">auto</span></span><span class="fsec-s" id="sum-wx"></span></summary>
         <div class="wx" id="wxBox"></div>
-      </div>
-      <div>
-        <span class="lbl">Pollen <span class="muted" style="font-weight:400">· weekly UCT count from the nearest site, filled in automatically</span></span>
+      </details>
+      <details class="fsec" id="sec-pol"><summary><span class="fsec-t">Pollen <span class="auto">auto</span></span><span class="fsec-s" id="sum-pol"></span></summary>
         <div class="pol" id="polBox"></div>
-      </div>
-      <div>
-        <span class="lbl">Air quality <span class="muted" style="font-weight:400">· daily average, filled in automatically</span></span>
+      </details>
+      <details class="fsec" id="sec-air"><summary><span class="fsec-t">Air quality <span class="auto">auto</span></span><span class="fsec-s" id="sum-air"></span></summary>
         <div class="pol" id="airBox"></div>
-      </div>
-      <fieldset><legend>Exposures in the last 24 hours</legend><div class="chips" data-group="exposures"></div></fieldset>
-      <fieldset><legend>What you took or did</legend><div class="chips" data-group="treatment"></div></fieldset>
-
-      <div>
-        <label class="lbl" for="notes">Notes</label>
-        <textarea id="notes" placeholder="Sleep, which side, anything unusual"></textarea>
+      </details>
+      <details class="fsec" id="sec-notes"><summary><span class="fsec-t">Notes</span><span class="fsec-s" id="sum-notes"></span></summary>
+        <textarea id="notes" aria-label="Notes" placeholder="Sleep, which side, anything unusual"></textarea>
+      </details>
       </div>
 
       <div class="actions">
@@ -650,7 +678,7 @@ function wxShort(ds){
 function renderWx(ds){
   var box=$("wxBox"), w=wxDay(ds), en=entries[ds];
   $("wxLbl").textContent="Weather in "+(en&&en.place?(en.place.name||"your location"):HOME.name);
-  if(!w){box.innerHTML='<div class="none">'+(ds>=ymd(new Date())?"Weather for this day is added the next morning.":"No weather on record for this day.")+'</div>';return}
+  if(!w){box.innerHTML='<div class="none">'+(ds>=ymd(new Date())?"Weather for this day is added the next morning.":"No weather on record for this day.")+'</div>';setSum("wx",ds>=ymd(new Date())?"Added tomorrow":"No data");return}
   var f=wxFlags(ds), dp=f.dp;
   var cells=[
     [w.rain_mm.toFixed(1)+" mm","Rain"],
@@ -664,6 +692,7 @@ function renderWx(ds){
   if(f.sector) tagList.splice(f.front?1:0,0,windTag(f.sector,placeFor(ds)));
   var tags=tagList.map(function(t){return '<span class="tag">'+esc(t)+'</span>'}).join("");
   box.innerHTML=cells.map(function(c){return '<div class="cell"><div class="v">'+c[0]+'</div><div class="k">'+c[1]+'</div></div>'}).join("")+(tags?'<div class="tagline">'+tags+'</div>':"");
+  setSum("wx",[w.rain_mm>=0.5?w.rain_mm.toFixed(0)+" mm":null,compass(w.wind_dir_deg)+" gusts "+Math.round(w.gust_max_kmh),tagList.length?tagList.join(", "):null].filter(Boolean).join(" · "),tagList.length>0);
 }
 
 /* ---------- State ---------- */
@@ -674,14 +703,35 @@ var $ = function(id){return document.getElementById(id)};
 /* Chips */
 Object.keys(GROUPS).forEach(function(g){
   var box = document.querySelector('[data-group="'+g+'"]');
-  var heads={}, at=0; SECTIONS[g].forEach(function(sec){if(sec[0]) heads[at]=sec[0]; at+=sec[1].length});
+  var heads={}, at=0, target=box; SECTIONS[g].forEach(function(sec){if(sec[0]) heads[at]=sec[0]; at+=sec[1].length});
   GROUPS[g].forEach(function(name,i){
-    if(heads[i]){var h=document.createElement("span"); h.className="chipsec"; h.textContent=heads[i]; box.appendChild(h)}
+    if(heads[i]){
+      var d=document.createElement("details"); d.className="fsub"; d.id="sub-"+g+"-"+i;
+      d.innerHTML='<summary><span></span><span class="cnt"></span></summary><div class="chips"></div>';
+      d.querySelector("summary span").textContent=heads[i];
+      box.appendChild(d); target=d.querySelector(".chips");
+    }
     var b=document.createElement("button"); b.type="button"; b.className="chip"; b.textContent=name;
     b.id="chip-"+g+"-"+i; b.setAttribute("aria-pressed","false"); b.dataset.value=name;
-    b.addEventListener("click",function(){b.setAttribute("aria-pressed", b.getAttribute("aria-pressed")==="true"?"false":"true")});
-    box.appendChild(b);
+    b.addEventListener("click",function(){b.setAttribute("aria-pressed", b.getAttribute("aria-pressed")==="true"?"false":"true");updateSummaries()});
+    target.appendChild(b);
   });
+});
+/* Closed panels show what's selected inside them. */
+function setSum(id,text,on){var el=$("sum-"+id); if(!el) return; el.textContent=text; el.classList.toggle("on",!!on)}
+function updateSummaries(){
+  Object.keys(GROUPS).forEach(function(g){
+    var sel=readChips(g); setSum(g,sel.length?sel.length+" · "+sel.join(", "):"None",sel.length>0);
+    document.querySelectorAll('[data-group="'+g+'"] .fsub').forEach(function(d){var n=d.querySelectorAll('.chip[aria-pressed="true"]').length;d.querySelector(".cnt").textContent=n?n+" selected":""});
+  });
+  var t=$("notes").value.trim(); setSum("notes",t?t.replace(/\s+/g," "):"Empty",!!t);
+}
+$("notes").addEventListener("input",updateSummaries);
+/* Remember which panels you keep open. */
+var OPEN=(function(){try{return JSON.parse(localStorage.getItem("msl:open")||"{}")}catch(e){return {}}})();
+document.querySelectorAll("details.fsec,details.fsub").forEach(function(d){
+  if(OPEN[d.id]) d.open=true;
+  d.addEventListener("toggle",function(){OPEN[d.id]=d.open;try{localStorage.setItem("msl:open",JSON.stringify(OPEN))}catch(e){}});
 });
 function readChips(g){return Array.prototype.map.call(document.querySelectorAll('[data-group="'+g+'"] .chip[aria-pressed="true"]'),function(b){return b.dataset.value})}
 function setChips(g,vals){vals=vals||[];document.querySelectorAll('[data-group="'+g+'"] .chip').forEach(function(b){b.setAttribute("aria-pressed", vals.indexOf(b.dataset.value)>=0?"true":"false")})}
@@ -748,23 +798,29 @@ function polNote(t){var m=document.createElement("div");m.className="meta";m.tex
 function renderAir(ds){
   var box=$("airBox"); if(!box) return;
   var a=airDay(ds);
-  if(!a){box.innerHTML='<div class="meta">'+(ds>=ymd(new Date())?"Today's air quality shows once the day's readings are in.":"No air-quality data for this day.")+'</div>';return}
+  if(!a){box.innerHTML='<div class="meta">'+(ds>=ymd(new Date())?"Today's air quality shows once the day's readings are in.":"No air-quality data for this day.")+'</div>';setSum("air",ds>=ymd(new Date())?"Added tomorrow":"No data");return}
+  var i25=airLevel(a.pm2_5,15), i10=airLevel(a.pm10,45);
+  setSum("air","PM2.5 "+Math.round(a.pm2_5)+" · PM10 "+Math.round(a.pm10)+" · "+(Math.max(i25,i10)<=1?"good":"above WHO limit"),Math.max(i25,i10)>1);
   box.innerHTML=[["pm2_5","Fine particles (PM2.5)",15],["pm10","Dust (PM10)",45]].map(function(c){
     var v=a[c[0]], i=airLevel(v,c[2]);
     return '<div class="cell"><span class="k">'+c[1]+'</span><span class="lvl l'+i+'">'+(v==null?"—":Math.round(v)+" µg/m³ · "+AIR_WORD[i])+'</span></div>';
   }).join("")+'<div class="meta">Daily average · WHO limit '+"PM2.5 15, PM10 45 µg/m³"+'</div>';
 }
+function polSum(r,prefix){
+  var parts=[["tree","Trees"],["grass","Grass"],["weed","Weeds"],["mould","Moulds"]].filter(function(c){return r[c[0]]}).map(function(c){return c[1]+" "+r[c[0]]});
+  setSum("pol",(prefix||"")+parts.join(" · "),parts.some(function(t){return /high|moderate/.test(t)}));
+}
 function renderPollen(ds){
-  var box=$("polBox"); if(!box) return;
+  var box=$("polBox"); if(!box) return; setSum("pol","—");
   var pt=placeFor(ds), where=placeLabel(pt);
   if(!Object.keys(pollen||{}).length){box.innerHTML="";box.appendChild(polNote("Pollen reports arrive from your GitHub data repo once sync is connected."));return}
-  if(!anySiteNear(pt)){box.innerHTML="";box.appendChild(polNote("No UCT pollen site within "+SITE_RANGE_KM+" km of "+where+", so pollen isn't counted for this day."));return}
+  if(!anySiteNear(pt)){box.innerHTML="";box.appendChild(polNote("No UCT pollen site within "+SITE_RANGE_KM+" km of "+where+", so pollen isn't counted for this day."));setSum("pol","No site nearby");return}
   var r=pollenFor(ds);
-  if(r){box.innerHTML=polCells(r); box.appendChild(polMeta(r,"Week "));return}
+  if(r){box.innerHTML=polCells(r); box.appendChild(polMeta(r,"Week ")); polSum(r); return}
   var last=latestPollenNear(pt);
   if(last&&ds>last.periodEnd){
     box.innerHTML=""; box.appendChild(polNote("The report covering this day usually comes out on the Friday after. Last week for reference:"));
-    box.insertAdjacentHTML("beforeend",polCells(last)); box.appendChild(polMeta(last,"Week "));
+    box.insertAdjacentHTML("beforeend",polCells(last)); box.appendChild(polMeta(last,"Week ")); polSum(last,"Last week: ");
   } else {box.innerHTML="";box.appendChild(polNote("No UCT report covers this day near "+where+"."))}
 }
 $("date").addEventListener("change",function(){loadForm($("date").value)});
@@ -774,6 +830,7 @@ function loadForm(dateStr){
   $("sev").value = e?e.severity:0; syncSev();
   Object.keys(GROUPS).forEach(function(g){setChips(g, e?e[g]:[])});
   $("notes").value = e&&e.notes?e.notes:"";
+  updateSummaries();
   $("delBtn").hidden = !e; $("confirm").hidden=true;
   $("saveBtn").textContent = e?"Update entry":"Save entry";
   $("status").textContent=""; $("status").className="status";
@@ -1357,7 +1414,21 @@ function reportData(){
   var sus=computeSuspects(rows).filter(function(r){return r.name.indexOf("Full-moon")!==0&&r.name.indexOf("Hay fever")!==0&&r.gap!==null&&r.gap>=0.15&&r.fl>=2}).slice(0,6);
   var notes=flares.filter(function(e){return e.notes}).slice(-8);
   var hayDays=rows.filter(function(e){return (e.hayfever||[]).length>0}).length, hayFlare=flares.filter(function(e){return (e.hayfever||[]).length>0}).length;
-  return {start:start,end:today,span:span,rows:rows,flares:flares,avg:avg,eps:eps,longest:longest,sinus:freq("symptoms"),hay:freq("hayfever"),breath:freq("breathing"),exp:freq("exposures"),
+  /* Things worth raising with a doctor: counts of what was logged, never a diagnosis. */
+  function daysWith(group,names){return rows.filter(function(e){return (e[group]||[]).some(function(x){return names.indexOf(x)>=0})}).length}
+  var flags=[], n;
+  n=daysWith("breathing",["Wheezing","Short of breath","Chest tightness"]); if(n) flags.push("Wheezing, chest tightness or shortness of breath on "+n+" day"+(n>1?"s":""));
+  n=daysWith("symptoms",["Fever"]); if(n) flags.push("Fever on "+n+" day"+(n>1?"s":""));
+  n=rows.filter(function(e){return e.severity>=9}).length; if(n) flags.push("Severe congestion (9–10 out of 10) on "+n+" day"+(n>1?"s":""));
+  n=eps.filter(function(ep){return ep.len>=7}).length; if(n) flags.push(n+" flare"+(n>1?"s":"")+" lasting 7 days or more (longest "+longest+" days)");
+  if(eps.length>=3) flags.push(eps.length+" separate flares in this period, so symptoms keep coming back");
+  n=daysWith("symptoms",["Nosebleed"]); if(n) flags.push("Nosebleeds on "+n+" day"+(n>1?"s":""));
+  n=daysWith("symptoms",["Upper tooth or cheek pain"]); var fev=daysWith("symptoms",["Discoloured mucus"]); if(n&&fev) flags.push("Discoloured mucus on "+fev+" days and upper tooth or cheek pain on "+n+" days");
+  n=daysWith("treatment",["Reliever pump (e.g. Venteze, Asthavent)"]); if(n) flags.push("Reliever pump used on "+n+" day"+(n>1?"s":""));
+  n=daysWith("treatment",["Steroid tablets"]); if(n) flags.push("Steroid tablets taken on "+n+" day"+(n>1?"s":""));
+  n=daysWith("treatment",["Antibiotic"]); if(n) flags.push("Antibiotics taken on "+n+" day"+(n>1?"s":""));
+  n=daysWith("treatment",["Decongestant"]); if(n>=7) flags.push("Decongestant used on "+n+" days (sprays are usually limited to a few days at a time)");
+  return {start:start,end:today,span:span,rows:rows,flares:flares,avg:avg,eps:eps,longest:longest,flags:flags,sinus:freq("symptoms"),hay:freq("hayfever"),breath:freq("breathing"),exp:freq("exposures"),
     treat:treat,sus:sus,notes:notes,hayDays:hayDays,hayFlare:hayFlare,byDate:byDate};
 }
 function pctOf(a,b){return b?Math.round(a/b*100)+"%":"—"}
@@ -1387,6 +1458,7 @@ function renderReport(){
     '<div class="kpi"><b>'+d.flares.length+'</b><span>bad days (6+), '+pctOf(d.flares.length,d.rows.length)+'</span></div>'+
     '<div class="kpi"><b>'+d.eps.length+'</b><span>flare episodes</span></div>'+
     '<div class="kpi"><b>'+(d.longest||"—")+'</b><span>longest flare (days)</span></div></section>';
+  if(d.flags.length) h+='<section class="flags"><h4>Worth raising with your doctor</h4><ul>'+d.flags.map(function(f){return '<li>'+esc(f)+'</li>'}).join("")+'</ul></section>';
   h+='<section><h4>Daily congestion</h4>'+calendarHtml(d)+'</section>';
   function symTable(list,title){
     if(!list.length) return '<div><h4>'+title+'</h4><p class="empty">None recorded</p></div>';
@@ -1418,6 +1490,7 @@ function reportText(){
   L.push("Sinus and hay fever diary: "+longDate(d.start)+" to "+longDate(d.end));
   if(!d.rows.length) return L[0]+"\nNo entries yet.";
   L.push(d.rows.length+" of "+d.span+" days logged · average "+d.avg.toFixed(1)+"/10 · "+d.flares.length+" bad days (6+) · "+d.eps.length+" flare episodes, longest "+(d.longest||0)+" days");
+  if(d.flags.length) L.push("Worth raising: "+d.flags.join("; "));
   if(d.sinus.length) L.push("Sinus symptoms: "+d.sinus.slice(0,5).map(function(x){return x.name+" "+pctOf(x.all,d.rows.length)}).join(", "));
   if(d.breath.length) L.push("Breathing: "+d.breath.slice(0,5).map(function(x){return x.name+" "+pctOf(x.all,d.rows.length)}).join(", "));
   if(d.hay.length) L.push("Hay fever symptoms: "+d.hay.slice(0,5).map(function(x){return x.name+" "+pctOf(x.all,d.rows.length)}).join(", "));
@@ -1444,7 +1517,7 @@ $("repCopy").addEventListener("click",function(){
 });
 
 /* ---------- Help & feedback ---------- */
-var APP_VERSION="2026.10.25.9";
+var APP_VERSION="2026.10.25.10";
 /* Optional: a Web3Forms access key sends feedback straight to an inbox. Empty = use the share sheet. */
 var FEEDBACK_KEY="";
 $("appVer").textContent="App version "+APP_VERSION;
