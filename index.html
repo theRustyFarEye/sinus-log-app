@@ -178,7 +178,7 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
   <header style="display:flex;flex-direction:column;gap:6px">
     <span class="eyebrow">Hout Bay · 34.0° S</span>
     <h1>Moonlit Sinus Log</h1>
-    <p class="muted">Log congestion each evening. Moon phase, weather (Hout Bay, or wherever you are) and Cape Town pollen are added to every entry automatically, and after a few lunar cycles the tests below show what actually lines up with your flares.</p>
+    <p class="muted">Log congestion each evening. Moon phase, weather (Hout Bay, or wherever you are) and pollen from the nearest UCT site are added to every entry automatically, and after a few lunar cycles the tests below show what actually lines up with your flares.</p>
   </header>
 
   <div class="syncbar">
@@ -261,7 +261,7 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
         <div class="wx" id="wxBox"></div>
       </div>
       <div>
-        <span class="lbl">Pollen in Cape Town <span class="muted" style="font-weight:400">· weekly UCT count, filled in automatically</span></span>
+        <span class="lbl">Pollen <span class="muted" style="font-weight:400">· weekly UCT count from the nearest site, filled in automatically</span></span>
         <div class="pol" id="polBox"></div>
       </div>
       <fieldset><legend>Exposures in the last 24 hours</legend><div class="chips" data-group="exposures"></div></fieldset>
@@ -304,7 +304,7 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
     <p class="note">How often each factor was present on your flare days (6 or higher) compared with your other logged days. Weather counts if it hit on the day or the day before, since sinuses often react with a lag. A factor needs at least 4 flare days and a clear gap before it gets highlighted.</p>
     <div class="tblwrap"><table class="sus" id="sus"><thead><tr><th>Factor</th><th>Flare days</th><th>Other days</th><th>Gap</th></tr></thead><tbody></tbody></table></div>
     <p class="note" id="wxSource">Weather: Open-Meteo model data for Hout Bay (34.04° S, 18.36° E), added each morning for the day before.</p>
-    <p class="note" id="polSource">Pollen: weekly counts from the <a href="https://pollencount.co.za/report/" target="_blank" rel="noopener">UCT Lung Institute</a> sampling site in Cape Town. Each report covers the 7 days up to its date.</p>
+    <p class="note" id="polSource">Pollen: weekly counts from the <a href="https://pollencount.co.za/report/" target="_blank" rel="noopener">UCT Lung Institute</a> sampling site nearest to where each day was logged (within 100 km). Each report covers the 7 days up to its date; weeks a site wasn't sampled are left out of this table.</p>
     <div class="actions"><button class="btn ghost" type="button" id="csvBtn" hidden>Download as CSV</button></div>
   </section>
 
@@ -491,16 +491,36 @@ function showDateMoon(){
 /* ---------- Pollen (UCT Lung Institute, weekly) ---------- */
 var PLV=["very low","low","moderate","high","very high"];
 function plv(x){return x?PLV.indexOf(x):-1}
-var CPT={lat:-33.96,lon:18.46};
+/* UCT sampling sites. Coordinates also arrive with pollen.json; these are the fallback. */
+var SITE_XY={"Cape Town":{lat:-33.95,lon:18.47},"Johannesburg":{lat:-26.19,lon:28.03},"Johannesburg South":{lat:-26.27,lon:27.95},"Pretoria":{lat:-25.75,lon:28.23},
+  "Bloemfontein":{lat:-29.11,lon:26.19},"Kimberley":{lat:-28.74,lon:24.77},"Durban":{lat:-29.86,lon:31.02},"Gqeberha":{lat:-33.96,lon:25.60},"George":{lat:-33.96,lon:22.46},
+  "Potchefstroom":{lat:-26.69,lon:27.09},"Vanderbijlpark":{lat:-26.71,lon:27.84},"East London":{lat:-33.02,lon:27.91},"Polokwane":{lat:-23.90,lon:29.45},"Mbombela":{lat:-25.47,lon:30.97},"Stellenbosch":{lat:-33.93,lon:18.86}};
+var SITE_RANGE_KM=100;
 function kmBetween(a,b){var R=6371,dLa=(b.lat-a.lat)*Math.PI/180,dLo=(b.lon-a.lon)*Math.PI/180,x=Math.sin(dLa/2)*Math.sin(dLa/2)+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLo/2)*Math.sin(dLo/2);return 2*R*Math.asin(Math.sqrt(x))}
-function awayFromCape(ds){var e=entries[ds];return !!(e&&e.place&&kmBetween(e.place,CPT)>60)}
-function pollenFor(ds){
-  if(awayFromCape(ds)) return null;
-  var reps=pollen||{}, best=null;
-  Object.keys(reps).forEach(function(k){var r=reps[k]; if(r&&r.periodStart<=ds&&ds<=r.periodEnd&&(!best||r.date>best.date)) best=r});
+function placeFor(ds){var e=entries[ds];return (e&&e.place)?e.place:HOME}
+function placeLabel(pt){return pt===HOME?"Hout Bay":(pt.name||"your location")}
+function sitesOf(r){
+  if(r.sites) return r.sites;
+  return r.capeTown?{"Cape Town":{tree:r.tree,grass:r.grass,weed:r.weed,mould:r.mould,dominant:r.dominant,text:r.capeTown}}:{};
+}
+function nearestSite(pt,r){
+  var sites=sitesOf(r), best=null;
+  Object.keys(sites).forEach(function(n){var c=SITE_XY[n]; if(!c) return; var km=kmBetween(pt,c); if(km<=SITE_RANGE_KM&&(!best||km<best.km)) best={name:n,km:km,data:sites[n]}});
   return best;
 }
-function latestPollen(){var ks=Object.keys(pollen||{}).sort();return ks.length?pollen[ks[ks.length-1]]:null}
+function anySiteNear(pt){return Object.keys(SITE_XY).some(function(n){return kmBetween(pt,SITE_XY[n])<=SITE_RANGE_KM})}
+function asReading(r,s){return Object.assign({},s.data,{site:s.name,km:s.km,date:r.date,periodStart:r.periodStart,periodEnd:r.periodEnd,link:r.link})}
+/* The week's reading from the UCT site nearest to where this day was logged. */
+function pollenFor(ds){
+  var pt=placeFor(ds), reps=pollen||{}, best=null;
+  Object.keys(reps).forEach(function(k){var r=reps[k]; if(r&&r.periodStart<=ds&&ds<=r.periodEnd&&nearestSite(pt,r)&&(!best||r.date>best.date)) best=r});
+  return best?asReading(best,nearestSite(pt,best)):null;
+}
+function latestPollenNear(pt){
+  var ks=Object.keys(pollen||{}).sort().reverse();
+  for(var i=0;i<ks.length;i++){var r=pollen[ks[i]], s=nearestSite(pt,r); if(s) return asReading(r,s)}
+  return null;
+}
 function shortRange(a,b){var x=parseYmd(a),y=parseYmd(b);return x.getDate()+(x.getMonth()!==y.getMonth()?" "+MON[x.getMonth()]:"")+"–"+y.getDate()+" "+MON[y.getMonth()]}
 function polCells(r){
   return [["tree","Trees"],["grass","Grass"],["weed","Weeds"],["mould","Moulds"]].map(function(c){
@@ -510,21 +530,24 @@ function polCells(r){
 }
 function polMeta(r,prefix){
   var el=document.createElement("div"); el.className="meta";
-  el.appendChild(document.createTextNode(prefix+shortRange(r.periodStart,r.periodEnd)+(r.dominant?" · dominant tree: "+r.dominant:"")+" · "));
+  el.appendChild(document.createTextNode(prefix+shortRange(r.periodStart,r.periodEnd)+" · "+r.site+" site"+(r.km>=15?" ("+Math.round(r.km)+" km away)":"")+
+    (r.estimated?" · not sampled this week, typical levels shown":"")+(r.dominant?" · dominant tree: "+r.dominant:"")+" · "));
   var a=document.createElement("a"); a.href=r.link; a.target="_blank"; a.rel="noopener"; a.textContent="Read the report"; el.appendChild(a);
   return el;
 }
+function polNote(t){var m=document.createElement("div");m.className="meta";m.textContent=t;return m}
 function renderPollen(ds){
   var box=$("polBox"); if(!box) return;
-  if(awayFromCape(ds)){box.innerHTML="";var m=document.createElement("div");m.className="meta";m.textContent="Logged in "+(entries[ds].place.name||"another area")+", so Cape Town pollen doesn't apply to this day.";box.appendChild(m);return}
+  var pt=placeFor(ds), where=placeLabel(pt);
+  if(!Object.keys(pollen||{}).length){box.innerHTML="";box.appendChild(polNote("Pollen reports arrive from your GitHub data repo once sync is connected."));return}
+  if(!anySiteNear(pt)){box.innerHTML="";box.appendChild(polNote("No UCT pollen site within "+SITE_RANGE_KM+" km of "+where+", so pollen isn't counted for this day."));return}
   var r=pollenFor(ds);
   if(r){box.innerHTML=polCells(r); box.appendChild(polMeta(r,"Week "));return}
-  var last=latestPollen();
-  if(!last){box.innerHTML='<div class="meta">Pollen reports arrive from your GitHub data repo once sync is connected.</div>';return}
-  if(ds>last.periodEnd){
-    box.innerHTML='<div class="meta">The report covering this day usually comes out on the Friday after. Last week for reference:</div>'+polCells(last);
-    box.appendChild(polMeta(last,"Week "));
-  } else box.innerHTML='<div class="meta">No UCT report covers this day.</div>';
+  var last=latestPollenNear(pt);
+  if(last&&ds>last.periodEnd){
+    box.innerHTML=""; box.appendChild(polNote("The report covering this day usually comes out on the Friday after. Last week for reference:"));
+    box.insertAdjacentHTML("beforeend",polCells(last)); box.appendChild(polMeta(last,"Week "));
+  } else {box.innerHTML="";box.appendChild(polNote("No UCT report covers this day near "+where+"."))}
 }
 $("date").addEventListener("change",function(){loadForm($("date").value)});
 
@@ -660,7 +683,7 @@ function renderSuspects(rows){
   GROUPS.exposures.forEach(function(name){factors.push(["x-"+name,name,function(e){return (e.exposures||[]).indexOf(name)>=0},function(){return true}])});
   factors.push(["hay","Hay fever symptoms (any)",function(e){return (e.hayfever||[]).length>0},function(){return true}]);
   [["tree",3,"Tree pollen high (UCT week)"],["grass",2,"Grass pollen moderate or higher (UCT week)"],["weed",2,"Weed pollen moderate or higher (UCT week)"],["mould",2,"Moulds moderate or higher (UCT week)"]].forEach(function(x){
-    factors.push(["pol-"+x[0],x[2],function(e){var r=pollenFor(e.date);return !!r&&plv(r[x[0]])>=x[1]},function(e){return !!pollenFor(e.date)}]);
+    factors.push(["pol-"+x[0],x[2],function(e){var r=pollenFor(e.date);return !!r&&!r.estimated&&plv(r[x[0]])>=x[1]},function(e){var r=pollenFor(e.date);return !!r&&!r.estimated}]);
   });
   var out=factors.map(function(f){
     var fl=0,flN=0,ot=0,otN=0;
@@ -684,9 +707,9 @@ function download(name,text,type){
   catch(e){setSync("Couldn't create the file on this device.","err")}
 }
 function csvText(){
-  var head=["date","place","severity","moonPhase","illumination","daysFromFull","rain_mm","wind_dir","gust_kmh","pressure_hpa","humidity","tree_pollen","grass_pollen","weed_pollen","mould","symptoms","hayfever","exposures","treatment","notes"];
+  var head=["date","place","severity","moonPhase","illumination","daysFromFull","rain_mm","wind_dir","gust_kmh","pressure_hpa","humidity","pollen_site","tree_pollen","grass_pollen","weed_pollen","mould","symptoms","hayfever","exposures","treatment","notes"];
   var esc=function(v){v=Array.isArray(v)?v.join("; "):(v===undefined||v===null?"":String(v));return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
-  return head.join(",")+"\n"+list().map(function(e){var m=moonAt(parseYmd(e.date));var w=wxDay(e.date)||{};e=Object.assign({},e,{place:e.place?(e.place.name||(e.place.lat+","+e.place.lon)):"Hout Bay",moonPhase:m.name,illumination:Math.round(m.illum*100)+"%",daysFromFull:m.fromFull.toFixed(1),rain_mm:w.rain_mm,wind_dir:w.wind_dir_deg===undefined?"":compass(w.wind_dir_deg),gust_kmh:w.gust_max_kmh,pressure_hpa:w.pressure_hpa,humidity:w.rh_mean});var pr=pollenFor(e.date)||{};e.tree_pollen=pr.tree;e.grass_pollen=pr.grass;e.weed_pollen=pr.weed;e.mould=pr.mould;return head.map(function(h){return esc(e[h])}).join(",")}).join("\n");
+  return head.join(",")+"\n"+list().map(function(e){var m=moonAt(parseYmd(e.date));var w=wxDay(e.date)||{};e=Object.assign({},e,{place:e.place?(e.place.name||(e.place.lat+","+e.place.lon)):"Hout Bay",moonPhase:m.name,illumination:Math.round(m.illum*100)+"%",daysFromFull:m.fromFull.toFixed(1),rain_mm:w.rain_mm,wind_dir:w.wind_dir_deg===undefined?"":compass(w.wind_dir_deg),gust_kmh:w.gust_max_kmh,pressure_hpa:w.pressure_hpa,humidity:w.rh_mean});var pr=pollenFor(e.date)||{};e.pollen_site=pr.site?(pr.site+(pr.estimated?" (typical)":"")):"";e.tree_pollen=pr.tree;e.grass_pollen=pr.grass;e.weed_pollen=pr.weed;e.mould=pr.mould;return head.map(function(h){return esc(e[h])}).join(",")}).join("\n");
 }
 $("csvBtn").addEventListener("click",function(){download("sinus-moon-log-"+ymd(new Date())+".csv",csvText(),"text/csv")});
 $("csvBtn2").addEventListener("click",function(){download("sinus-moon-log-"+ymd(new Date())+".csv",csvText(),"text/csv")});
@@ -779,7 +802,8 @@ function sync(){
     .then(function(){return getFile("weather.json")})
     .then(function(w){if(w.data&&w.data.days){weather=w.data.days;lsSet("weather",weather)}})
     .then(function(){return getFile("pollen.json").catch(function(){return {data:null}})})
-    .then(function(p){if(p.data&&p.data.reports){pollen=p.data.reports;lsSet("pollen",pollen)}})
+    .then(function(p){if(p.data&&p.data.reports){pollen=p.data.reports;lsSet("pollen",pollen)}
+      if(p.data&&p.data.sites){Object.keys(p.data.sites).forEach(function(n){SITE_XY[n]=p.data.sites[n]})}})
     .then(function(){syncing=false;lastSync=new Date().toISOString();lsSet("lastSync",lastSync);renderAll();showDateMoon();updateWxSource();renderNowPollen();renderNow();setSync();fillPlaceWx();
        if($("status").textContent.indexOf("Syncing")>=0) setStatus("Saved and synced.");})
     .catch(function(e){syncing=false;setSync(errText(e),"err");if($("status").textContent.indexOf("Syncing")>=0) setStatus("Saved on this device. GitHub sync will retry.",true)});
@@ -810,11 +834,11 @@ function locate(prompted){
   navigator.geolocation.getCurrentPosition(function(pos){
     var lat=pos.coords.latitude, lon=pos.coords.longitude, moved=loc.lat==null||kmBetween({lat:lat,lon:lon},loc)>2;
     loc={mode:"here",lat:lat,lon:lon,name:moved?null:loc.name,at:new Date().toISOString()};
-    lsSet("loc",loc); renderLocUi(); nowWx=null; fetchNow();
+    lsSet("loc",loc); renderLocUi(); renderNowPollen(); nowWx=null; fetchNow();
     (moved||!loc.name?reverseName(lat.toFixed(3),lon.toFixed(3)):Promise.resolve(loc.name)).then(function(n){
       if(loc.mode!=="here") return;
       if(n&&kmBetween({lat:lat,lon:lon},HOME)<4) n="Hout Bay";
-      loc.name=n||(lat.toFixed(2)+", "+lon.toFixed(2)); lsSet("loc",loc); renderLocUi(); showDateMoon();
+      loc.name=n||(lat.toFixed(2)+", "+lon.toFixed(2)); lsSet("loc",loc); renderLocUi(); renderNowPollen(); showDateMoon();
     });
     btn.classList.remove("busy");
   },function(err){
@@ -822,10 +846,10 @@ function locate(prompted){
     if(!prompted) return;
     setNowNote(err&&err.code===1?"Location is blocked for this app. Allow it in your browser's site settings, or keep using Hout Bay.":"Couldn't get your location just now. Try again in a moment.");
     setTimeout(function(){renderNow()},6000);
-  },{enableHighAccuracy:false,timeout:15000,maximumAge:10*60*1000});
+  },{enableHighAccuracy:false,timeout:15000,maximumAge:prompted?0:10*60*1000});
 }
 $("locBtn").addEventListener("click",function(){locate(true)});
-$("homeBtn").addEventListener("click",function(){loc={mode:"home"};lsSet("loc",loc);renderLocUi();nowWx=null;fetchNow()});
+$("homeBtn").addEventListener("click",function(){loc={mode:"home"};lsSet("loc",loc);renderLocUi();renderNowPollen();nowWx=null;fetchNow()});
 /* Refresh the position quietly on open, but only if permission was already given. */
 function refreshLocQuietly(){
   if(loc.mode!=="here"||!navigator.permissions||!navigator.permissions.query) return;
@@ -890,8 +914,9 @@ function fetchNow(){
   }).catch(function(){}).then(function(){nowBusy=false;renderNow()});
 }
 function renderNowPollen(){
-  var r=latestPollen(), box=$("nowPol");
-  if(!r) return;
+  var box=$("nowPol"); if(!Object.keys(pollen||{}).length) return;
+  var pt=(loc.mode==="here"&&loc.lat!=null)?loc:HOME, r=latestPollenNear(pt);
+  if(!r){$("nowPolK").textContent="Pollen";box.innerHTML="";box.appendChild(el("span","sub","No UCT pollen site within "+SITE_RANGE_KM+" km of "+(pt===HOME?"Hout Bay":(loc.name||"here"))+"."));return}
   var today=ymd(new Date()), cur=today>=r.periodStart&&today<=r.periodEnd;
   $("nowPolK").textContent=cur?"Pollen this week":"Pollen last week";
   var frag=document.createDocumentFragment();
@@ -899,8 +924,7 @@ function renderNowPollen(){
     var v=r[c[0]], i=plv(v); if(!v) return;
     frag.appendChild(el("span","lvl l"+i,c[1]+" "+v));
   });
-  var meta=el("span","sub","UCT, "+shortRange(r.periodStart,r.periodEnd)+(r.dominant?" · mostly "+r.dominant:""));
-  frag.appendChild(meta);
+  frag.appendChild(el("span","sub","UCT "+r.site+" site, "+shortRange(r.periodStart,r.periodEnd)+(r.estimated?" · typical levels":"")+(r.dominant?" · mostly "+r.dominant:"")));
   box.innerHTML=""; box.appendChild(frag);
 }
 function updateWxSource(){
