@@ -289,6 +289,10 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
       </div>
       <p class="note" id="fbMsg" role="status"></p>
     </form>
+    <div class="actions" style="border-top:1px solid var(--line);padding-top:12px">
+      <span class="note" id="appVer"></span>
+      <button class="linkbtn" type="button" id="updBtn">Check for updates</button>
+    </div>
   </section>
 
   <section class="panel onboard" id="onboard" hidden aria-labelledby="obh">
@@ -1298,9 +1302,15 @@ $("repCopy").addEventListener("click",function(){
 });
 
 /* ---------- Help & feedback ---------- */
-var APP_VERSION="2026.10.25";
+var APP_VERSION="2026.10.25.2";
 /* Optional: a Web3Forms access key sends feedback straight to an inbox. Empty = use the share sheet. */
 var FEEDBACK_KEY="";
+$("appVer").textContent="App version "+APP_VERSION;
+$("updBtn").addEventListener("click",function(){
+  $("appVer").textContent="Checking…";
+  var go=function(){location.reload()};
+  if(navigator.serviceWorker&&navigator.serviceWorker.getRegistration) navigator.serviceWorker.getRegistration().then(function(r){return r&&r.update()}).catch(function(){}).then(go); else go();
+});
 $("helpBtn").addEventListener("click",function(){var h=$("help");h.hidden=!h.hidden;this.setAttribute("aria-expanded",String(!h.hidden));if(!h.hidden) h.scrollIntoView({behavior:"smooth",block:"start"})});
 var fbType="Idea";
 document.querySelectorAll("#fbType .chip").forEach(function(b){b.addEventListener("click",function(){
@@ -1369,7 +1379,18 @@ sync();
 document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible") sync()});
 window.addEventListener("online",function(){sync()});
 setInterval(function(){if(document.visibilityState==="visible") sync()}, 10*60*1000);
-if("serviceWorker" in navigator) window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});
+/* Updates: always check for a new version, and reload once when it takes over (unless you're typing). */
+if("serviceWorker" in navigator) window.addEventListener("load",function(){
+  var hadController=!!navigator.serviceWorker.controller, reloaded=false;
+  navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(function(reg){
+    document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible") reg.update().catch(function(){})});
+  }).catch(function(){});
+  navigator.serviceWorker.addEventListener("controllerchange",function(){
+    if(!hadController||reloaded) return; reloaded=true;
+    var typing=document.activeElement&&/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName);
+    if(!typing) location.reload();
+  });
+});
 
 })();
 </script>
