@@ -473,7 +473,7 @@ var SYN = 29.530588853;
 var GROUPS = {
   symptoms:["Blocked nose","Facial pressure","Headache","Post-nasal drip","Discoloured mucus","Reduced smell","Ear pressure","Ache behind eyes","Fever"],
   hayfever:["Sneezing","Itchy nose","Runny nose (clear)","Itchy or watery eyes","Itchy throat or palate","Itchy ears"],
-  exposures:["Sawdust / sanding","Acetate / solvent fumes","Welding fumes","Garden / pollen","Dust (Landy, roads)","Alcohol","Poor sleep","Aircon"],
+  exposures:["Sawdust / sanding","Acetate / solvent fumes","Welding fumes","Garden / pollen","Dust / dirt roads","Alcohol","Poor sleep","Aircon"],
   treatment:["Saline rinse","Steroid spray","Decongestant","Antihistamine","Painkiller","Antibiotic","Steam"]
 };
 var WORDS = ["Clear","Barely there","Mild","Noticeable","Annoying","Struggling","Rough","Bad","Very bad","Severe","Floored"];
@@ -928,7 +928,13 @@ var cfg=lsGet("cfg",{owner:"",repo:"sinus-log-data",token:""});
 weather=lsGet("weather",{});
 var pollen=lsGet("pollen",{});
 var lastSync=lsGet("lastSync",null), syncing=false, syncTimer=null;
-function rebuild(){entries={};Object.keys(recs).forEach(function(k){if(recs[k]&&!recs[k].deleted) entries[k]=recs[k]})}
+/* Renamed chips: older entries are read under the new name. */
+var RENAMED={"Dust (Landy, roads)":"Dust / dirt roads"};
+function normalise(r){
+  if(!r||!r.exposures||!r.exposures.some(function(x){return RENAMED[x]})) return r;
+  return Object.assign({},r,{exposures:r.exposures.map(function(x){return RENAMED[x]||x})});
+}
+function rebuild(){entries={};Object.keys(recs).forEach(function(k){if(recs[k]&&!recs[k].deleted) entries[k]=normalise(recs[k])})}
 function persist(){lsSet("recs",recs);lsSet("dirty",dirty)}
 function commit(rec){recs[rec.date]=rec;dirty[rec.date]=true;persist();rebuild();renderAll();scheduleSync()}
 function pending(){return Object.keys(dirty).length}
@@ -1405,7 +1411,7 @@ $("repCopy").addEventListener("click",function(){
 });
 
 /* ---------- Help & feedback ---------- */
-var APP_VERSION="2026.10.25.5";
+var APP_VERSION="2026.10.25.6";
 /* Optional: a Web3Forms access key sends feedback straight to an inbox. Empty = use the share sheet. */
 var FEEDBACK_KEY="";
 $("appVer").textContent="App version "+APP_VERSION;
