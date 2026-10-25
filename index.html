@@ -468,11 +468,11 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
     <p class="note" id="wxSource">Weather: Open-Meteo model data for your home town.</p>
     <p class="note">Air quality: Open-Meteo / Copernicus CAMS model (about 45 km grid). Limits are the WHO 24-hour guidelines: PM2.5 15 µg/m³, PM10 45 µg/m³.</p>
     <p class="note" id="polSource">Pollen: weekly counts from the <a href="https://pollencount.co.za/report/" target="_blank" rel="noopener">UCT Lung Institute</a> sampling site nearest to where each day was logged (within 100 km). Each report covers the 7 days up to its date; weeks a site wasn't sampled are left out of this table.</p>
-    <div class="actions"><button class="btn ghost" type="button" id="csvBtn" hidden>Download as CSV</button></div>
+    <div class="actions"><button class="btn ghost" type="button" id="repBtn2">Doctor report</button><button class="btn ghost" type="button" id="csvBtn" hidden>Download as CSV</button></div>
   </section>
 
   <section class="panel" aria-labelledby="histh">
-    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><h2 id="histh">History</h2><button class="btn ghost" type="button" id="repBtn2">Make a doctor report</button></div>
+    <h2 id="histh">History</h2>
     <div class="hist" id="hist"></div>
   </section>
 </div>
@@ -1422,7 +1422,7 @@ $("repCopy").addEventListener("click",function(){
 });
 
 /* ---------- Help & feedback ---------- */
-var APP_VERSION="2026.10.25.7";
+var APP_VERSION="2026.10.25.8";
 /* Optional: a Web3Forms access key sends feedback straight to an inbox. Empty = use the share sheet. */
 var FEEDBACK_KEY="";
 $("appVer").textContent="App version "+APP_VERSION;
