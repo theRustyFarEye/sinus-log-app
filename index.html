@@ -104,6 +104,8 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 fieldset{border:0;margin:0;padding:0;min-width:0}
 legend{font-size:.82rem;font-weight:600;padding:0;margin-bottom:8px}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
+.chipsec{flex-basis:100%;font-family:var(--f-mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.chipsec:first-child{margin-top:0}
 .chip{font:inherit;font-size:.84rem;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--fg);cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
@@ -191,6 +193,7 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
 .sheet td{border-bottom:1px solid var(--p-line);padding:3px 4px;vertical-align:top;font-variant-numeric:tabular-nums}
 .sheet td.n,.sheet th.n{text-align:right;white-space:nowrap}
 .sheet .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sheet .three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
 .sheet .cal{display:flex;gap:2px;align-items:flex-start;overflow:hidden}
 .sheet .calcol{display:flex;flex-direction:column;gap:2px}
 .sheet .calcell{width:11px;height:11px;border-radius:2px;background:var(--p-soft);border:1px solid var(--p-line)}
@@ -199,7 +202,7 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
 .sheet .foot{border-top:1px solid var(--p-line);padding-top:8px;font-size:10px;color:var(--p-muted)}
 .sheet .qs{white-space:pre-wrap;background:var(--p-soft);border-radius:6px;padding:8px 10px}
 .sheet .empty{color:var(--p-muted);font-style:italic}
-@media (max-width:520px){ .sheet .kpis{grid-template-columns:repeat(3,1fr)} .sheet .two{grid-template-columns:1fr} .sheet{padding:16px} }
+@media (max-width:520px){ .sheet .kpis{grid-template-columns:repeat(3,1fr)} .sheet .two,.sheet .three{grid-template-columns:1fr} .sheet{padding:16px} }
 @media print{
   @page{size:A4;margin:12mm}
   :root{padding:0!important}
@@ -212,6 +215,7 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
   .sheet{border:0;border-radius:0;padding:0;min-width:0;font-size:11px}
   .sheet .kpis{grid-template-columns:repeat(5,1fr)!important}
   .sheet .two{grid-template-columns:1fr 1fr!important}
+  .sheet .three{grid-template-columns:1fr 1fr 1fr!important}
   .sheet section{break-inside:avoid}
 }
 @media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important} }
@@ -414,6 +418,7 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
 
       <fieldset><legend>Sinus symptoms</legend><div class="chips" data-group="symptoms"></div></fieldset>
       <fieldset><legend>Hay fever symptoms</legend><div class="chips" data-group="hayfever"></div></fieldset>
+      <fieldset><legend>Breathing and chest</legend><div class="chips" data-group="breathing"></div></fieldset>
       <div>
         <span class="lbl"><span id="wxLbl">Weather</span> <span class="muted" style="font-weight:400">· filled in automatically</span></span>
         <div class="wx" id="wxBox"></div>
@@ -481,12 +486,26 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
 (function(){
 "use strict";
 var SYN = 29.530588853;
-var GROUPS = {
-  symptoms:["Blocked nose","Facial pressure","Headache","Post-nasal drip","Discoloured mucus","Reduced smell","Ear pressure","Ache behind eyes","Fever"],
-  hayfever:["Sneezing","Itchy nose","Runny nose (clear)","Itchy or watery eyes","Itchy throat or palate","Itchy ears"],
-  exposures:["Sawdust / sanding","Acetate / solvent fumes","Welding fumes","Garden / pollen","Dust (dirt roads)","Alcohol","Poor sleep","Aircon"],
-  treatment:["Saline rinse","Steroid spray","Decongestant","Antihistamine","Painkiller","Antibiotic","Steam"]
+/* Chip lists. Sections are only headings; each group is stored as one flat list.
+   Existing labels are kept word for word so older entries still match. */
+var SECTIONS = {
+  symptoms:[[null,["Blocked nose","Facial pressure","Headache","Post-nasal drip","Discoloured mucus","Reduced smell","Ear pressure","Ache behind eyes","Fever",
+    "Upper tooth or cheek pain","Bad breath or taste","Sore throat","Tiredness","Nosebleed"]]],
+  hayfever:[[null,["Sneezing","Itchy nose","Runny nose (clear)","Itchy or watery eyes","Itchy throat or palate","Itchy ears","Red or puffy eyes","Earache","Itchy skin or hives"]]],
+  breathing:[[null,["Dry cough","Cough with phlegm","Night-time cough","Wheezing","Short of breath","Chest tightness","Mouth breathing or snoring"]]],
+  exposures:[
+    ["Work and workshop",["Sawdust / sanding","MDF or board dust","Acetate / solvent fumes","Paint, lacquer or oil finish","Glue, resin or epoxy","Welding fumes","Metal grinding or cutting","Laser or CNC fumes","Cleaning chemicals or bleach","Flour, food or spice dust","Farm, animal or lab work","Hair or beauty products"]],
+    ["Home and outdoors",["Garden / pollen","Cut grass","Dust (dirt roads)","House dust or vacuuming","Mould or damp","Pets (cats, dogs)","Smoke (fire, braai, second-hand)","Traffic fumes","Perfume or strong scents","Swimming pool (chlorine)","Cold air or temperature swing","Flying or diving","Sick contact (cold or flu)"]],
+    ["You",["Smoking (tobacco)","Vaping","Cannabis (smoked or vaped)","Alcohol","Poor sleep","Aircon","Stress"]]
+  ],
+  treatment:[
+    ["Medicines",["Antihistamine","Antihistamine nasal spray","Antihistamine eye drops","Steroid spray","Combination spray (steroid + antihistamine)","Decongestant","Painkiller","Mucus thinner","Steroid tablets","Antibiotic","Reliever pump (e.g. Venteze, Asthavent)","Preventer pump (e.g. Flixotide, Symbicort)","Montelukast","Allergy immunotherapy"]],
+    ["Rinses and care",["Saline rinse","Saline spray","Steam","Warm compress","Nasal strips","Vaseline in nostrils","Hot drinks or honey","Drank plenty of water"]],
+    ["Protection and routines",["Wore a dust mask or respirator","Dust extraction on","Windows closed","Showered after outdoors","Air purifier","Humidifier","Head raised in bed","Washed bedding","Breathing exercises","Saw a doctor or pharmacist"]]
+  ]
 };
+var GROUPS = {};
+Object.keys(SECTIONS).forEach(function(g){GROUPS[g]=[];SECTIONS[g].forEach(function(sec){GROUPS[g]=GROUPS[g].concat(sec[1])})});
 var WORDS = ["Clear","Barely there","Mild","Noticeable","Annoying","Struggling","Rough","Bad","Very bad","Severe","Floored"];
 var FLARE = 6, WINDOW = 3;
 
@@ -655,7 +674,9 @@ var $ = function(id){return document.getElementById(id)};
 /* Chips */
 Object.keys(GROUPS).forEach(function(g){
   var box = document.querySelector('[data-group="'+g+'"]');
+  var heads={}, at=0; SECTIONS[g].forEach(function(sec){if(sec[0]) heads[at]=sec[0]; at+=sec[1].length});
   GROUPS[g].forEach(function(name,i){
+    if(heads[i]){var h=document.createElement("span"); h.className="chipsec"; h.textContent=heads[i]; box.appendChild(h)}
     var b=document.createElement("button"); b.type="button"; b.className="chip"; b.textContent=name;
     b.id="chip-"+g+"-"+i; b.setAttribute("aria-pressed","false"); b.dataset.value=name;
     b.addEventListener("click",function(){b.setAttribute("aria-pressed", b.getAttribute("aria-pressed")==="true"?"false":"true")});
@@ -816,7 +837,7 @@ function renderHistory(){
   if(!rows.length){box.innerHTML='<div class="empty-state">No entries yet. Start by back-filling the last few days of this flare in the week strip above, then log each evening. Every entry gets its moon phase stamped automatically.</div>';return}
   rows.forEach(function(e){
     var b=document.createElement("button"); b.type="button"; b.className="hrow"; b.id="h-"+e.date;
-    var m=moonAt(parseYmd(e.date)), wx=wxShort(e.date), tags=(wx?wx+" — ":"")+[].concat(e.symptoms||[],e.hayfever||[],e.exposures||[]).join(", ");
+    var m=moonAt(parseYmd(e.date)), wx=wxShort(e.date), tags=(wx?wx+" — ":"")+[].concat(e.symptoms||[],e.hayfever||[],e.breathing||[],e.exposures||[]).join(", ");
     b.innerHTML='<span class="mono" style="font-size:.85rem">'+nice(parseYmd(e.date))+'</span><span class="pill" style="background:'+sevColor(e.severity)+'">'+e.severity+'</span>'+
       '<svg viewBox="0 0 100 100" width="22" height="22" aria-hidden="true"></svg><span class="tags"></span>';
     b.querySelector(".tags").textContent = tags || (e.notes||"");
@@ -911,7 +932,7 @@ function download(name,text,type){
   catch(e){setSync("Couldn't create the file on this device.","err")}
 }
 function csvText(){
-  var head=["date","place","severity","moonPhase","illumination","daysFromFull","rain_mm","wind_dir","gust_kmh","pressure_hpa","humidity","pm2_5","pm10","pollen_site","tree_pollen","grass_pollen","weed_pollen","mould","symptoms","hayfever","exposures","treatment","notes"];
+  var head=["date","place","severity","moonPhase","illumination","daysFromFull","rain_mm","wind_dir","gust_kmh","pressure_hpa","humidity","pm2_5","pm10","pollen_site","tree_pollen","grass_pollen","weed_pollen","mould","symptoms","hayfever","breathing","exposures","treatment","notes"];
   var esc=function(v){v=Array.isArray(v)?v.join("; "):(v===undefined||v===null?"":String(v));return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
   return head.join(",")+"\n"+list().map(function(e){var m=moonAt(parseYmd(e.date));var w=wxDay(e.date)||{};e=Object.assign({},e,{place:e.place?(e.place.name||(e.place.lat+","+e.place.lon)):HOME.name,moonPhase:m.name,illumination:Math.round(m.illum*100)+"%",daysFromFull:m.fromFull.toFixed(1),rain_mm:w.rain_mm,wind_dir:w.wind_dir_deg===undefined?"":compass(w.wind_dir_deg),gust_kmh:w.gust_max_kmh,pressure_hpa:w.pressure_hpa,humidity:w.rh_mean});var aq=airDay(e.date)||{};e.pm2_5=aq.pm2_5;e.pm10=aq.pm10;var pr=pollenFor(e.date)||{};e.pollen_site=pr.site?(pr.site+(pr.estimated?" (typical)":"")):"";e.tree_pollen=pr.tree;e.grass_pollen=pr.grass;e.weed_pollen=pr.weed;e.mould=pr.mould;return head.map(function(h){return esc(e[h])}).join(",")}).join("\n");
 }
@@ -1336,7 +1357,7 @@ function reportData(){
   var sus=computeSuspects(rows).filter(function(r){return r.name.indexOf("Full-moon")!==0&&r.name.indexOf("Hay fever")!==0&&r.gap!==null&&r.gap>=0.15&&r.fl>=2}).slice(0,6);
   var notes=flares.filter(function(e){return e.notes}).slice(-8);
   var hayDays=rows.filter(function(e){return (e.hayfever||[]).length>0}).length, hayFlare=flares.filter(function(e){return (e.hayfever||[]).length>0}).length;
-  return {start:start,end:today,span:span,rows:rows,flares:flares,avg:avg,eps:eps,longest:longest,sinus:freq("symptoms"),hay:freq("hayfever"),exp:freq("exposures"),
+  return {start:start,end:today,span:span,rows:rows,flares:flares,avg:avg,eps:eps,longest:longest,sinus:freq("symptoms"),hay:freq("hayfever"),breath:freq("breathing"),exp:freq("exposures"),
     treat:treat,sus:sus,notes:notes,hayDays:hayDays,hayFlare:hayFlare,byDate:byDate};
 }
 function pctOf(a,b){return b?Math.round(a/b*100)+"%":"—"}
@@ -1372,7 +1393,7 @@ function renderReport(){
     return '<div><h4>'+title+'</h4><table><thead><tr><th>Symptom</th><th class="n">All days</th><th class="n">Bad days</th></tr></thead><tbody>'+
       list.map(function(x){return '<tr><td>'+esc(x.name)+'</td><td class="n">'+pctOf(x.all,d.rows.length)+'</td><td class="n">'+pctOf(x.flare,d.flares.length)+'</td></tr>'}).join("")+'</tbody></table></div>';
   }
-  h+='<section class="two">'+symTable(d.sinus,"Sinus symptoms")+symTable(d.hay,"Hay fever symptoms")+'</section>';
+  h+='<section class="three">'+symTable(d.sinus,"Sinus symptoms")+symTable(d.hay,"Hay fever symptoms")+symTable(d.breath,"Breathing and chest")+'</section>';
   h+='<section class="sub">Hay fever symptoms on '+pctOf(d.hayDays,d.rows.length)+' of logged days and '+pctOf(d.hayFlare,d.flares.length)+' of bad days.</section>';
   var tr=d.treat.length?'<table><thead><tr><th>Treatment</th><th class="n">Days used</th><th class="n">Avg on the day</th><th class="n">2 days later</th></tr></thead><tbody>'+
     d.treat.map(function(t){return '<tr><td>'+esc(t.name)+'</td><td class="n">'+t.days+'</td><td class="n">'+t.avg.toFixed(1)+'</td><td class="n">'+(t.change===null?"—":(t.change>0?"+":"")+t.change.toFixed(1))+'</td></tr>'}).join("")+
@@ -1398,6 +1419,7 @@ function reportText(){
   if(!d.rows.length) return L[0]+"\nNo entries yet.";
   L.push(d.rows.length+" of "+d.span+" days logged · average "+d.avg.toFixed(1)+"/10 · "+d.flares.length+" bad days (6+) · "+d.eps.length+" flare episodes, longest "+(d.longest||0)+" days");
   if(d.sinus.length) L.push("Sinus symptoms: "+d.sinus.slice(0,5).map(function(x){return x.name+" "+pctOf(x.all,d.rows.length)}).join(", "));
+  if(d.breath.length) L.push("Breathing: "+d.breath.slice(0,5).map(function(x){return x.name+" "+pctOf(x.all,d.rows.length)}).join(", "));
   if(d.hay.length) L.push("Hay fever symptoms: "+d.hay.slice(0,5).map(function(x){return x.name+" "+pctOf(x.all,d.rows.length)}).join(", "));
   if(d.treat.length) L.push("Treatments: "+d.treat.map(function(t){return t.name+" ("+t.days+" days)"}).join(", "));
   if(d.sus.length) L.push("Possible triggers: "+d.sus.map(function(r){return r.name+" ("+pctOf(r.fl,r.flN)+" of bad days vs "+pctOf(r.ot,r.otN)+")"}).join("; "));
@@ -1422,7 +1444,7 @@ $("repCopy").addEventListener("click",function(){
 });
 
 /* ---------- Help & feedback ---------- */
-var APP_VERSION="2026.10.25.8";
+var APP_VERSION="2026.10.25.9";
 /* Optional: a Web3Forms access key sends feedback straight to an inbox. Empty = use the share sheet. */
 var FEEDBACK_KEY="";
 $("appVer").textContent="App version "+APP_VERSION;
