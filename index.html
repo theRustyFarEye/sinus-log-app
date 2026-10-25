@@ -58,6 +58,22 @@ p{margin:0}
 .window-flag{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:.8rem;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--sunk);color:var(--fg)}
 .window-flag.on{background:var(--accent);color:var(--accent-ink)}
 @media (max-width:460px){ .sky{grid-template-columns:1fr;justify-items:start} .moonbox{width:112px;height:112px} }
+.now{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:10px}
+.nowrow{display:grid;grid-template-columns:8.5rem 1fr;gap:4px 12px;align-items:baseline;min-width:0}
+.nowk{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.nowv{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;font-size:.88rem;min-width:0}
+.nowv b{font-family:var(--f-mono);font-weight:500;font-variant-numeric:tabular-nums}
+.nowv .sub{font-size:.78rem;color:var(--muted)}
+.nowv .tag{font-size:.72rem;font-weight:600;padding:1px 8px;border-radius:999px;background:var(--accent);color:var(--accent-ink)}
+.nowv .lvl{font-size:.74rem}
+@media (max-width:460px){ .nowrow{grid-template-columns:1fr} }
+.nowk{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.locbtn{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--accent);cursor:pointer;padding:0}
+.locbtn svg{width:14px;height:14px}
+.locbtn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.locbtn.busy svg{animation:locpulse 1s ease-in-out infinite}
+@keyframes locpulse{50%{opacity:.35}}
+.homebtn{font:inherit;font-family:var(--f-body);font-size:.75rem;letter-spacing:0;text-transform:none;background:none;border:0;padding:2px;color:var(--accent);text-decoration:underline;cursor:pointer}
 
 /* Week strip */
 .week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
@@ -116,9 +132,9 @@ legend{font-size:.82rem;font-weight:600;padding:0;margin-bottom:8px}
 .pol .cell{background:var(--sunk);border-radius:8px;padding:8px 10px;min-width:0;display:flex;flex-direction:column;gap:4px}
 .pol .k{font-size:.72rem;color:var(--muted)}
 .lvl{align-self:flex-start;font-size:.78rem;font-weight:600;padding:1px 8px;border-radius:999px;background:var(--line);color:var(--fg)}
-.lvl.l1,.lvl.l0{background:var(--ok);color:#fff}
-.lvl.l2{background:var(--warn);color:#fff}
-.lvl.l3,.lvl.l4{background:var(--bad);color:#fff}
+.lvl.l1,.lvl.l0{background:var(--ok);color:var(--accent-ink)}
+.lvl.l2{background:var(--warn);color:var(--accent-ink)}
+.lvl.l3,.lvl.l4{background:var(--bad);color:var(--accent-ink)}
 .pol .meta{grid-column:1/-1;font-size:.82rem;color:var(--muted)}
 .pol .meta a{color:var(--accent)}
 .tblwrap{overflow-x:auto}
@@ -130,7 +146,7 @@ table.sus td:first-child{font-family:var(--f-body)}
 table.sus tr.hot td{background:var(--halo)}
 table.sus tr.hot td:first-child{font-weight:600}
 .lift{display:inline-block;min-width:3.2em;padding:1px 6px;border-radius:5px;background:var(--sunk)}
-tr.hot .lift{background:var(--bad);color:#fff}
+tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
 .verdict{font-size:.92rem;padding:10px 12px;border-left:3px solid var(--accent);background:var(--sunk);border-radius:0 8px 8px 0}
 
 /* History */
@@ -138,16 +154,16 @@ tr.hot .lift{background:var(--bad);color:#fff}
 .hrow{display:grid;grid-template-columns:5.8rem 2.2rem 1.6rem 1fr;gap:10px;align-items:center;padding:9px 4px;border-top:1px solid var(--line);background:none;border-left:0;border-right:0;border-bottom:0;color:var(--fg);font:inherit;text-align:left;cursor:pointer;width:100%}
 .hrow:hover{background:var(--sunk)}
 .hrow .tags{font-size:.8rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
-.pill{font-family:var(--f-mono);font-size:.8rem;font-weight:500;text-align:center;border-radius:6px;padding:1px 0;color:#fff}
+.pill{font-family:var(--f-mono);font-size:.8rem;font-weight:500;text-align:center;border-radius:6px;padding:1px 0;color:var(--accent-ink)}
 .empty-state{padding:14px;border:1px dashed var(--line);border-radius:8px;color:var(--muted);font-size:.9rem}
 .note{font-size:.84rem;color:var(--muted)}
 .banner{font-size:.85rem;padding:8px 12px;border-radius:8px;background:var(--sunk);border:1px solid var(--line)}
 @media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important} }
 .syncbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
 .syncpill{font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--sunk);color:var(--fg)}
-.syncpill.ok{background:var(--ok);color:#fff}
-.syncpill.warn{background:var(--warn);color:#fff}
-.syncpill.err{background:var(--bad);color:#fff}
+.syncpill.ok{background:var(--ok);color:var(--accent-ink)}
+.syncpill.warn{background:var(--warn);color:var(--accent-ink)}
+.syncpill.err{background:var(--bad);color:var(--accent-ink)}
 .errtext{color:var(--bad)}
 .linkbtn{font:inherit;font-size:.85rem;background:none;border:0;padding:4px 2px;color:var(--accent);text-decoration:underline;cursor:pointer}
 .field{display:flex;flex-direction:column;gap:4px;flex:1 1 180px;min-width:0}
@@ -162,7 +178,7 @@ tr.hot .lift{background:var(--bad);color:#fff}
   <header style="display:flex;flex-direction:column;gap:6px">
     <span class="eyebrow">Hout Bay · 34.0° S</span>
     <h1>Moonlit Sinus Log</h1>
-    <p class="muted">Log congestion each evening. Moon phase and Hout Bay weather are added to every entry automatically, and after a few lunar cycles the tests below show what actually lines up with your flares.</p>
+    <p class="muted">Log congestion each evening. Moon phase, weather (Hout Bay, or wherever you are) and Cape Town pollen are added to every entry automatically, and after a few lunar cycles the tests below show what actually lines up with your flares.</p>
   </header>
 
   <div class="syncbar">
@@ -209,6 +225,10 @@ tr.hot .lift{background:var(--bad);color:#fff}
         <span class="window-flag" id="windowFlag">Outside the full-moon window</span>
       </div>
     </div>
+    <div class="now" aria-label="Hout Bay right now">
+      <div class="nowrow"><span class="nowk"><button type="button" class="locbtn" id="locBtn" aria-pressed="false" aria-label="Use my current location for the weather" title="Use my current location"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="21,3 3,10.5 10.5,13.5 13.5,21" fill="currentColor"/></svg></button><span id="nowWxK">Hout Bay now</span><button type="button" class="homebtn" id="homeBtn" hidden>Back to Hout Bay</button></span><span class="nowv" id="nowWx"><span class="sub">Loading the weather…</span></span></div>
+      <div class="nowrow"><span class="nowk" id="nowPolK">Pollen this week</span><span class="nowv" id="nowPol"><span class="sub">Arrives once sync is connected.</span></span></div>
+    </div>
   </section>
 
   <section class="panel" aria-labelledby="logh">
@@ -237,7 +257,7 @@ tr.hot .lift{background:var(--bad);color:#fff}
       <fieldset><legend>Sinus symptoms</legend><div class="chips" data-group="symptoms"></div></fieldset>
       <fieldset><legend>Hay fever symptoms</legend><div class="chips" data-group="hayfever"></div></fieldset>
       <div>
-        <span class="lbl">Weather in Hout Bay <span class="muted" style="font-weight:400">· filled in automatically</span></span>
+        <span class="lbl"><span id="wxLbl">Weather in Hout Bay</span> <span class="muted" style="font-weight:400">· filled in automatically</span></span>
         <div class="wx" id="wxBox"></div>
       </div>
       <div>
@@ -389,10 +409,12 @@ var weather = {};   /* date -> Open-Meteo daily row */
 var COMPASS=["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
 function compass(deg){return COMPASS[Math.round(((deg%360)+360)%360/22.5)%16]}
 function prevDay(ds){var d=parseYmd(ds);d.setDate(d.getDate()-1);return ymd(d)}
+/* An entry logged with location on carries its own weather; otherwise Hout Bay's. */
+function wxDay(ds){var e=entries[ds];return (e&&e.wx)?e.wx:weather[ds]}
 function wxFlags(ds){
-  var w=weather[ds]; if(!w) return null;
-  var p=weather[prevDay(ds)], dir=w.wind_dir_deg, gust=w.gust_max_kmh||0, rain=w.rain_mm||0;
-  var dp=(p&&typeof p.pressure_hpa==="number"&&typeof w.pressure_hpa==="number")?w.pressure_hpa-p.pressure_hpa:null;
+  var w=wxDay(ds); if(!w) return null;
+  var p=weather[prevDay(ds)], prevP=(typeof w.prevPressure==="number")?w.prevPressure:(p&&p.pressure_hpa), dir=w.wind_dir_deg, gust=w.gust_max_kmh||0, rain=w.rain_mm||0;
+  var dp=(typeof prevP==="number"&&typeof w.pressure_hpa==="number")?w.pressure_hpa-prevP:null;
   return {
     southeaster: dir>=100&&dir<=190&&gust>=40,
     front: dir>=260&&dir<=350&&(rain>=1||gust>=45),
@@ -415,13 +437,14 @@ var WXF=[
 ];
 /* true if the flag held on the day or the day before */
 function wxHit(ds,key){var a=wxFlags(ds),b=wxFlags(prevDay(ds));return !!((a&&a[key])||(b&&b[key]))}
-function wxKnown(ds){return !!weather[ds]}
+function wxKnown(ds){return !!wxDay(ds)}
 function wxShort(ds){
-  var w=weather[ds]; if(!w) return "";
+  var w=wxDay(ds); if(!w) return "";
   return (w.rain_mm>=0.5?w.rain_mm.toFixed(0)+"mm · ":"")+compass(w.wind_dir_deg)+" "+Math.round(w.gust_max_kmh)+" · "+Math.round(w.pressure_hpa)+"hPa";
 }
 function renderWx(ds){
-  var box=$("wxBox"), w=weather[ds];
+  var box=$("wxBox"), w=wxDay(ds), en=entries[ds];
+  $("wxLbl").textContent="Weather in "+(en&&en.place?(en.place.name||"your location"):"Hout Bay");
   if(!w){box.innerHTML='<div class="none">'+(ds>=ymd(new Date())?"Weather for this day is added the next morning.":"No weather on record for this day.")+'</div>';return}
   var f=wxFlags(ds), dp=f.dp;
   var cells=[
@@ -468,7 +491,11 @@ function showDateMoon(){
 /* ---------- Pollen (UCT Lung Institute, weekly) ---------- */
 var PLV=["very low","low","moderate","high","very high"];
 function plv(x){return x?PLV.indexOf(x):-1}
+var CPT={lat:-33.96,lon:18.46};
+function kmBetween(a,b){var R=6371,dLa=(b.lat-a.lat)*Math.PI/180,dLo=(b.lon-a.lon)*Math.PI/180,x=Math.sin(dLa/2)*Math.sin(dLa/2)+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLo/2)*Math.sin(dLo/2);return 2*R*Math.asin(Math.sqrt(x))}
+function awayFromCape(ds){var e=entries[ds];return !!(e&&e.place&&kmBetween(e.place,CPT)>60)}
 function pollenFor(ds){
+  if(awayFromCape(ds)) return null;
   var reps=pollen||{}, best=null;
   Object.keys(reps).forEach(function(k){var r=reps[k]; if(r&&r.periodStart<=ds&&ds<=r.periodEnd&&(!best||r.date>best.date)) best=r});
   return best;
@@ -489,6 +516,7 @@ function polMeta(r,prefix){
 }
 function renderPollen(ds){
   var box=$("polBox"); if(!box) return;
+  if(awayFromCape(ds)){box.innerHTML="";var m=document.createElement("div");m.className="meta";m.textContent="Logged in "+(entries[ds].place.name||"another area")+", so Cape Town pollen doesn't apply to this day.";box.appendChild(m);return}
   var r=pollenFor(ds);
   if(r){box.innerHTML=polCells(r); box.appendChild(polMeta(r,"Week "));return}
   var last=latestPollen();
@@ -521,7 +549,12 @@ $("form").addEventListener("submit",function(ev){
     moonPhase:m.name, illumination:Math.round(m.illum*1000)/1000, lunarDay:Math.round(m.age*10)/10,
     daysFromFull:Math.round(m.fromFull*10)/10, updatedAt:new Date().toISOString()};
   Object.keys(GROUPS).forEach(function(g){rec[g]=readChips(g)});
+  var prior=entries[ds];
+  if(loc.mode==="here"&&loc.lat!=null) rec.place={lat:Math.round(loc.lat*100)/100,lon:Math.round(loc.lon*100)/100,name:loc.name||null};
+  else if(prior&&prior.place&&loc.mode!=="here"){ /* editing an away entry from home keeps where it was logged */ rec.place=prior.place; if(prior.wx) rec.wx=prior.wx }
+  if(rec.place&&prior&&prior.wx&&prior.place&&prior.place.lat===rec.place.lat&&prior.place.lon===rec.place.lon) rec.wx=prior.wx;
   commit(rec); loadForm(ds);
+  if(rec.place&&(!rec.wx||rec.wx.partial)) fillPlaceWx(ds);
   setStatus(cfg.token?"Saved. Syncing to GitHub…":"Saved on this device.");
 });
 function setStatus(t,err){$("status").textContent=t;$("status").className="status"+(err?" err":"")}
@@ -540,7 +573,7 @@ function renderTonight(){
   $("phaseName").textContent=m.name; $("illum").textContent=Math.round(m.illum*100)+"%";
   $("age").textContent=m.age.toFixed(1)+" / 29.5";
   var f=nextFull(now); if(f){var days=(f-now)/86400000;
-    $("nextFull").textContent=nice(f)+" "+pad(f.getHours())+":"+pad(f.getMinutes())+(days<1.5?" (tomorrow-ish)":" (in "+days.toFixed(1)+" d)");}
+    $("nextFull").textContent=nice(f)+" "+pad(f.getHours())+":"+pad(f.getMinutes())+(days<1?" (in "+Math.max(1,Math.round(days*24))+" h)":" (in "+days.toFixed(1)+" d)");}
   var inW=Math.abs(m.fromFull)<=WINDOW; var flag=$("windowFlag");
   flag.textContent = inW?"Inside the full-moon window":"Outside the full-moon window"; flag.className="window-flag"+(inW?" on":"");
 }
@@ -651,9 +684,9 @@ function download(name,text,type){
   catch(e){setSync("Couldn't create the file on this device.","err")}
 }
 function csvText(){
-  var head=["date","severity","moonPhase","illumination","daysFromFull","rain_mm","wind_dir","gust_kmh","pressure_hpa","humidity","tree_pollen","grass_pollen","weed_pollen","mould","symptoms","hayfever","exposures","treatment","notes"];
+  var head=["date","place","severity","moonPhase","illumination","daysFromFull","rain_mm","wind_dir","gust_kmh","pressure_hpa","humidity","tree_pollen","grass_pollen","weed_pollen","mould","symptoms","hayfever","exposures","treatment","notes"];
   var esc=function(v){v=Array.isArray(v)?v.join("; "):(v===undefined||v===null?"":String(v));return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
-  return head.join(",")+"\n"+list().map(function(e){var m=moonAt(parseYmd(e.date));var w=weather[e.date]||{};e=Object.assign({},e,{moonPhase:m.name,illumination:Math.round(m.illum*100)+"%",daysFromFull:m.fromFull.toFixed(1),rain_mm:w.rain_mm,wind_dir:w.wind_dir_deg===undefined?"":compass(w.wind_dir_deg),gust_kmh:w.gust_max_kmh,pressure_hpa:w.pressure_hpa,humidity:w.rh_mean});var pr=pollenFor(e.date)||{};e.tree_pollen=pr.tree;e.grass_pollen=pr.grass;e.weed_pollen=pr.weed;e.mould=pr.mould;return head.map(function(h){return esc(e[h])}).join(",")}).join("\n");
+  return head.join(",")+"\n"+list().map(function(e){var m=moonAt(parseYmd(e.date));var w=wxDay(e.date)||{};e=Object.assign({},e,{place:e.place?(e.place.name||(e.place.lat+","+e.place.lon)):"Hout Bay",moonPhase:m.name,illumination:Math.round(m.illum*100)+"%",daysFromFull:m.fromFull.toFixed(1),rain_mm:w.rain_mm,wind_dir:w.wind_dir_deg===undefined?"":compass(w.wind_dir_deg),gust_kmh:w.gust_max_kmh,pressure_hpa:w.pressure_hpa,humidity:w.rh_mean});var pr=pollenFor(e.date)||{};e.tree_pollen=pr.tree;e.grass_pollen=pr.grass;e.weed_pollen=pr.weed;e.mould=pr.mould;return head.map(function(h){return esc(e[h])}).join(",")}).join("\n");
 }
 $("csvBtn").addEventListener("click",function(){download("sinus-moon-log-"+ymd(new Date())+".csv",csvText(),"text/csv")});
 $("csvBtn2").addEventListener("click",function(){download("sinus-moon-log-"+ymd(new Date())+".csv",csvText(),"text/csv")});
@@ -747,9 +780,128 @@ function sync(){
     .then(function(w){if(w.data&&w.data.days){weather=w.data.days;lsSet("weather",weather)}})
     .then(function(){return getFile("pollen.json").catch(function(){return {data:null}})})
     .then(function(p){if(p.data&&p.data.reports){pollen=p.data.reports;lsSet("pollen",pollen)}})
-    .then(function(){syncing=false;lastSync=new Date().toISOString();lsSet("lastSync",lastSync);renderAll();showDateMoon();updateWxSource();setSync();
+    .then(function(){syncing=false;lastSync=new Date().toISOString();lsSet("lastSync",lastSync);renderAll();showDateMoon();updateWxSource();renderNowPollen();renderNow();setSync();fillPlaceWx();
        if($("status").textContent.indexOf("Syncing")>=0) setStatus("Saved and synced.");})
     .catch(function(e){syncing=false;setSync(errText(e),"err");if($("status").textContent.indexOf("Syncing")>=0) setStatus("Saved on this device. GitHub sync will retry.",true)});
+}
+/* ---------- Hout Bay right now (live weather + this week's pollen) ---------- */
+var HOME={lat:-34.04,lon:18.36,name:"Hout Bay"};
+var loc=lsGet("loc",{mode:"home"});
+function nowUrl(){var p=loc.mode==="here"&&loc.lat!=null?loc:HOME;
+  return "https://api.open-meteo.com/v1/forecast?latitude="+p.lat.toFixed(3)+"&longitude="+p.lon.toFixed(3)+"&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m,is_day&daily=precipitation_sum,temperature_2m_max,temperature_2m_min,pressure_msl_mean&past_days=1&forecast_days=1&timezone=auto"}
+function placeKey(){return loc.mode==="here"&&loc.lat!=null?loc.lat.toFixed(2)+","+loc.lon.toFixed(2):"home"}
+var nowWx=lsGet("now",null), nowBusy=false;
+function renderLocUi(){
+  var here=loc.mode==="here"&&loc.lat!=null;
+  $("locBtn").setAttribute("aria-pressed",String(here));
+  $("locBtn").setAttribute("aria-label",here?"Refresh my location":"Use my current location for the weather");
+  $("nowWxK").textContent=(here?(loc.name||"Your location"):"Hout Bay")+" now";
+  $("homeBtn").hidden=!here;
+}
+function setNowNote(t){var box=$("nowWx");box.innerHTML="";box.appendChild(el("span","sub",t))}
+function reverseName(lat,lon){
+  return fetch("https://api.bigdatacloud.net/data/reverse-geocode-client?latitude="+lat+"&longitude="+lon+"&localityLanguage=en")
+    .then(function(r){if(!r.ok) throw 0;return r.json()})
+    .then(function(j){return j.locality||j.city||j.principalSubdivision||null}).catch(function(){return null});
+}
+function locate(prompted){
+  if(!("geolocation" in navigator)){setNowNote("This device can't share its location.");return}
+  var btn=$("locBtn"); btn.classList.add("busy");
+  navigator.geolocation.getCurrentPosition(function(pos){
+    var lat=pos.coords.latitude, lon=pos.coords.longitude, moved=loc.lat==null||kmBetween({lat:lat,lon:lon},loc)>2;
+    loc={mode:"here",lat:lat,lon:lon,name:moved?null:loc.name,at:new Date().toISOString()};
+    lsSet("loc",loc); renderLocUi(); nowWx=null; fetchNow();
+    (moved||!loc.name?reverseName(lat.toFixed(3),lon.toFixed(3)):Promise.resolve(loc.name)).then(function(n){
+      if(loc.mode!=="here") return;
+      if(n&&kmBetween({lat:lat,lon:lon},HOME)<4) n="Hout Bay";
+      loc.name=n||(lat.toFixed(2)+", "+lon.toFixed(2)); lsSet("loc",loc); renderLocUi(); showDateMoon();
+    });
+    btn.classList.remove("busy");
+  },function(err){
+    btn.classList.remove("busy");
+    if(!prompted) return;
+    setNowNote(err&&err.code===1?"Location is blocked for this app. Allow it in your browser's site settings, or keep using Hout Bay.":"Couldn't get your location just now. Try again in a moment.");
+    setTimeout(function(){renderNow()},6000);
+  },{enableHighAccuracy:false,timeout:15000,maximumAge:10*60*1000});
+}
+$("locBtn").addEventListener("click",function(){locate(true)});
+$("homeBtn").addEventListener("click",function(){loc={mode:"home"};lsSet("loc",loc);renderLocUi();nowWx=null;fetchNow()});
+/* Refresh the position quietly on open, but only if permission was already given. */
+function refreshLocQuietly(){
+  if(loc.mode!=="here"||!navigator.permissions||!navigator.permissions.query) return;
+  navigator.permissions.query({name:"geolocation"}).then(function(st){if(st.state==="granted") locate(false)}).catch(function(){});
+}
+/* Daily weather for an entry logged away from Hout Bay. Today's values are provisional and refreshed later. */
+var placeBusy={};
+function fillPlaceWx(only){
+  var today=ymd(new Date()), limit=ymd(new Date(Date.now()-90*86400000));
+  Object.keys(entries).forEach(function(ds){
+    if(only&&ds!==only) return;
+    var e=entries[ds]; if(!e.place||placeBusy[ds]||ds<limit) return;
+    if(e.wx&&!(e.wx.partial&&ds<today)&&!(e.wx.partial&&only)) return;
+    placeBusy[ds]=true;
+    var prev=prevDay(ds);
+    fetch("https://api.open-meteo.com/v1/forecast?latitude="+e.place.lat+"&longitude="+e.place.lon+"&daily=precipitation_sum,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant,temperature_2m_max,temperature_2m_min,relative_humidity_2m_mean,pressure_msl_mean&start_date="+prev+"&end_date="+ds+"&timezone=auto")
+      .then(function(r){if(!r.ok) throw 0;return r.json()}).then(function(j){
+        var d=j.daily, i=d.time.indexOf(ds), k=d.time.indexOf(prev); if(i<0) throw 0;
+        var wx={date:ds,source:"Open-Meteo",lat:e.place.lat,lon:e.place.lon,rain_mm:d.precipitation_sum[i],wind_max_kmh:d.wind_speed_10m_max[i],gust_max_kmh:d.wind_gusts_10m_max[i],
+          wind_dir_deg:d.wind_direction_10m_dominant[i],tmax:d.temperature_2m_max[i],tmin:d.temperature_2m_min[i],rh_mean:d.relative_humidity_2m_mean[i],pressure_hpa:d.pressure_msl_mean[i],
+          prevPressure:k>=0?d.pressure_msl_mean[k]:null,partial:ds>=today,fetchedAt:new Date().toISOString()};
+        if([wx.rain_mm,wx.gust_max_kmh,wx.wind_dir_deg,wx.pressure_hpa].some(function(v){return v==null})) throw 0;
+        var cur=recs[ds]; if(!cur||cur.deleted||!cur.place) return;
+        var next=Object.assign({},cur,{wx:wx}); recs[ds]=next; dirty[ds]=true; persist(); rebuild(); renderAll(); showDateMoon(); scheduleSync();
+      }).catch(function(){}).then(function(){delete placeBusy[ds]});
+  });
+}
+function sky(code,day){
+  if(code===0) return day?"Clear":"Clear night";
+  if(code<=2) return "Partly cloudy"; if(code===3) return "Overcast";
+  if(code===45||code===48) return "Fog"; if(code>=51&&code<=57) return "Drizzle";
+  if(code>=61&&code<=67) return "Rain"; if(code>=71&&code<=77) return "Snow";
+  if(code>=80&&code<=82) return "Showers"; if(code>=95) return "Thunderstorm"; return "";
+}
+function el(tag,cls,text){var e=document.createElement(tag);if(cls) e.className=cls;if(text!==undefined) e.textContent=text;return e}
+function renderNow(){
+  var box=$("nowWx");
+  if(!nowWx||!nowWx.current){ if(!navigator.onLine) {box.innerHTML="";box.appendChild(el("span","sub","Offline. Live weather shows when you're back online."))} return }
+  var c=nowWx.current, d=nowWx.daily||{}, frag=document.createDocumentFragment();
+  var t=el("span"); t.appendChild(el("b",null,Math.round(c.temperature_2m)+"°")); t.appendChild(document.createTextNode(" "+sky(c.weather_code,c.is_day))); frag.appendChild(t);
+  var w=el("span"); w.appendChild(el("b",null,compass(c.wind_direction_10m)+" "+Math.round(c.wind_speed_10m))); w.appendChild(document.createTextNode(" km/h, gusts "));
+  w.appendChild(el("b",null,String(Math.round(c.wind_gusts_10m)))); frag.appendChild(w);
+  var n=(d.time||[]).length, ti=Math.max(0,n-1), yp=n>1&&d.pressure_msl_mean?d.pressure_msl_mean[0]:null;
+  var dp=(typeof yp==="number")?c.pressure_msl-yp:null;
+  var pr=el("span"); pr.appendChild(el("b",null,Math.round(c.pressure_msl)+" hPa")); if(dp!==null&&Math.abs(dp)>=1) pr.appendChild(document.createTextNode(" "+(dp<0?"↓":"↑")+Math.abs(dp).toFixed(0)+" vs yesterday")); frag.appendChild(pr);
+  var h=el("span"); h.appendChild(el("b",null,Math.round(c.relative_humidity_2m)+"%")); h.appendChild(document.createTextNode(" humidity")); frag.appendChild(h);
+  var rain=d.precipitation_sum&&d.precipitation_sum[ti]; if(rain>=0.2){var r=el("span");r.appendChild(el("b",null,rain.toFixed(1)+" mm"));r.appendChild(document.createTextNode(" rain today"));frag.appendChild(r)}
+  var dir=c.wind_direction_10m, g=c.wind_gusts_10m;
+  if(dir>=100&&dir<=190&&g>=40) frag.appendChild(el("span","tag","Southeaster"));
+  else if(dir>=260&&dir<=350&&(g>=45||c.precipitation>0)) frag.appendChild(el("span","tag","Northwester"));
+  if(g>=55) frag.appendChild(el("span","tag","Strong gusts"));
+  if(dp!==null&&dp<=-4) frag.appendChild(el("span","tag","Pressure dropping"));
+  var at=new Date(nowWx.fetchedAt); frag.appendChild(el("span","sub","updated "+pad(at.getHours())+":"+pad(at.getMinutes())));
+  box.innerHTML=""; box.appendChild(frag);
+}
+function fetchNow(){
+  if(nowBusy) return; if(nowWx&&nowWx.key===placeKey()&&Date.now()-new Date(nowWx.fetchedAt)<15*60*1000){renderNow();return}
+  nowBusy=true;
+  var key=placeKey();
+  fetch(nowUrl(),{cache:"no-store"}).then(function(r){if(!r.ok) throw 0;return r.json()}).then(function(j){
+    if(!j.current) throw 0; if(key!==placeKey()) return; nowWx={current:j.current,daily:j.daily,key:key,fetchedAt:new Date().toISOString()}; lsSet("now",nowWx);
+  }).catch(function(){}).then(function(){nowBusy=false;renderNow()});
+}
+function renderNowPollen(){
+  var r=latestPollen(), box=$("nowPol");
+  if(!r) return;
+  var today=ymd(new Date()), cur=today>=r.periodStart&&today<=r.periodEnd;
+  $("nowPolK").textContent=cur?"Pollen this week":"Pollen last week";
+  var frag=document.createDocumentFragment();
+  [["tree","Trees"],["grass","Grass"],["weed","Weeds"],["mould","Moulds"]].forEach(function(c){
+    var v=r[c[0]], i=plv(v); if(!v) return;
+    frag.appendChild(el("span","lvl l"+i,c[1]+" "+v));
+  });
+  var meta=el("span","sub","UCT, "+shortRange(r.periodStart,r.periodEnd)+(r.dominant?" · mostly "+r.dominant:""));
+  frag.appendChild(meta);
+  box.innerHTML=""; box.appendChild(frag);
 }
 function updateWxSource(){
   var ds=Object.keys(weather).sort();
@@ -781,6 +933,10 @@ $("disconnectBtn").addEventListener("click",function(){cfg={owner:cfg.owner,repo
 rebuild();
 renderTonight(); loadForm(ymd(new Date())); renderAll(); updateWxSource(); setSync();
 setInterval(renderTonight, 10*60*1000);
+renderLocUi(); renderNow(); renderNowPollen(); fetchNow(); refreshLocQuietly();
+setInterval(function(){if(document.visibilityState==="visible") fetchNow()}, 15*60*1000);
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible"){refreshLocQuietly();fetchNow()}});
+window.addEventListener("online",fetchNow);
 sync();
 document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible") sync()});
 window.addEventListener("online",function(){sync()});
