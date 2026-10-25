@@ -141,7 +141,7 @@ legend{font-size:.82rem;font-weight:600;padding:0;margin-bottom:8px}
 .pol .meta{grid-column:1/-1;font-size:.82rem;color:var(--muted)}
 .pol .meta a{color:var(--accent)}
 .tblwrap{overflow-x:auto}
-table.sus{width:100%;border-collapse:collapse;font-size:.88rem;min-width:340px}
+table.sus{width:100%;border-collapse:collapse;font-size:.88rem}
 table.sus th{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;text-align:right;padding:6px 8px;border-bottom:1px solid var(--line)}
 table.sus th:first-child,table.sus td:first-child{text-align:left}
 table.sus td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
@@ -150,6 +150,17 @@ table.sus tr.hot td{background:var(--halo)}
 table.sus tr.hot td:first-child{font-weight:600}
 .lift{display:inline-block;min-width:3.2em;padding:1px 6px;border-radius:5px;background:var(--sunk)}
 tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
+/* Phones: slimmer margins, and the Suspects table fits without scrolling sideways */
+@media (max-width:520px){
+  .wrap{padding-left:max(10px, env(safe-area-inset-left, 0px));padding-right:max(10px, env(safe-area-inset-right, 0px));gap:16px}
+  .panel{padding:14px 12px}
+  table.sus{font-size:.8rem}
+  table.sus th{padding:5px 3px;letter-spacing:.03em;font-size:.66rem}
+  table.sus td{padding:6px 3px}
+  table.sus td:first-child{padding-right:6px;word-break:break-word}
+  table.sus td .muted{display:block;font-size:.72rem}
+  .lift{min-width:2.6em;padding:1px 4px}
+}
 .verdict{font-size:.92rem;padding:10px 12px;border-left:3px solid var(--accent);background:var(--sunk);border-radius:0 8px 8px 0}
 
 /* History */
@@ -473,7 +484,7 @@ var SYN = 29.530588853;
 var GROUPS = {
   symptoms:["Blocked nose","Facial pressure","Headache","Post-nasal drip","Discoloured mucus","Reduced smell","Ear pressure","Ache behind eyes","Fever"],
   hayfever:["Sneezing","Itchy nose","Runny nose (clear)","Itchy or watery eyes","Itchy throat or palate","Itchy ears"],
-  exposures:["Sawdust / sanding","Acetate / solvent fumes","Welding fumes","Garden / pollen","Dust / dirt roads","Alcohol","Poor sleep","Aircon"],
+  exposures:["Sawdust / sanding","Acetate / solvent fumes","Welding fumes","Garden / pollen","Dust (dirt roads)","Alcohol","Poor sleep","Aircon"],
   treatment:["Saline rinse","Steroid spray","Decongestant","Antihistamine","Painkiller","Antibiotic","Steam"]
 };
 var WORDS = ["Clear","Barely there","Mild","Noticeable","Annoying","Struggling","Rough","Bad","Very bad","Severe","Floored"];
@@ -929,7 +940,7 @@ weather=lsGet("weather",{});
 var pollen=lsGet("pollen",{});
 var lastSync=lsGet("lastSync",null), syncing=false, syncTimer=null;
 /* Renamed chips: older entries are read under the new name. */
-var RENAMED={"Dust (Landy, roads)":"Dust / dirt roads"};
+var RENAMED={"Dust (Landy, roads)":"Dust (dirt roads)","Dust / dirt roads":"Dust (dirt roads)"};
 function normalise(r){
   if(!r||!r.exposures||!r.exposures.some(function(x){return RENAMED[x]})) return r;
   return Object.assign({},r,{exposures:r.exposures.map(function(x){return RENAMED[x]||x})});
@@ -1411,7 +1422,7 @@ $("repCopy").addEventListener("click",function(){
 });
 
 /* ---------- Help & feedback ---------- */
-var APP_VERSION="2026.10.25.6";
+var APP_VERSION="2026.10.25.7";
 /* Optional: a Web3Forms access key sends feedback straight to an inbox. Empty = use the share sheet. */
 var FEEDBACK_KEY="";
 $("appVer").textContent="App version "+APP_VERSION;
