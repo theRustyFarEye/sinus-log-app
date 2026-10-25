@@ -274,7 +274,7 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
     <h2 id="helph">Help &amp; feedback</h2>
     <details class="faq"><summary>How do I install it?</summary><p><b>Android:</b> open the link in Chrome, tap the menu (⋮), then <b>Install app</b> or <b>Add to Home screen</b>.</p><p><b>iPhone or iPad:</b> open it in Safari, tap Share, then <b>Add to Home Screen</b>. This also stops Safari clearing your entries if you don't open the app for a while.</p><p><b>Windows or Mac:</b> open it in Chrome or Edge and click the install icon at the right of the address bar (or menu, then <b>Install</b>).</p><p>The first time you open it, choose your home town. That's all the setup there is.</p></details>
     <details class="faq"><summary>Where are my entries saved?</summary><p>On this device only. Nobody else can see them, including the person who made the app. Use Settings, then <b>Download backup</b> now and then, and keep the file somewhere safe.</p></details>
-    <details class="faq"><summary>Where do the weather and pollen come from?</summary><p>Weather is Open-Meteo model data for your home town, or for wherever you are when the arrow button is on. Pollen is the weekly count from the nearest UCT Lung Institute sampling site within 100 km. Some areas have no site nearby.</p></details>
+    <details class="faq"><summary>Where do the weather and pollen come from?</summary><p>Weather is Open-Meteo model data for your home town, or for wherever you are when the arrow button is on. Pollen is the weekly count from the nearest UCT Lung Institute sampling site within 100 km; some areas have no site nearby. Air quality (fine particles and dust) is daily model data from Copernicus via Open-Meteo, compared with the WHO 24-hour limits.</p></details>
     <details class="faq" id="faqSync"><summary>Can I use it on my phone and my computer? (optional GitHub sync)</summary>
       <p>Normally each device keeps its own entries. If you want the same diary on several devices, with automatic backup and history, you can sync it to a free, private GitHub repository that only you can see. It takes about 10 minutes, once.</p>
       <ol class="steps">
@@ -373,6 +373,7 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
     </div>
     <div class="now" aria-label="Weather and pollen right now">
       <div class="nowrow"><span class="nowk"><button type="button" class="locbtn" id="locBtn" aria-pressed="false" aria-label="Use my current location for the weather" title="Use my current location"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="21,3 3,10.5 10.5,13.5 13.5,21" fill="currentColor"/></svg></button><span id="nowWxK">Weather now</span><button type="button" class="homebtn" id="homeBtn" hidden>Back to home</button></span><span class="nowv" id="nowWx"><span class="sub">Loading the weather…</span></span></div>
+      <div class="nowrow"><span class="nowk">Air now</span><span class="nowv" id="nowAir"><span class="sub">Loading…</span></span></div>
       <div class="nowrow"><span class="nowk" id="nowPolK">Pollen this week</span><span class="nowv" id="nowPol"><span class="sub">Arrives once sync is connected.</span></span></div>
     </div>
   </section>
@@ -409,6 +410,10 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
       <div>
         <span class="lbl">Pollen <span class="muted" style="font-weight:400">· weekly UCT count from the nearest site, filled in automatically</span></span>
         <div class="pol" id="polBox"></div>
+      </div>
+      <div>
+        <span class="lbl">Air quality <span class="muted" style="font-weight:400">· daily average, filled in automatically</span></span>
+        <div class="pol" id="airBox"></div>
       </div>
       <fieldset><legend>Exposures in the last 24 hours</legend><div class="chips" data-group="exposures"></div></fieldset>
       <fieldset><legend>What you took or did</legend><div class="chips" data-group="treatment"></div></fieldset>
@@ -450,6 +455,7 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
     <p class="note">How often each factor was present on your flare days (6 or higher) compared with your other logged days. Weather counts if it hit on the day or the day before, since sinuses often react with a lag. A factor needs at least 4 flare days and a clear gap before it gets highlighted.</p>
     <div class="tblwrap"><table class="sus" id="sus"><thead><tr><th>Factor</th><th>Flare days</th><th>Other days</th><th>Gap</th></tr></thead><tbody></tbody></table></div>
     <p class="note" id="wxSource">Weather: Open-Meteo model data for your home town.</p>
+    <p class="note">Air quality: Open-Meteo / Copernicus CAMS model (about 45 km grid). Limits are the WHO 24-hour guidelines: PM2.5 15 µg/m³, PM10 45 µg/m³.</p>
     <p class="note" id="polSource">Pollen: weekly counts from the <a href="https://pollencount.co.za/report/" target="_blank" rel="noopener">UCT Lung Institute</a> sampling site nearest to where each day was logged (within 100 km). Each report covers the 7 days up to its date; weeks a site wasn't sampled are left out of this table.</p>
     <div class="actions"><button class="btn ghost" type="button" id="csvBtn" hidden>Download as CSV</button></div>
   </section>
@@ -557,13 +563,36 @@ function compass(deg){return COMPASS[Math.round(((deg%360)+360)%360/22.5)%16]}
 function prevDay(ds){var d=parseYmd(ds);d.setDate(d.getDate()-1);return ymd(d)}
 /* An entry logged with location on carries its own weather; otherwise the home town's. */
 function wxDay(ds){var e=entries[ds];return (e&&e.wx)?e.wx:weather[ds]}
+/* Air quality (daily mean PM2.5 / PM10). Away entries carry their own; otherwise the home town's. */
+var air={};
+function airDay(ds){var e=entries[ds];if(e&&e.wx) return typeof e.wx.pm10==="number"?{pm2_5:e.wx.pm2_5,pm10:e.wx.pm10}:null;return air[ds]}
+function airHit(ds,key,limit){var a=airDay(ds),b=airDay(prevDay(ds));return !!((a&&a[key]>limit)||(b&&b[key]>limit))}
+function airLevel(v,limit){return v==null?-1:v<=limit?1:v<=limit*2.5?2:3}
+var AIR_WORD=["","Good","Above limit","High"];
+var SECT=["N","NE","E","SE","S","SW","W","NW"], SECT_NAME={N:"north",NE:"north-east",E:"east",SE:"south-east",S:"south",SW:"south-west",W:"west",NW:"north-west"};
+function sector8(deg){return SECT[Math.round((((deg%360)+360)%360)/45)%8]}
+/* Western Cape: keep the local names for the two famous winds. */
+function inCape(pt){return pt&&pt.lat<=-31.5&&pt.lat>=-35&&pt.lon>=17.5&&pt.lon<=21.5}
+function windLabel(sec,pt){var nick=inCape(pt)?(sec==="SE"?" (Southeaster)":sec==="NW"?" (Northwester)":""):"";return "Strong wind from the "+SECT_NAME[sec]+nick}
+function windTag(sec,pt){var nick=inCape(pt)?(sec==="SE"?"Southeaster":sec==="NW"?"Northwester":""):"";return nick||("Strong "+sec+" wind")}
 function wxFlags(ds){
   var w=wxDay(ds); if(!w) return null;
-  var p=weather[prevDay(ds)], prevP=(typeof w.prevPressure==="number")?w.prevPressure:(p&&p.pressure_hpa), dir=w.wind_dir_deg, gust=w.gust_max_kmh||0, rain=w.rain_mm||0;
+  var w1=wxDay(prevDay(ds)), w2=wxDay(prevDay(prevDay(ds))), wn=wxDay(addDays(ds,1));
+  var prevP=(typeof w.prevPressure==="number")?w.prevPressure:(w1&&w1.pressure_hpa), dir=w.wind_dir_deg, gust=w.gust_max_kmh||0, rain=w.rain_mm||0;
   var dp=(typeof prevP==="number"&&typeof w.pressure_hpa==="number")?w.pressure_hpa-prevP:null;
+  /* Cold front, anywhere: pressure falls 4+ hPa into a dip, then recovers, with rain or a temperature drop.
+     Without the next day yet, a 4+ hPa fall with 2+ mm of rain counts. */
+  var before=[prevP,w2&&w2.pressure_hpa].filter(function(v){return typeof v==="number"});
+  var fall=before.length&&typeof w.pressure_hpa==="number"?w.pressure_hpa-Math.max.apply(null,before):null, front=false;
+  if(fall!==null&&fall<=-4){
+    if(wn&&typeof wn.pressure_hpa==="number"){
+      var rise=wn.pressure_hpa-w.pressure_hpa, wet=rain+(wn.rain_mm||0), cool=(w1&&typeof w1.tmax==="number"&&typeof wn.tmax==="number")?wn.tmax-w1.tmax:0;
+      front=rise>=2&&(wet>=2||cool<=-3);
+    } else front=rain>=2;
+  }
   return {
-    southeaster: dir>=100&&dir<=190&&gust>=40,
-    front: dir>=260&&dir<=350&&(rain>=1||gust>=45),
+    front: front,
+    sector: gust>=40&&typeof dir==="number"?sector8(dir):null,
     rain: rain>=1,
     gusty: gust>=55,
     humid: (w.rh_mean||0)>=85,
@@ -573,8 +602,7 @@ function wxFlags(ds){
   };
 }
 var WXF=[
-  ["southeaster","Southeaster (gusts 40+ km/h)"],
-  ["front","Northwester / cold front"],
+  ["front","Cold front"],
   ["rain","Rain (1 mm+)"],
   ["gusty","Strong gusts (55+ km/h)"],
   ["humid","Humid (85%+)"],
@@ -583,6 +611,7 @@ var WXF=[
 ];
 /* true if the flag held on the day or the day before */
 function wxHit(ds,key){var a=wxFlags(ds),b=wxFlags(prevDay(ds));return !!((a&&a[key])||(b&&b[key]))}
+function windHit(ds,sec){var a=wxFlags(ds),b=wxFlags(prevDay(ds));return !!((a&&a.sector===sec)||(b&&b.sector===sec))}
 function wxKnown(ds){return !!wxDay(ds)}
 function wxShort(ds){
   var w=wxDay(ds); if(!w) return "";
@@ -601,7 +630,9 @@ function renderWx(ds){
     [Math.round(w.rh_mean)+"%","Humidity"],
     [Math.round(w.tmin)+"–"+Math.round(w.tmax)+"°","Temp °C"]
   ];
-  var tags=WXF.filter(function(x){return f[x[0]]}).map(function(x){return '<span class="tag">'+x[1].replace(/ \(.*\)/,"")+'</span>'}).join("");
+  var tagList=WXF.filter(function(x){return f[x[0]]}).map(function(x){return x[1].replace(/ \(.*\)/,"")});
+  if(f.sector) tagList.splice(f.front?1:0,0,windTag(f.sector,placeFor(ds)));
+  var tags=tagList.map(function(t){return '<span class="tag">'+esc(t)+'</span>'}).join("");
   box.innerHTML=cells.map(function(c){return '<div class="cell"><div class="v">'+c[0]+'</div><div class="k">'+c[1]+'</div></div>'}).join("")+(tags?'<div class="tagline">'+tags+'</div>':"");
 }
 
@@ -632,7 +663,7 @@ function showDateMoon(){
   var m=moonAt(parseYmd(s));
   var off=m.fromFull; var rel = Math.abs(off)<0.5?"on full moon":(Math.abs(off).toFixed(1)+" days "+(off<0?"before":"after")+" full moon");
   $("dateMoon").textContent = m.name+" · "+Math.round(m.illum*100)+"% lit · "+rel;
-  renderWx(s); renderPollen(s);
+  renderWx(s); renderPollen(s); renderAir(s);
 }
 /* ---------- Pollen (UCT Lung Institute, weekly) ---------- */
 var PLV=["very low","low","moderate","high","very high"];
@@ -682,6 +713,15 @@ function polMeta(r,prefix){
   return el;
 }
 function polNote(t){var m=document.createElement("div");m.className="meta";m.textContent=t;return m}
+function renderAir(ds){
+  var box=$("airBox"); if(!box) return;
+  var a=airDay(ds);
+  if(!a){box.innerHTML='<div class="meta">'+(ds>=ymd(new Date())?"Today's air quality shows once the day's readings are in.":"No air-quality data for this day.")+'</div>';return}
+  box.innerHTML=[["pm2_5","Fine particles (PM2.5)",15],["pm10","Dust (PM10)",45]].map(function(c){
+    var v=a[c[0]], i=airLevel(v,c[2]);
+    return '<div class="cell"><span class="k">'+c[1]+'</span><span class="lvl l'+i+'">'+(v==null?"—":Math.round(v)+" µg/m³ · "+AIR_WORD[i])+'</span></div>';
+  }).join("")+'<div class="meta">Daily average · WHO limit '+"PM2.5 15, PM10 45 µg/m³"+'</div>';
+}
 function renderPollen(ds){
   var box=$("polBox"); if(!box) return;
   var pt=placeFor(ds), where=placeLabel(pt);
@@ -826,6 +866,9 @@ function renderAnalysis(){
 function computeSuspects(rows){
   var factors=[["moon","Full-moon window (±3 days)",function(e){return Math.abs(moonAt(parseYmd(e.date)).fromFull)<=WINDOW},function(){return true}]];
   WXF.forEach(function(x){factors.push([x[0],x[1],function(e){return wxHit(e.date,x[0])},function(e){return wxKnown(e.date)}])});
+  SECT.forEach(function(sec){factors.push(["wind-"+sec,windLabel(sec,HOME),function(e){return windHit(e.date,sec)},function(e){return wxKnown(e.date)}])});
+  factors.push(["pm25","Fine particles above WHO daily limit (PM2.5 over 15)",function(e){return airHit(e.date,"pm2_5",15)},function(e){return !!airDay(e.date)}]);
+  factors.push(["pm10","Dust above WHO daily limit (PM10 over 45)",function(e){return airHit(e.date,"pm10",45)},function(e){return !!airDay(e.date)}]);
   GROUPS.exposures.forEach(function(name){factors.push(["x-"+name,name,function(e){return (e.exposures||[]).indexOf(name)>=0},function(){return true}])});
   factors.push(["hay","Hay fever symptoms (any)",function(e){return (e.hayfever||[]).length>0},function(){return true}]);
   [["tree",3,"Tree pollen high (UCT week)"],["grass",2,"Grass pollen moderate or higher (UCT week)"],["weed",2,"Weed pollen moderate or higher (UCT week)"],["mould",2,"Moulds moderate or higher (UCT week)"]].forEach(function(x){
@@ -836,7 +879,7 @@ function computeSuspects(rows){
     rows.forEach(function(e){ if(!f[3](e)) return; var hit=f[2](e); if(e.severity>=FLARE){flN++; if(hit) fl++;} else {otN++; if(hit) ot++;} });
     var pf=flN?fl/flN:null, po=otN?ot/otN:null, gap=(pf!==null&&po!==null)?pf-po:null;
     return {name:f[1],fl:fl,flN:flN,ot:ot,otN:otN,pf:pf,po:po,gap:gap,hot:gap!==null&&flN>=4&&fl>=3&&gap>=0.25};
-  }).filter(function(r){return r.fl+r.ot>0||r.name.indexOf("Full-moon")===0||r.name.indexOf("(UCT week)")>0||WXF.some(function(x){return x[1]===r.name})});
+  }).filter(function(r){return r.fl+r.ot>0||r.name.indexOf("Full-moon")===0||r.name.indexOf("(UCT week)")>0||r.name.indexOf("WHO daily")>0||WXF.some(function(x){return x[1]===r.name})});
   out.sort(function(a,b){return (b.gap===null?-9:b.gap)-(a.gap===null?-9:a.gap)});
   return out;
 }
@@ -857,9 +900,9 @@ function download(name,text,type){
   catch(e){setSync("Couldn't create the file on this device.","err")}
 }
 function csvText(){
-  var head=["date","place","severity","moonPhase","illumination","daysFromFull","rain_mm","wind_dir","gust_kmh","pressure_hpa","humidity","pollen_site","tree_pollen","grass_pollen","weed_pollen","mould","symptoms","hayfever","exposures","treatment","notes"];
+  var head=["date","place","severity","moonPhase","illumination","daysFromFull","rain_mm","wind_dir","gust_kmh","pressure_hpa","humidity","pm2_5","pm10","pollen_site","tree_pollen","grass_pollen","weed_pollen","mould","symptoms","hayfever","exposures","treatment","notes"];
   var esc=function(v){v=Array.isArray(v)?v.join("; "):(v===undefined||v===null?"":String(v));return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
-  return head.join(",")+"\n"+list().map(function(e){var m=moonAt(parseYmd(e.date));var w=wxDay(e.date)||{};e=Object.assign({},e,{place:e.place?(e.place.name||(e.place.lat+","+e.place.lon)):HOME.name,moonPhase:m.name,illumination:Math.round(m.illum*100)+"%",daysFromFull:m.fromFull.toFixed(1),rain_mm:w.rain_mm,wind_dir:w.wind_dir_deg===undefined?"":compass(w.wind_dir_deg),gust_kmh:w.gust_max_kmh,pressure_hpa:w.pressure_hpa,humidity:w.rh_mean});var pr=pollenFor(e.date)||{};e.pollen_site=pr.site?(pr.site+(pr.estimated?" (typical)":"")):"";e.tree_pollen=pr.tree;e.grass_pollen=pr.grass;e.weed_pollen=pr.weed;e.mould=pr.mould;return head.map(function(h){return esc(e[h])}).join(",")}).join("\n");
+  return head.join(",")+"\n"+list().map(function(e){var m=moonAt(parseYmd(e.date));var w=wxDay(e.date)||{};e=Object.assign({},e,{place:e.place?(e.place.name||(e.place.lat+","+e.place.lon)):HOME.name,moonPhase:m.name,illumination:Math.round(m.illum*100)+"%",daysFromFull:m.fromFull.toFixed(1),rain_mm:w.rain_mm,wind_dir:w.wind_dir_deg===undefined?"":compass(w.wind_dir_deg),gust_kmh:w.gust_max_kmh,pressure_hpa:w.pressure_hpa,humidity:w.rh_mean});var aq=airDay(e.date)||{};e.pm2_5=aq.pm2_5;e.pm10=aq.pm10;var pr=pollenFor(e.date)||{};e.pollen_site=pr.site?(pr.site+(pr.estimated?" (typical)":"")):"";e.tree_pollen=pr.tree;e.grass_pollen=pr.grass;e.weed_pollen=pr.weed;e.mould=pr.mould;return head.map(function(h){return esc(e[h])}).join(",")}).join("\n");
 }
 $("csvBtn").addEventListener("click",function(){download("sinus-moon-log-"+ymd(new Date())+".csv",csvText(),"text/csv")});
 $("csvBtn2").addEventListener("click",function(){download("sinus-moon-log-"+ymd(new Date())+".csv",csvText(),"text/csv")});
@@ -974,7 +1017,7 @@ function renderHomeUi(){
 }
 function setHome(h){
   HOME={lat:Math.round(h.lat*1000)/1000,lon:Math.round(h.lon*1000)/1000,name:h.name}; lsSet("home",HOME); homeChosen=true;
-  renderHomeUi(); nowWx=null; fetchNow(); fetchHomeWeather(true); renderNowPollen(); renderAll(); showDateMoon(); updateWxSource();
+  renderHomeUi(); nowWx=null; fetchNow(); fetchHomeWeather(true); air={}; fetchHomeAir(true); renderNowPollen(); renderAll(); showDateMoon(); updateWxSource();
 }
 /* Town picker: "use my location" or search by name (Open-Meteo geocoding). Used in the welcome card and in Settings. */
 function buildTownPick(box){
@@ -1033,6 +1076,36 @@ function fetchHomeWeather(force){
       renderAll(); showDateMoon(); updateWxSource(); renderNow();
     }).catch(function(){});
 }
+/* Air quality history for the home town (hourly CAMS model data averaged per day), fetched on the device. */
+var AQ="https://air-quality-api.open-meteo.com/v1/air-quality?hourly=pm10,pm2_5&timezone=auto";
+air=lsGet("air",{});
+function dailyMeans(j){
+  var h=j.hourly||{}, out={};
+  (h.time||[]).forEach(function(t,i){var d=t.slice(0,10), a=h.pm2_5[i], b=h.pm10[i]; if(a==null||b==null) return; var o=out[d]||(out[d]={n:0,a:0,b:0}); o.n++; o.a+=a; o.b+=b});
+  var r={}; Object.keys(out).forEach(function(d){var o=out[d]; if(o.n>=12) r[d]={pm2_5:Math.round(o.a/o.n*10)/10,pm10:Math.round(o.b/o.n*10)/10}});
+  return r;
+}
+function fetchHomeAir(force){
+  var key=HOME.lat.toFixed(2)+","+HOME.lon.toFixed(2), meta=lsGet("airMeta",{});
+  if(!force&&meta.key===key&&Date.now()-meta.at<6*3600*1000) return;
+  fetch(AQ+"&latitude="+HOME.lat+"&longitude="+HOME.lon+"&past_days=92&forecast_days=1",{cache:"no-store"})
+    .then(function(r){if(!r.ok) throw 0;return r.json()}).then(function(j){
+      if(key!==HOME.lat.toFixed(2)+","+HOME.lon.toFixed(2)) return;
+      var today=ymd(new Date()), days=dailyMeans(j), keep={};
+      Object.keys(days).forEach(function(d){if(d<today) keep[d]=days[d]});
+      if(meta.key===key) Object.keys(air).forEach(function(d){if(!keep[d]) keep[d]=air[d]});
+      air=keep; lsSet("air",air); lsSet("airMeta",{key:key,at:Date.now()});
+      renderAll(); showDateMoon();
+    }).catch(function(){});
+}
+function renderNowAir(){
+  var box=$("nowAir"), a=nowWx&&nowWx.air;
+  if(!a){box.innerHTML="";box.appendChild(el("span","sub",navigator.onLine?"Loading…":"Shows when you're online."));return}
+  box.innerHTML="";
+  [["pm2_5","PM2.5",15],["pm10","PM10",45]].forEach(function(c){var v=a[c[0]]; if(v==null) return; var i=airLevel(v,c[2]); box.appendChild(el("span","lvl l"+i,c[1]+" "+Math.round(v)+" · "+AIR_WORD[i].toLowerCase()))});
+  box.appendChild(el("span","sub","µg/m³ now; WHO daily limits 15 and 45"));
+}
+
 /* Pollen levels published in the public app repo, for devices without their own data repo. */
 var PUB_POLLEN=["https://raw.githubusercontent.com/theRustyFarEye/sinus-log-app/main/data/pollen.json","data/pollen.json"];
 function loadPublicPollen(force){
@@ -1110,6 +1183,10 @@ function fillPlaceWx(only){
           wind_dir_deg:d.wind_direction_10m_dominant[i],tmax:d.temperature_2m_max[i],tmin:d.temperature_2m_min[i],rh_mean:d.relative_humidity_2m_mean[i],pressure_hpa:d.pressure_msl_mean[i],
           prevPressure:k>=0?d.pressure_msl_mean[k]:null,partial:ds>=today,fetchedAt:new Date().toISOString()};
         if([wx.rain_mm,wx.gust_max_kmh,wx.wind_dir_deg,wx.pressure_hpa].some(function(v){return v==null})) throw 0;
+        return fetch(AQ+"&latitude="+e.place.lat+"&longitude="+e.place.lon+"&start_date="+ds+"&end_date="+ds).then(function(r){if(!r.ok) throw 0;return r.json()})
+          .then(function(q){var m=dailyMeans(q)[ds]; if(m){wx.pm2_5=m.pm2_5;wx.pm10=m.pm10}}).catch(function(){}).then(function(){return wx});
+      }).then(function(wx){
+        if(!wx) return;
         var cur=recs[ds]; if(!cur||cur.deleted||!cur.place) return;
         var next=Object.assign({},cur,{wx:wx}); recs[ds]=next; dirty[ds]=true; persist(); rebuild(); renderAll(); showDateMoon(); scheduleSync();
       }).catch(function(){}).then(function(){delete placeBusy[ds]});
@@ -1136,11 +1213,13 @@ function renderNow(){
   var h=el("span"); h.appendChild(el("b",null,Math.round(c.relative_humidity_2m)+"%")); h.appendChild(document.createTextNode(" humidity")); frag.appendChild(h);
   var rain=d.precipitation_sum&&d.precipitation_sum[ti]; if(rain>=0.2){var r=el("span");r.appendChild(el("b",null,rain.toFixed(1)+" mm"));r.appendChild(document.createTextNode(" rain today"));frag.appendChild(r)}
   var dir=c.wind_direction_10m, g=c.wind_gusts_10m;
-  if(dir>=100&&dir<=190&&g>=40) frag.appendChild(el("span","tag","Southeaster"));
-  else if(dir>=260&&dir<=350&&(g>=45||c.precipitation>0)) frag.appendChild(el("span","tag","Northwester"));
+  var here=(loc.mode==="here"&&loc.lat!=null)?loc:HOME;
+  if(dp!==null&&dp<=-4&&(rain>=1||c.precipitation>0)) frag.appendChild(el("span","tag","Cold front likely"));
+  if(g>=40) frag.appendChild(el("span","tag",windTag(sector8(dir),here)));
   if(g>=55) frag.appendChild(el("span","tag","Strong gusts"));
   if(dp!==null&&dp<=-4) frag.appendChild(el("span","tag","Pressure dropping"));
   var at=new Date(nowWx.fetchedAt); frag.appendChild(el("span","sub","updated "+pad(at.getHours())+":"+pad(at.getMinutes())));
+  renderNowAir();
   box.innerHTML=""; box.appendChild(frag);
 }
 function fetchNow(){
@@ -1148,7 +1227,10 @@ function fetchNow(){
   nowBusy=true;
   var key=placeKey();
   fetch(nowUrl(),{cache:"no-store"}).then(function(r){if(!r.ok) throw 0;return r.json()}).then(function(j){
-    if(!j.current) throw 0; if(key!==placeKey()) return; nowWx={current:j.current,daily:j.daily,key:key,fetchedAt:new Date().toISOString()}; lsSet("now",nowWx);
+    if(!j.current) throw 0; if(key!==placeKey()) return; nowWx={current:j.current,daily:j.daily,key:key,fetchedAt:new Date().toISOString(),air:nowWx&&nowWx.key===key?nowWx.air:null}; lsSet("now",nowWx);
+    var p=loc.mode==="here"&&loc.lat!=null?loc:HOME;
+    fetch(AQ.replace("hourly=pm10,pm2_5&","")+"&current=pm10,pm2_5&latitude="+p.lat.toFixed(3)+"&longitude="+p.lon.toFixed(3),{cache:"no-store"})
+      .then(function(r){if(!r.ok) throw 0;return r.json()}).then(function(q){if(q.current&&nowWx&&nowWx.key===key){nowWx.air={pm2_5:q.current.pm2_5,pm10:q.current.pm10};lsSet("now",nowWx);renderNowAir()}}).catch(function(){});
   }).catch(function(){}).then(function(){nowBusy=false;renderNow()});
 }
 function renderNowPollen(){
@@ -1216,7 +1298,8 @@ function reportData(){
     ep.len=ep.days.length; ep.peak=Math.max.apply(null,ep.days.map(function(e){return e.severity}));
     var tr={}; ep.days.forEach(function(e){(e.treatment||[]).forEach(function(t){tr[t]=1})}); ep.treat=Object.keys(tr);
     var tags={}, look=[addDays(ep.start,-2),addDays(ep.start,-1)].concat(ep.days.map(function(e){return e.date}));
-    look.forEach(function(ds){var f=wxFlags(ds); if(!f) return; if(f.front) tags["cold front"]=1; if(f.southeaster) tags["southeaster"]=1; if(f.rain) tags["rain"]=1; if(f.pdrop) tags["pressure drop"]=1});
+    look.forEach(function(ds){var f=wxFlags(ds); if(!f) return; if(f.front) tags["cold front"]=1; if(f.sector){var wt=windTag(f.sector,placeFor(ds)); tags[/^Strong /.test(wt)?"strong "+SECT_NAME[f.sector]+" wind":wt.toLowerCase()]=1} if(f.rain) tags["rain"]=1; if(f.pdrop) tags["pressure drop"]=1;
+      var a=airDay(ds); if(a&&a.pm2_5>15) tags["PM2.5 above WHO limit"]=1; if(a&&a.pm10>45) tags["dust above WHO limit"]=1});
     var pr=pollenFor(ep.start); if(pr&&!pr.estimated){if(plv(pr.tree)>=3) tags["tree pollen high"]=1; if(plv(pr.grass)>=2) tags["grass pollen "+pr.grass]=1}
     ep.tags=Object.keys(tags);
   });
@@ -1322,7 +1405,7 @@ $("repCopy").addEventListener("click",function(){
 });
 
 /* ---------- Help & feedback ---------- */
-var APP_VERSION="2026.10.25.4";
+var APP_VERSION="2026.10.25.5";
 /* Optional: a Web3Forms access key sends feedback straight to an inbox. Empty = use the share sheet. */
 var FEEDBACK_KEY="";
 $("appVer").textContent="App version "+APP_VERSION;
@@ -1396,9 +1479,9 @@ rebuild();
 renderTonight(); loadForm(ymd(new Date())); renderAll(); updateWxSource(); setSync();
 setInterval(renderTonight, 10*60*1000);
 renderHomeUi(); updateWxSource(); renderNow(); renderNowPollen(); fetchNow(); refreshLocQuietly();
-fetchHomeWeather(false); if(!cfg.token) loadPublicPollen(false);
+fetchHomeWeather(false); fetchHomeAir(false); if(!cfg.token) loadPublicPollen(false);
 setInterval(function(){if(document.visibilityState==="visible") fetchNow()}, 15*60*1000);
-document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible"){refreshLocQuietly();fetchNow();fetchHomeWeather(false);if(!cfg.token) loadPublicPollen(false)}});
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible"){refreshLocQuietly();fetchNow();fetchHomeWeather(false);fetchHomeAir(false);if(!cfg.token) loadPublicPollen(false)}});
 window.addEventListener("online",fetchNow);
 sync();
 document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible") sync()});
