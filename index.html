@@ -225,6 +225,10 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
 .ghbox{border-top:1px solid var(--line);padding-top:12px}
 .faq summary{cursor:pointer;font-weight:600;font-size:.92rem;padding:4px 0}
 .faq p{font-size:.9rem;color:var(--muted);margin:4px 0 6px;max-width:65ch}
+.faq .steps{font-size:.9rem;color:var(--muted);margin:4px 0 6px;padding-left:1.3em;max-width:65ch;display:flex;flex-direction:column;gap:6px}
+.faq .steps ul{padding-left:1.1em;margin:4px 0 0;display:flex;flex-direction:column;gap:3px}
+.faq code{font-family:var(--f-mono);font-size:.85em;background:var(--sunk);padding:0 4px;border-radius:4px}
+.faq a{color:var(--accent)}
 .filebtn input{position:absolute;inset:0;opacity:0;cursor:pointer}
 </style>
 </head>
@@ -268,9 +272,24 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
 
   <section class="panel" id="help" hidden aria-labelledby="helph">
     <h2 id="helph">Help &amp; feedback</h2>
-    <details class="faq"><summary>How do I install it?</summary><p>Android: open the link in Chrome, tap the menu, then <b>Install app</b>. iPhone: open it in Safari, tap Share, then <b>Add to Home Screen</b>. On iPhone, adding it to the Home Screen also stops Safari clearing your entries.</p></details>
+    <details class="faq"><summary>How do I install it?</summary><p><b>Android:</b> open the link in Chrome, tap the menu (⋮), then <b>Install app</b> or <b>Add to Home screen</b>.</p><p><b>iPhone or iPad:</b> open it in Safari, tap Share, then <b>Add to Home Screen</b>. This also stops Safari clearing your entries if you don't open the app for a while.</p><p><b>Windows or Mac:</b> open it in Chrome or Edge and click the install icon at the right of the address bar (or menu, then <b>Install</b>).</p><p>The first time you open it, choose your home town. That's all the setup there is.</p></details>
     <details class="faq"><summary>Where are my entries saved?</summary><p>On this device only. Nobody else can see them, including the person who made the app. Use Settings, then <b>Download backup</b> now and then, and keep the file somewhere safe.</p></details>
     <details class="faq"><summary>Where do the weather and pollen come from?</summary><p>Weather is Open-Meteo model data for your home town, or for wherever you are when the arrow button is on. Pollen is the weekly count from the nearest UCT Lung Institute sampling site within 100 km. Some areas have no site nearby.</p></details>
+    <details class="faq" id="faqSync"><summary>Can I use it on my phone and my computer? (optional GitHub sync)</summary>
+      <p>Normally each device keeps its own entries. If you want the same diary on several devices, with automatic backup and history, you can sync it to a free, private GitHub repository that only you can see. It takes about 10 minutes, once.</p>
+      <ol class="steps">
+        <li>Create a free account at <a href="https://github.com/signup" target="_blank" rel="noopener">github.com/signup</a>.</li>
+        <li>Make a new repository: tap <b>+</b>, then <b>New repository</b>. Name it <code>sinus-log-data</code>, choose <b>Private</b>, tick <b>Add a README</b>, then <b>Create repository</b>.</li>
+        <li>Create an access token at <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a>:
+          <ul><li>Name: <code>Sinus Log – phone</code> (or computer). Expiration: 1 year.</li>
+          <li>Repository access: <b>Only select repositories</b>, then pick <code>sinus-log-data</code>.</li>
+          <li>Repository permissions: <b>Contents</b>, set to <b>Read and write</b>. Leave everything else.</li>
+          <li>Tap <b>Generate token</b> and copy it. GitHub shows it only once.</li></ul></li>
+        <li>In this app: <b>Settings</b>, then <b>Sync between devices</b>. Enter your GitHub username, <code>sinus-log-data</code> and the token, then tap <b>Connect</b>. It should say <i>Connected … (private)</i>.</li>
+        <li>Repeat step 4 on each device, ideally with its own token, so you can switch one off without affecting the others.</li>
+      </ol>
+      <p>Your entries already on the device are uploaded on the first sync. The token is stored only on that device and is sent only to GitHub. Never paste it into a chat or email; if it leaks, delete it on GitHub and make a new one. Keep the repository private, because it holds your health diary.</p>
+    </details>
     <details class="faq"><summary>What does the Suspects table mean?</summary><p>For each factor it compares how often it was present on your bad days (6 or higher) with your other days. A big gap is worth a closer look. It shows patterns, not causes, and isn't medical advice: see your doctor about symptoms that worry you.</p></details>
     <details class="faq"><summary>What do Send and Copy message do?</summary><p><b>Send</b> opens your phone's share menu with the message ready. Choose WhatsApp or email and send it to the person who shared the app with you. On a computer without a share menu, it copies the message instead.</p><p class="ownerOnly" hidden>On this device the app is connected to GitHub, so Send adds the message straight to the ideas list (IDEAS.md) in your data repo instead.</p><p><b>Copy message</b> copies the message so you can paste it anywhere. Each message includes its type (idea, bug or question), your name if you add one, and the app version, device type and screen size to help fix bugs. Your log entries are never included.</p></details>
     <form id="fbForm" novalidate style="gap:12px;border-top:1px solid var(--line);padding-top:14px">
@@ -320,6 +339,7 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
     </div>
     <details id="ghDetails" class="ghbox">
     <summary>Sync between devices with your own GitHub (optional)</summary>
+    <p class="note" style="margin-top:8px">New to this? <button class="linkbtn" type="button" id="syncHow">See the step-by-step guide</button> in Help.</p>
     <form id="ghForm" style="gap:12px;margin-top:12px" novalidate>
       <div class="row">
         <label class="field"><span class="lbl" style="margin:0">GitHub username</span><input id="ghOwner" autocomplete="username" autocapitalize="off" spellcheck="false"></label>
@@ -945,7 +965,7 @@ var HOME=lsGet("home",null);
 if(!HOME&&cfg.token){HOME=HB;lsSet("home",HOME)}      /* an existing synced device keeps Hout Bay */
 var homeChosen=!!HOME;
 if(!HOME) HOME=CT;
-function useRepoWeather(){return !!cfg.token&&kmBetween(HOME,HB)<5}
+function useRepoWeather(){return isMakerDevice()&&kmBetween(HOME,HB)<5}
 function renderHomeUi(){
   $("eyebrowPlace").textContent=HOME.name+" · "+Math.abs(HOME.lat).toFixed(1)+"° "+(HOME.lat<0?"S":"N");
   $("homeName").textContent=HOME.name+(homeChosen?"":" (not set yet)");
@@ -1302,11 +1322,14 @@ $("repCopy").addEventListener("click",function(){
 });
 
 /* ---------- Help & feedback ---------- */
-var APP_VERSION="2026.10.25.3";
+var APP_VERSION="2026.10.25.4";
 /* Optional: a Web3Forms access key sends feedback straight to an inbox. Empty = use the share sheet. */
 var FEEDBACK_KEY="";
 $("appVer").textContent="App version "+APP_VERSION;
-function renderOwnerBits(){document.querySelectorAll(".ownerOnly").forEach(function(el){el.hidden=!cfg.token})}
+/* Only the app maker's own devices send feedback into GitHub; everyone else's goes by WhatsApp or email to him. */
+function isMakerDevice(){return !!cfg.token&&(cfg.owner||"").toLowerCase()==="therustyfareye"}
+function renderOwnerBits(){document.querySelectorAll(".ownerOnly").forEach(function(el){el.hidden=!isMakerDevice()})}
+$("syncHow").addEventListener("click",function(){$("settings").hidden=true;$("setBtn").setAttribute("aria-expanded","false");$("help").hidden=false;$("helpBtn").setAttribute("aria-expanded","true");var f=$("faqSync");f.open=true;f.scrollIntoView({behavior:"smooth",block:"start"})});
 renderOwnerBits();
 $("updBtn").addEventListener("click",function(){
   $("appVer").textContent="Checking…";
@@ -1334,8 +1357,8 @@ $("fbForm").addEventListener("submit",function(ev){
   ev.preventDefault();
   var t=$("fbText").value.trim(); if(t.length<3){$("fbMsg").textContent="Write your message first.";return}
   var done=function(){$("fbText").value="";$("fbMsg").textContent="Thanks, your "+fbType.toLowerCase()+" was sent."};
-  if(cfg.token){
-    /* Synced device: add it to the New ideas section of IDEAS.md in the data repo. */
+  if(isMakerDevice()){
+    /* The maker's synced device: add it to the New ideas section of IDEAS.md in the data repo. */
     $("fbSend").disabled=true; $("fbMsg").textContent="Adding it to your ideas list on GitHub…";
     var line="- "+ymd(new Date())+" · **"+fbType+"** · "+t.replace(/\s*\n+\s*/g," / ")+" _(app "+APP_VERSION+", "+deviceKind()+")_";
     function put(attempt){
