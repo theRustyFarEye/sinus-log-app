@@ -224,7 +224,8 @@ tr.hot .lift{background:var(--bad);color:#fff}
         <div class="scale"><span>0 clear</span><span>5 struggling</span><span>10 floored</span></div>
       </div>
 
-      <fieldset><legend>Symptoms</legend><div class="chips" data-group="symptoms"></div></fieldset>
+      <fieldset><legend>Sinus symptoms</legend><div class="chips" data-group="symptoms"></div></fieldset>
+      <fieldset><legend>Hay fever symptoms</legend><div class="chips" data-group="hayfever"></div></fieldset>
       <div>
         <span class="lbl">Weather in Hout Bay <span class="muted" style="font-weight:400">· filled in automatically</span></span>
         <div class="wx" id="wxBox"></div>
@@ -284,6 +285,7 @@ tr.hot .lift{background:var(--bad);color:#fff}
 var SYN = 29.530588853;
 var GROUPS = {
   symptoms:["Blocked nose","Facial pressure","Headache","Post-nasal drip","Discoloured mucus","Reduced smell","Ear pressure","Ache behind eyes","Fever"],
+  hayfever:["Sneezing","Itchy nose","Runny nose (clear)","Itchy or watery eyes","Itchy throat or palate","Itchy ears"],
   exposures:["Sawdust / sanding","Acetate / solvent fumes","Welding fumes","Garden / pollen","Dust (Landy, roads)","Alcohol","Poor sleep","Aircon"],
   treatment:["Saline rinse","Steroid spray","Decongestant","Antihistamine","Painkiller","Antibiotic","Steam"]
 };
@@ -513,7 +515,7 @@ function renderHistory(){
   if(!rows.length){box.innerHTML='<div class="empty-state">No entries yet. Start by back-filling the last few days of this flare in the week strip above, then log each evening. Every entry gets its moon phase stamped automatically.</div>';return}
   rows.forEach(function(e){
     var b=document.createElement("button"); b.type="button"; b.className="hrow"; b.id="h-"+e.date;
-    var m=moonAt(parseYmd(e.date)), wx=wxShort(e.date), tags=(wx?wx+" — ":"")+[].concat(e.symptoms||[],e.exposures||[]).join(", ");
+    var m=moonAt(parseYmd(e.date)), wx=wxShort(e.date), tags=(wx?wx+" — ":"")+[].concat(e.symptoms||[],e.hayfever||[],e.exposures||[]).join(", ");
     b.innerHTML='<span class="mono" style="font-size:.85rem">'+nice(parseYmd(e.date))+'</span><span class="pill" style="background:'+sevColor(e.severity)+'">'+e.severity+'</span>'+
       '<svg viewBox="0 0 100 100" width="22" height="22" aria-hidden="true"></svg><span class="tags"></span>';
     b.querySelector(".tags").textContent = tags || (e.notes||"");
@@ -575,6 +577,7 @@ function renderSuspects(rows){
   var factors=[["moon","Full-moon window (±3 days)",function(e){return Math.abs(moonAt(parseYmd(e.date)).fromFull)<=WINDOW},function(){return true}]];
   WXF.forEach(function(x){factors.push([x[0],x[1],function(e){return wxHit(e.date,x[0])},function(e){return wxKnown(e.date)}])});
   GROUPS.exposures.forEach(function(name){factors.push(["x-"+name,name,function(e){return (e.exposures||[]).indexOf(name)>=0},function(){return true}])});
+  factors.push(["hay","Hay fever symptoms (any)",function(e){return (e.hayfever||[]).length>0},function(){return true}]);
   var out=factors.map(function(f){
     var fl=0,flN=0,ot=0,otN=0;
     rows.forEach(function(e){ if(!f[3](e)) return; var hit=f[2](e); if(e.severity>=FLARE){flN++; if(hit) fl++;} else {otN++; if(hit) ot++;} });
@@ -597,7 +600,7 @@ function download(name,text,type){
   catch(e){setSync("Couldn't create the file on this device.","err")}
 }
 function csvText(){
-  var head=["date","severity","moonPhase","illumination","daysFromFull","rain_mm","wind_dir","gust_kmh","pressure_hpa","humidity","symptoms","exposures","treatment","notes"];
+  var head=["date","severity","moonPhase","illumination","daysFromFull","rain_mm","wind_dir","gust_kmh","pressure_hpa","humidity","symptoms","hayfever","exposures","treatment","notes"];
   var esc=function(v){v=Array.isArray(v)?v.join("; "):(v===undefined||v===null?"":String(v));return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
   return head.join(",")+"\n"+list().map(function(e){var m=moonAt(parseYmd(e.date));var w=weather[e.date]||{};e=Object.assign({},e,{moonPhase:m.name,illumination:Math.round(m.illum*100)+"%",daysFromFull:m.fromFull.toFixed(1),rain_mm:w.rain_mm,wind_dir:w.wind_dir_deg===undefined?"":compass(w.wind_dir_deg),gust_kmh:w.gust_max_kmh,pressure_hpa:w.pressure_hpa,humidity:w.rh_mean});return head.map(function(h){return esc(e[h])}).join(",")}).join("\n");
 }
