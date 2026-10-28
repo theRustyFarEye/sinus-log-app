@@ -170,6 +170,9 @@ table.sus tr.hot td{background:var(--halo)}
 table.sus tr.hot td:first-child{font-weight:600}
 .lift{display:inline-block;min-width:3.2em;padding:1px 6px;border-radius:5px;background:var(--sunk)}
 tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
+.ev{display:block;font-family:var(--f-body);font-size:.66rem;margin-top:2px;color:var(--muted)}
+.ev-strong{color:var(--bad);font-weight:600}
+.ev-some{color:var(--warn);font-weight:600}
 /* Phones: slimmer margins, and the Suspects table fits without scrolling sideways */
 @media (max-width:520px){
   .wrap{padding-left:max(10px, env(safe-area-inset-left, 0px));padding-right:max(10px, env(safe-area-inset-right, 0px));gap:16px}
@@ -326,7 +329,7 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
       </ol>
       <p>Your entries already on the device are uploaded on the first sync. The token is stored only on that device and is sent only to GitHub. Never paste it into a chat or email; if it leaks, delete it on GitHub and make a new one. Keep the repository private, because it holds your health diary.</p>
     </details>
-    <details class="faq"><summary>What does the Suspects table mean?</summary><p>For each factor it compares how often it was present on your bad days (6 or higher) with your other days. A big gap is worth a closer look. It shows patterns, not causes, and isn't medical advice: see your doctor about symptoms that worry you.</p></details>
+    <details class="faq"><summary>What does the Suspects table mean?</summary><p>For each factor it compares how often it was present on your bad days (6 or higher) with your other days. The <b>gap</b> is the difference in percentage points: on 80% of bad days but 20% of other days gives +60.</p><p>The list is sorted by how convincing each link is. <b>Strong</b> means the gap holds up even allowing for chance, <b>some</b> means it probably does, and <b>weak</b> means it could easily be luck with this few days. The more you log, the clearer it gets. It shows patterns, not causes, and isn't medical advice: see your doctor about symptoms that worry you.</p></details>
     <details class="faq"><summary>What do Send and Copy message do?</summary><p><b>Send</b> opens your phone's share menu with the message ready. Choose WhatsApp or email and send it to the person who shared the app with you. On a computer without a share menu, it copies the message instead.</p><p class="ownerOnly" hidden>On this device the app is connected to GitHub, so Send adds the message straight to the ideas list (IDEAS.md) in your data repo instead.</p><p><b>Copy message</b> copies the message so you can paste it anywhere. Each message includes its type (idea, bug or question), your name if you add one, and the app version, device type and screen size to help fix bugs. Your log entries are never included.</p></details>
     <form id="fbForm" novalidate style="gap:12px;border-top:1px solid var(--line);padding-top:14px">
       <span class="lbl" style="margin:0">Send an idea, a bug or a question</span>
@@ -496,7 +499,8 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
 
   <section class="panel" aria-labelledby="sush">
     <h2 id="sush">Suspects</h2>
-    <p class="note">How often each factor was present on your flare days (6 or higher) compared with your other logged days. Weather counts if it hit on the day or the day before, since sinuses often react with a lag. A factor needs at least 4 flare days and a clear gap before it gets highlighted.</p>
+    <p class="note">How often each factor was present on your bad days (6 or higher) compared with your other logged days. Weather counts if it hit on the day or the day before, since sinuses often react with a lag.</p>
+    <p class="note"><b>Gap</b> is how many percentage points more often a factor showed up on bad days. For example, on 80% of bad days but only 20% of other days gives +60. 0 means no difference; a minus means it's more common on good days. The list is sorted by how convincing the link is, not just the gap: <b>strong</b>, <b>some</b> or <b>weak</b> takes into account how many days it's based on, so a big gap from only a couple of bad days ranks lower until you've logged more. Highlighted rows have at least 4 bad days behind them.</p>
     <div class="tblwrap"><table class="sus" id="sus"><thead><tr><th>Factor</th><th>Flare days</th><th>Other days</th><th>Gap</th></tr></thead><tbody></tbody></table></div>
     <p class="note" id="wxSource">Weather: Open-Meteo model data for your home town.</p>
     <p class="note">Air quality: Open-Meteo / Copernicus CAMS model (about 45 km grid). Limits are the WHO 24-hour guidelines: PM2.5 15 µg/m³, PM10 45 µg/m³.</p>
@@ -952,6 +956,17 @@ function renderAnalysis(){
   $("verdict").textContent=v;
   renderSuspects(rows);
 }
+/* How convincing is a gap? Wilson score intervals for each share, combined with Newcombe's method,
+   give the low end of a 90% range for the gap. Rank by that, so luck from a handful of days ranks lower. */
+function wilson(k,n,z){if(!n) return [0,1];var p=k/n,d=1+z*z/n,c=(p+z*z/(2*n))/d,h=z*Math.sqrt(p*(1-p)/n+z*z/(4*n*n))/d;return [Math.max(0,c-h),Math.min(1,c+h)]}
+function gapLow(fl,flN,ot,otN){
+  if(!flN||!otN) return null;
+  var z=1.645, p1=fl/flN, p2=ot/otN, a=wilson(fl,flN,z), b=wilson(ot,otN,z);
+  return (p1-p2)-Math.sqrt(Math.pow(p1-a[0],2)+Math.pow(b[1]-p2,2));
+}
+function evidence(r){if(r.gap===null||r.gap<=0) return "";if(r.flN<3) return "weak";return r.low>=0.25&&r.flN>=5?"strong":r.low>0?"some":"weak"}
+/* fewer than 3 bad days behind a factor: never ranked as a lead */
+function rankScore(r){return r.low===null?-9:r.low-(r.flN<3?1:0)}
 function computeSuspects(rows){
   var factors=[["moon","Full-moon window (±3 days)",function(e){return Math.abs(moonAt(parseYmd(e.date)).fromFull)<=WINDOW},function(){return true}]];
   WXF.forEach(function(x){factors.push([x[0],x[1],function(e){return wxHit(e.date,x[0])},function(e){return wxKnown(e.date)}])});
@@ -967,9 +982,11 @@ function computeSuspects(rows){
     var fl=0,flN=0,ot=0,otN=0;
     rows.forEach(function(e){ if(!f[3](e)) return; var hit=f[2](e); if(e.severity>=FLARE){flN++; if(hit) fl++;} else {otN++; if(hit) ot++;} });
     var pf=flN?fl/flN:null, po=otN?ot/otN:null, gap=(pf!==null&&po!==null)?pf-po:null;
-    return {name:f[1],fl:fl,flN:flN,ot:ot,otN:otN,pf:pf,po:po,gap:gap,hot:gap!==null&&flN>=4&&fl>=3&&gap>=0.25};
+    var low=gapLow(fl,flN,ot,otN);
+    return {name:f[1],fl:fl,flN:flN,ot:ot,otN:otN,pf:pf,po:po,gap:gap,low:low,hot:low!==null&&low>0&&flN>=4};
   }).filter(function(r){return r.fl+r.ot>0||r.name.indexOf("Full-moon")===0||r.name.indexOf("(UCT week)")>0||r.name.indexOf("WHO daily")>0||WXF.some(function(x){return x[1]===r.name})});
-  out.sort(function(a,b){return (b.gap===null?-9:b.gap)-(a.gap===null?-9:a.gap)});
+  out.sort(function(a,b){return rankScore(b)-rankScore(a)||((b.gap===null?-9:b.gap)-(a.gap===null?-9:a.gap))});
+  out.forEach(function(r){r.ev=evidence(r)});
   return out;
 }
 function renderSuspects(rows){
@@ -978,7 +995,7 @@ function renderSuspects(rows){
   var body=$("sus").querySelector("tbody");
   if(!rows.length){body.innerHTML='<tr><td colspan="4" class="muted" style="font-family:var(--f-body)">Once you have logged a few flare days and some clear days, each factor is ranked here by how much more often it shows up on bad days.</td></tr>';return}
   body.innerHTML=out.map(function(r){
-    return '<tr class="'+(r.hot?"hot":"")+'"><td>'+r.name+'</td><td>'+pct(r.fl,r.flN)+'</td><td>'+pct(r.ot,r.otN)+'</td><td><span class="lift">'+(r.gap===null?"—":(r.gap>0?"+":"")+Math.round(r.gap*100))+'</span></td></tr>';
+    return '<tr class="'+(r.hot?"hot":"")+'"><td>'+r.name+'</td><td>'+pct(r.fl,r.flN)+'</td><td>'+pct(r.ot,r.otN)+'</td><td><span class="lift">'+(r.gap===null?"—":(r.gap>0?"+":"")+Math.round(r.gap*100))+'</span>'+(r.ev?'<span class="ev ev-'+r.ev+'">'+r.ev+'</span>':'')+'</td></tr>';
   }).join("");
 }
 function renderAll(){renderWeek();renderHistory();renderAnalysis()}
@@ -1411,7 +1428,7 @@ function reportData(){
     var ch=[]; used.forEach(function(e){var later=entries[addDays(e.date,2)]; if(later) ch.push(later.severity-e.severity)});
     return {name:t,days:used.length,avg:used.length?used.reduce(function(a,e){return a+e.severity},0)/used.length:null,change:ch.length>=3?ch.reduce(function(a,b){return a+b},0)/ch.length:null,pairs:ch.length};
   }).filter(function(x){return x.days>0}).sort(function(a,b){return b.days-a.days});
-  var sus=computeSuspects(rows).filter(function(r){return r.name.indexOf("Full-moon")!==0&&r.name.indexOf("Hay fever")!==0&&r.gap!==null&&r.gap>=0.15&&r.fl>=2}).slice(0,6);
+  var sus=computeSuspects(rows).filter(function(r){return r.name.indexOf("Full-moon")!==0&&r.name.indexOf("Hay fever")!==0&&r.gap!==null&&r.gap>=0.15&&r.flN>=3&&r.low!==null&&r.low>0}).slice(0,6);
   var notes=flares.filter(function(e){return e.notes}).slice(-8);
   var hayDays=rows.filter(function(e){return (e.hayfever||[]).length>0}).length, hayFlare=flares.filter(function(e){return (e.hayfever||[]).length>0}).length;
   /* Things worth raising with a doctor: counts of what was logged, never a diagnosis. */
@@ -1472,7 +1489,7 @@ function renderReport(){
     '</tbody></table><div class="sub" style="margin-top:4px">"2 days later" is the average change in congestion two days after a day it was used (negative means better), shown when there are 3 or more pairs.</div>':'<p class="empty">No treatments recorded</p>';
   var su=d.sus.length?'<table><thead><tr><th>Factor</th><th class="n">On bad days</th><th class="n">Other days</th></tr></thead><tbody>'+
     d.sus.map(function(r){return '<tr><td>'+esc(r.name)+'</td><td class="n">'+pctOf(r.fl,r.flN)+'</td><td class="n">'+pctOf(r.ot,r.otN)+'</td></tr>'}).join("")+
-    '</tbody></table><div class="sub" style="margin-top:4px">Factors seen more often on bad days. Weather counts on the day or the day before. Patterns, not proof of cause.</div>':'<p class="empty">Not enough bad days yet to show patterns.</p>';
+    '</tbody></table><div class="sub" style="margin-top:4px">Factors seen more often on bad days, strongest evidence first; only links that hold up allowing for chance are listed. Weather counts on the day or the day before. Patterns, not proof of cause.</div>':'<p class="empty">Not enough bad days yet to show patterns.</p>';
   h+='<section class="two"><div><h4>Treatments</h4>'+tr+'</div><div><h4>Possible triggers</h4>'+su+'</div></section>';
   if(d.eps.length){
     h+='<section><h4>Flare episodes</h4><table><thead><tr><th>Started</th><th class="n">Days</th><th class="n">Peak</th><th>Taken</th><th>Around the start</th></tr></thead><tbody>'+
@@ -1517,7 +1534,7 @@ $("repCopy").addEventListener("click",function(){
 });
 
 /* ---------- Help & feedback ---------- */
-var APP_VERSION="2026.10.25.10";
+var APP_VERSION="2026.10.28";
 /* Optional: a Web3Forms access key sends feedback straight to an inbox. Empty = use the share sheet. */
 var FEEDBACK_KEY="";
 $("appVer").textContent="App version "+APP_VERSION;
