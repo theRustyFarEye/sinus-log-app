@@ -147,6 +147,7 @@ legend{font-size:.82rem;font-weight:600;padding:0;margin-bottom:8px}
 .wx .cell{background:var(--sunk);border-radius:8px;padding:8px 10px;min-width:0}
 .wx .cell .v{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:.95rem;font-weight:500}
 .wx .cell .k{font-size:.72rem;color:var(--muted)}
+.wx .cell:nth-child(7){grid-column:1/-1}
 .wx .tagline{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px}
 .wx .tag{font-size:.76rem;font-weight:600;padding:2px 9px;border-radius:999px;background:var(--accent);color:var(--accent-ink)}
 .wx .none{grid-column:1/-1;font-size:.85rem;color:var(--muted)}
@@ -376,6 +377,10 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
         <button class="btn ghost" type="button" id="csvBtn2">Download CSV</button>
       </div>
     </div>
+    <div class="actions" style="border-top:1px solid var(--line);padding-top:12px">
+      <span class="note" id="appVer2"></span>
+      <button class="linkbtn" type="button" id="updBtn2">Check for updates</button>
+    </div>
     <details id="ghDetails" class="ghbox">
     <summary>Sync between devices with your own GitHub (optional)</summary>
     <p class="note" style="margin-top:8px">New to this? <button class="linkbtn" type="button" id="syncHow">See the step-by-step guide</button> in Help.</p>
@@ -595,6 +600,24 @@ function fullMoonsBetween(a,b){
   return out;
 }
 
+/* Sunrise and sunset from date and position (the standard solar-position formulas, as in SunCalc). No network needed. */
+function sunTimes(ds,lat,lon){
+  var rad=Math.PI/180, dayMs=864e5, J1970=2440588, J2000=2451545;
+  var p=ds.split("-"), noon=new Date(+p[0],+p[1]-1,+p[2],12,0,0);
+  var days=noon.valueOf()/dayMs-0.5+J1970-J2000, lw=rad*-lon, phi=rad*lat;
+  var n=Math.round(days-0.0009-lw/(2*Math.PI)), dsn=0.0009+lw/(2*Math.PI)+n;
+  var M=rad*(357.5291+0.98560028*dsn), C=rad*(1.9148*Math.sin(M)+0.02*Math.sin(2*M)+0.0003*Math.sin(3*M));
+  var L=M+C+rad*102.9372+Math.PI, dec=Math.asin(Math.sin(L)*Math.sin(rad*23.4397));
+  var Jnoon=J2000+dsn+0.0053*Math.sin(M)-0.0069*Math.sin(2*L);
+  var cosw=(Math.sin(rad*-0.833)-Math.sin(phi)*Math.sin(dec))/(Math.cos(phi)*Math.cos(dec));
+  if(cosw<-1||cosw>1) return null;
+  var w=Math.acos(cosw), Jset=J2000+0.0009+(w+lw)/(2*Math.PI)+n+0.0053*Math.sin(M)-0.0069*Math.sin(2*L), Jrise=Jnoon-(Jset-Jnoon);
+  var toDate=function(j){return new Date((j+0.5-J1970)*dayMs)};
+  return {rise:toDate(Jrise),set:toDate(Jset)};
+}
+function hm(d){return pad(d.getHours())+":"+pad(d.getMinutes())}
+function sunText(ds,pt){var t=sunTimes(ds,pt.lat,pt.lon);return t?hm(t.rise)+"–"+hm(t.set):""}
+
 /* ---------- Moon drawing (Southern Hemisphere: waxing side lit on the left) ---------- */
 function drawMoon(svg, m){
   var r=44, cx=50, cy=50;
@@ -624,10 +647,10 @@ var COMPASS=["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W",
 function compass(deg){return COMPASS[Math.round(((deg%360)+360)%360/22.5)%16]}
 function prevDay(ds){var d=parseYmd(ds);d.setDate(d.getDate()-1);return ymd(d)}
 /* An entry logged with location on carries its own weather; otherwise the home town's. */
-function wxDay(ds){var e=entries[ds];return (e&&e.wx)?e.wx:weather[ds]}
+function wxDay(ds){var e=entries[ds];if(e&&e.wx&&!(e.place&&nearHome(e.place)&&weather[ds])) return e.wx;return weather[ds]}
 /* Air quality (daily mean PM2.5 / PM10). Away entries carry their own; otherwise the home town's. */
 var air={};
-function airDay(ds){var e=entries[ds];if(e&&e.wx) return typeof e.wx.pm10==="number"?{pm2_5:e.wx.pm2_5,pm10:e.wx.pm10}:null;return air[ds]}
+function airDay(ds){var e=entries[ds];if(e&&e.wx&&!(e.place&&nearHome(e.place))) return typeof e.wx.pm10==="number"?{pm2_5:e.wx.pm2_5,pm10:e.wx.pm10}:null;return air[ds]}
 function airHit(ds,key,limit){var a=airDay(ds),b=airDay(prevDay(ds));return !!((a&&a[key]>limit)||(b&&b[key]>limit))}
 function airLevel(v,limit){return v==null?-1:v<=limit?1:v<=limit*2.5?2:3}
 var AIR_WORD=["","Good","Above limit","High"];
@@ -682,7 +705,7 @@ function wxShort(ds){
 function renderWx(ds){
   var box=$("wxBox"), w=wxDay(ds), en=entries[ds];
   $("wxLbl").textContent="Weather in "+(en&&en.place?(en.place.name||"your location"):HOME.name);
-  if(!w){box.innerHTML='<div class="none">'+(ds>=ymd(new Date())?"Weather for this day is added the next morning.":"No weather on record for this day.")+'</div>';setSum("wx",ds>=ymd(new Date())?"Added tomorrow":"No data");return}
+  if(!w){box.innerHTML='<div class="cell"><div class="v">'+sunText(ds,placeFor(ds))+'</div><div class="k">Sunrise–sunset</div></div><div class="none">'+(ds>=ymd(new Date())?"The rest of the weather for this day is added the next morning.":"No weather on record for this day.")+'</div>';setSum("wx",ds>=ymd(new Date())?"Added tomorrow":"No data");return}
   var f=wxFlags(ds), dp=f.dp;
   var cells=[
     [w.rain_mm.toFixed(1)+" mm","Rain"],
@@ -690,7 +713,8 @@ function renderWx(ds){
     [Math.round(w.gust_max_kmh)+" km/h","Max gust"],
     [w.pressure_hpa.toFixed(0)+(dp===null?"":" ("+(dp>0?"+":"")+dp.toFixed(1)+")"),"Pressure hPa"],
     [Math.round(w.rh_mean)+"%","Humidity"],
-    [Math.round(w.tmin)+"–"+Math.round(w.tmax)+"°","Temp °C"]
+    [Math.round(w.tmin)+"–"+Math.round(w.tmax)+"°","Temp °C"],
+    [sunText(ds,placeFor(ds)),"Sunrise–sunset"]
   ];
   var tagList=WXF.filter(function(x){return f[x[0]]}).map(function(x){return x[1].replace(/ \(.*\)/,"")});
   if(f.sector) tagList.splice(f.front?1:0,0,windTag(f.sector,placeFor(ds)));
@@ -852,12 +876,21 @@ $("form").addEventListener("submit",function(ev){
     daysFromFull:Math.round(m.fromFull*10)/10, updatedAt:new Date().toISOString()};
   Object.keys(GROUPS).forEach(function(g){rec[g]=readChips(g)});
   var prior=entries[ds];
-  if(loc.mode==="here"&&loc.lat!=null) rec.place={lat:Math.round(loc.lat*100)/100,lon:Math.round(loc.lon*100)/100,name:loc.name||null};
+  if(loc.mode==="here"&&loc.lat!=null&&!nearHome(loc)) rec.place={lat:Math.round(loc.lat*100)/100,lon:Math.round(loc.lon*100)/100,name:loc.name||null};
   else if(prior&&prior.place&&loc.mode!=="here"){ /* editing an away entry from home keeps where it was logged */ rec.place=prior.place; if(prior.wx) rec.wx=prior.wx }
   if(rec.place&&prior&&prior.wx&&prior.place&&prior.place.lat===rec.place.lat&&prior.place.lon===rec.place.lon) rec.wx=prior.wx;
-  commit(rec); loadForm(ds);
-  if(rec.place&&(!rec.wx||rec.wx.partial)) fillPlaceWx(ds);
-  setStatus(cfg.token?"Saved. Syncing to GitHub…":"Saved on this device.");
+  var finish=function(){
+    rec.updatedAt=new Date().toISOString(); commit(rec); loadForm(ds); $("saveBtn").disabled=false;
+    setStatus(cfg.token?"Saved. Syncing to GitHub…":"Saved on this device.");
+  };
+  if(rec.place&&(!rec.wx||rec.wx.partial)){
+    /* get that place's weather first, so the entry goes to GitHub in one save (give up after 6 s) */
+    $("saveBtn").disabled=true; setStatus("Saving… getting the weather for "+(rec.place.name||"this place"));
+    var done=false, t=setTimeout(function(){if(!done){done=true;finish()}},6000);
+    fetchPlaceWx(rec.place,ds).then(function(wx){if(done) return; done=true; clearTimeout(t); if(wx) rec.wx=wx; finish()});
+    return;
+  }
+  finish();
 });
 function setStatus(t,err){$("status").textContent=t;$("status").className="status"+(err?" err":"")}
 
@@ -1055,10 +1088,16 @@ function setSync(msg,kind){
 }
 function b64e(s){var b=new TextEncoder().encode(s),out="";for(var i=0;i<b.length;i+=0x8000) out+=String.fromCharCode.apply(null,b.subarray(i,i+0x8000));return btoa(out)}
 function b64d(s){var bin=atob(s.replace(/\s/g,"")),b=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++) b[i]=bin.charCodeAt(i);return new TextDecoder().decode(b)}
+/* fetch with a time limit, so a bad signal can't leave a sync hanging */
+function fetchT(url,opts,ms){
+  opts=opts||{}; if(typeof AbortController==="undefined") return fetch(url,opts);
+  var c=new AbortController(), t=setTimeout(function(){c.abort()},ms||15000); opts.signal=c.signal;
+  return fetch(url,opts).then(function(r){clearTimeout(t);return r},function(e){clearTimeout(t);throw e});
+}
 function gh(path,opt){
   opt=opt||{};
   var h={"Authorization":"Bearer "+cfg.token,"Accept":opt.raw?"application/vnd.github.raw+json":"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28"};
-  return fetch("https://api.github.com/repos/"+encodeURIComponent(cfg.owner)+"/"+encodeURIComponent(cfg.repo)+(path?"/contents/"+path:""),
+  return fetchT("https://api.github.com/repos/"+encodeURIComponent(cfg.owner)+"/"+encodeURIComponent(cfg.repo)+(path?"/contents/"+path:""),
     {method:opt.method||"GET",headers:h,body:opt.body?JSON.stringify(opt.body):undefined,cache:"no-store"});
 }
 function fail(res){var e=new Error("http "+res.status);e.status=res.status;throw e}
@@ -1099,20 +1138,26 @@ function errText(e){
   if(e&&e.status===409) return "Another device saved at the same moment. Tap Sync now to merge.";
   return "Couldn't reach GitHub. Your changes are safe on this device; tap Sync now to retry.";
 }
-function scheduleSync(){clearTimeout(syncTimer);syncTimer=setTimeout(sync,1200)}
+var autoSyncs=[];
+function scheduleSync(){
+  clearTimeout(syncTimer);
+  var now=Date.now(); autoSyncs=autoSyncs.filter(function(t){return now-t<60000}); autoSyncs.push(now);
+  /* safety: if something keeps asking to sync, slow right down instead of looping */
+  syncTimer=setTimeout(sync, autoSyncs.length>6?60000:3000);
+}
+var manualSync=false, syncAgain=false;
 function sync(){
   if(!cfg.token){setSync();return Promise.resolve()}
-  if(syncing){scheduleSync();return Promise.resolve()}
+  if(syncing){syncAgain=true;return Promise.resolve()}
   syncing=true; setSync("Syncing with GitHub…");
   return pushLogs(0)
-    .then(function(){return useRepoWeather()?getFile("weather.json"):{data:null}})
-    .then(function(w){if(w.data&&w.data.days){weather=w.data.days;lsSet("weather",weather)}})
-    .then(function(){return getFile("pollen.json").catch(function(){return {data:null}})})
-    .then(function(p){if(p.data&&p.data.reports){pollen=p.data.reports;lsSet("pollen",pollen)} else return loadPublicPollen(true);
-      if(p.data&&p.data.sites){Object.keys(p.data.sites).forEach(function(n){SITE_XY[n]=p.data.sites[n]})}})
-    .then(function(){syncing=false;lastSync=new Date().toISOString();lsSet("lastSync",lastSync);renderAll();showDateMoon();updateWxSource();renderNowPollen();renderNow();setSync();fillPlaceWx();
+    .then(function(){var due=manualSync||Date.now()-(lsGet("wxRepoAt",0)||0)>30*60*1000; return useRepoWeather()&&due?getFile("weather.json"):{data:null}})
+    .then(function(w){if(w.data&&w.data.days){weather=w.data.days;lsSet("weather",weather);lsSet("wxRepoAt",Date.now())}})
+    .then(function(){return loadPublicPollen(manualSync)})
+    .then(function(){manualSync=false})
+    .then(function(){syncing=false;if(syncAgain){syncAgain=false;scheduleSync()}lastSync=new Date().toISOString();lsSet("lastSync",lastSync);renderAll();showDateMoon();updateWxSource();renderNowPollen();renderNow();setSync();fillPlaceWx();
        if($("status").textContent.indexOf("Syncing")>=0) setStatus("Saved and synced.");})
-    .catch(function(e){syncing=false;setSync(errText(e),"err");if($("status").textContent.indexOf("Syncing")>=0) setStatus("Saved on this device. GitHub sync will retry.",true)});
+    .catch(function(e){syncing=false;syncAgain=false;setSync(errText(e),"err");if($("status").textContent.indexOf("Syncing")>=0) setStatus("Saved on this device. GitHub sync will retry.",true)});
 }
 /* ---------- Home town, and right now (live weather + this week's pollen) ---------- */
 var HB={lat:-34.04,lon:18.36,name:"Hout Bay"}, CT={lat:-33.92,lon:18.42,name:"Cape Town"};
@@ -1224,7 +1269,7 @@ function loadPublicPollen(force){
   var meta=lsGet("polMeta",{}); if(!force&&Date.now()-(meta.at||0)<6*3600*1000&&Object.keys(pollen||{}).length) return Promise.resolve();
   function tryAt(i){
     if(i>=PUB_POLLEN.length) return Promise.resolve();
-    return fetch(PUB_POLLEN[i],{cache:"no-store"}).then(function(r){if(!r.ok) throw 0;return r.json()}).then(function(j){
+    return fetchT(PUB_POLLEN[i],{cache:"no-store"},15000).then(function(r){if(!r.ok) throw 0;return r.json()}).then(function(j){
       if(!j.reports) throw 0;
       pollen=j.reports; lsSet("pollen",pollen); lsSet("polMeta",{at:Date.now()});
       if(j.sites) Object.keys(j.sites).forEach(function(n){SITE_XY[n]=j.sites[n]});
@@ -1278,30 +1323,37 @@ function refreshLocQuietly(){
   if(loc.mode!=="here"||!navigator.permissions||!navigator.permissions.query) return;
   navigator.permissions.query({name:"geolocation"}).then(function(st){if(st.state==="granted") locate(false)}).catch(function(){});
 }
-/* Daily weather for an entry logged away from home. Today's values are provisional and refreshed later. */
-var placeBusy={};
-function fillPlaceWx(only){
+/* Daily weather for an entry logged away from home. Today's values are provisional and refreshed later.
+   Entries logged within 5 km of home just use the home town's weather. */
+function nearHome(p){return !!p&&kmBetween(p,HOME)<5}
+function fetchPlaceWx(place,ds){
+  var today=ymd(new Date()), prev=prevDay(ds);
+  return fetch("https://api.open-meteo.com/v1/forecast?latitude="+place.lat+"&longitude="+place.lon+WXQ+"&start_date="+prev+"&end_date="+ds+"&timezone=auto")
+    .then(function(r){if(!r.ok) throw 0;return r.json()}).then(function(j){
+      var d=j.daily, i=d.time.indexOf(ds), k=d.time.indexOf(prev); if(i<0) throw 0;
+      var wx={date:ds,source:"Open-Meteo",lat:place.lat,lon:place.lon,rain_mm:d.precipitation_sum[i],wind_max_kmh:d.wind_speed_10m_max[i],gust_max_kmh:d.wind_gusts_10m_max[i],
+        wind_dir_deg:d.wind_direction_10m_dominant[i],tmax:d.temperature_2m_max[i],tmin:d.temperature_2m_min[i],rh_mean:d.relative_humidity_2m_mean[i],pressure_hpa:d.pressure_msl_mean[i],
+        prevPressure:k>=0?d.pressure_msl_mean[k]:null,partial:ds>=today,fetchedAt:new Date().toISOString()};
+      if([wx.rain_mm,wx.gust_max_kmh,wx.wind_dir_deg,wx.pressure_hpa].some(function(v){return v==null})) throw 0;
+      /* air quality is a bonus: never let a slow reply hold up the weather */
+      var air=fetch(AQ+"&latitude="+place.lat+"&longitude="+place.lon+"&start_date="+ds+"&end_date="+ds).then(function(r){if(!r.ok) throw 0;return r.json()})
+        .then(function(q){var m=dailyMeans(q)[ds]; if(m){wx.pm2_5=m.pm2_5;wx.pm10=m.pm10}}).catch(function(){});
+      return Promise.race([air,new Promise(function(res){setTimeout(res,4000)})]).then(function(){return wx});
+    }).catch(function(){return null});
+}
+var placeBusy={}, placeTried={};
+function fillPlaceWx(){
   var today=ymd(new Date()), limit=ymd(new Date(Date.now()-90*86400000));
   Object.keys(entries).forEach(function(ds){
-    if(only&&ds!==only) return;
-    var e=entries[ds]; if(!e.place||placeBusy[ds]||ds<limit) return;
-    if(e.wx&&!(e.wx.partial&&ds<today)&&!(e.wx.partial&&only)) return;
-    placeBusy[ds]=true;
-    var prev=prevDay(ds);
-    fetch("https://api.open-meteo.com/v1/forecast?latitude="+e.place.lat+"&longitude="+e.place.lon+"&daily=precipitation_sum,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant,temperature_2m_max,temperature_2m_min,relative_humidity_2m_mean,pressure_msl_mean&start_date="+prev+"&end_date="+ds+"&timezone=auto")
-      .then(function(r){if(!r.ok) throw 0;return r.json()}).then(function(j){
-        var d=j.daily, i=d.time.indexOf(ds), k=d.time.indexOf(prev); if(i<0) throw 0;
-        var wx={date:ds,source:"Open-Meteo",lat:e.place.lat,lon:e.place.lon,rain_mm:d.precipitation_sum[i],wind_max_kmh:d.wind_speed_10m_max[i],gust_max_kmh:d.wind_gusts_10m_max[i],
-          wind_dir_deg:d.wind_direction_10m_dominant[i],tmax:d.temperature_2m_max[i],tmin:d.temperature_2m_min[i],rh_mean:d.relative_humidity_2m_mean[i],pressure_hpa:d.pressure_msl_mean[i],
-          prevPressure:k>=0?d.pressure_msl_mean[k]:null,partial:ds>=today,fetchedAt:new Date().toISOString()};
-        if([wx.rain_mm,wx.gust_max_kmh,wx.wind_dir_deg,wx.pressure_hpa].some(function(v){return v==null})) throw 0;
-        return fetch(AQ+"&latitude="+e.place.lat+"&longitude="+e.place.lon+"&start_date="+ds+"&end_date="+ds).then(function(r){if(!r.ok) throw 0;return r.json()})
-          .then(function(q){var m=dailyMeans(q)[ds]; if(m){wx.pm2_5=m.pm2_5;wx.pm10=m.pm10}}).catch(function(){}).then(function(){return wx});
-      }).then(function(wx){
-        if(!wx) return;
-        var cur=recs[ds]; if(!cur||cur.deleted||!cur.place) return;
-        var next=Object.assign({},cur,{wx:wx}); recs[ds]=next; dirty[ds]=true; persist(); rebuild(); renderAll(); showDateMoon(); scheduleSync();
-      }).catch(function(){}).then(function(){delete placeBusy[ds]});
+    var e=entries[ds]; if(!e.place||nearHome(e.place)||placeBusy[ds]||ds<limit) return;
+    if(e.wx&&!(e.wx.partial&&ds<today)) return;
+    if(placeTried[ds]&&Date.now()-placeTried[ds]<3600*1000) return;   /* at most one try an hour per day */
+    placeBusy[ds]=true; placeTried[ds]=Date.now();
+    fetchPlaceWx(e.place,ds).then(function(wx){
+      var cur=recs[ds]; if(!wx||!cur||cur.deleted||!cur.place) return;
+      /* bump updatedAt so the merge with GitHub keeps the new weather */
+      recs[ds]=Object.assign({},cur,{wx:wx,updatedAt:new Date().toISOString()}); dirty[ds]=true; persist(); rebuild(); renderAll(); showDateMoon(); scheduleSync();
+    }).then(function(){delete placeBusy[ds]});
   });
 }
 function sky(code,day){
@@ -1323,6 +1375,8 @@ function renderNow(){
   var dp=(typeof yp==="number")?c.pressure_msl-yp:null;
   var pr=el("span"); pr.appendChild(el("b",null,Math.round(c.pressure_msl)+" hPa")); if(dp!==null&&Math.abs(dp)>=1) pr.appendChild(document.createTextNode(" "+(dp<0?"↓":"↑")+Math.abs(dp).toFixed(0)+" vs yesterday")); frag.appendChild(pr);
   var h=el("span"); h.appendChild(el("b",null,Math.round(c.relative_humidity_2m)+"%")); h.appendChild(document.createTextNode(" humidity")); frag.appendChild(h);
+  var spt=(loc.mode==="here"&&loc.lat!=null)?loc:HOME, st=sunTimes(ymd(new Date()),spt.lat,spt.lon);
+  if(st){var su=el("span"); su.appendChild(document.createTextNode("Sunrise ")); su.appendChild(el("b",null,hm(st.rise))); su.appendChild(document.createTextNode(" · sunset ")); su.appendChild(el("b",null,hm(st.set))); frag.appendChild(su)}
   var rain=d.precipitation_sum&&d.precipitation_sum[ti]; if(rain>=0.2){var r=el("span");r.appendChild(el("b",null,rain.toFixed(1)+" mm"));r.appendChild(document.createTextNode(" rain today"));frag.appendChild(r)}
   var dir=c.wind_direction_10m, g=c.wind_gusts_10m;
   var here=(loc.mode==="here"&&loc.lat!=null)?loc:HOME;
@@ -1367,7 +1421,7 @@ function updateWxSource(){
 
 /* Settings */
 $("setBtn").addEventListener("click",function(){var s=$("settings");s.hidden=!s.hidden;this.setAttribute("aria-expanded",String(!s.hidden));if(!s.hidden){$("ghDetails").open=!!cfg.token;$("ghOwner").value=cfg.owner;$("ghRepo").value=cfg.repo;$("ghToken").value="";$("tokenState").textContent=cfg.token?"A token is saved on this device.":"No token saved yet."}});
-$("syncNow").addEventListener("click",function(){sync()});
+$("syncNow").addEventListener("click",function(){manualSync=true;sync()});
 $("ghForm").addEventListener("submit",function(ev){
   ev.preventDefault();
   var next={owner:$("ghOwner").value.trim(),repo:$("ghRepo").value.trim(),token:$("ghToken").value.trim()||cfg.token};
@@ -1534,10 +1588,11 @@ $("repCopy").addEventListener("click",function(){
 });
 
 /* ---------- Help & feedback ---------- */
-var APP_VERSION="2026.10.28";
+var APP_VERSION="2026.10.28.3";
 /* Optional: a Web3Forms access key sends feedback straight to an inbox. Empty = use the share sheet. */
 var FEEDBACK_KEY="";
-$("appVer").textContent="App version "+APP_VERSION;
+$("appVer").textContent="App version "+APP_VERSION; $("appVer2").textContent="App version "+APP_VERSION;
+$("updBtn2").addEventListener("click",function(){$("updBtn").click()});
 /* Only the app maker's own devices send feedback into GitHub; everyone else's goes by WhatsApp or email to him. */
 function isMakerDevice(){return !!cfg.token&&(cfg.owner||"").toLowerCase()==="therustyfareye"}
 function renderOwnerBits(){document.querySelectorAll(".ownerOnly").forEach(function(el){el.hidden=!isMakerDevice()})}
