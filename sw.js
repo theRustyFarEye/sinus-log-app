@@ -1,6 +1,6 @@
 /* Moonlit Sinus Log service worker: keeps the app shell available offline.
    GitHub API calls are never cached; data lives in the page's own storage. */
-const CACHE = "msl-shell-v21";
+const CACHE = "msl-shell-v22";
 const SHELL = ["./", "index.html", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL.map(u => new Request(u, { cache: "reload" })))).then(() => self.skipWaiting())); });
 self.addEventListener("activate", e => {

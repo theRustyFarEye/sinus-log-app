@@ -17,7 +17,7 @@
 :root{
   --bg:#EEF1F4; --surface:#FFFFFF; --sunk:#E4E9EE; --fg:#18212C; --muted:#5A6676; --line:#D3DAE2;
   --accent:#2C5C8C; --accent-ink:#FFFFFF; --moon:#EDE6CF; --moon-dark:#C6CDD6; --halo:rgba(44,92,140,.10);
-  --ok:#3F8A6B; --warn:#C08A1E; --bad:#BE4A38;
+  --ok:#3F8A6B; --warn:#C08A1E; --bad:#BE4A38; --sunrise:#F5C842; --sunset:#EF8A3A; --sun-ink:#2B1A00;
   --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
   --f-body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
   --f-mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -26,11 +26,11 @@
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
   --bg:#0F141B; --surface:#171E27; --sunk:#1E2732; --fg:#E4E9EF; --muted:#95A2B3; --line:#2A3442;
   --accent:#86ADD8; --accent-ink:#0F141B; --moon:#E9E1C6; --moon-dark:#2B3441; --halo:rgba(134,173,216,.12);
-  --ok:#6CBB98; --warn:#E0AE4C; --bad:#E57B68; color-scheme:dark } }
+  --ok:#6CBB98; --warn:#E0AE4C; --bad:#E57B68; --sunrise:#E9BC34; --sunset:#E7853A; --sun-ink:#1F1300; color-scheme:dark } }
 :root[data-theme="dark"]{
   --bg:#0F141B; --surface:#171E27; --sunk:#1E2732; --fg:#E4E9EF; --muted:#95A2B3; --line:#2A3442;
   --accent:#86ADD8; --accent-ink:#0F141B; --moon:#E9E1C6; --moon-dark:#2B3441; --halo:rgba(134,173,216,.12);
-  --ok:#6CBB98; --warn:#E0AE4C; --bad:#E57B68; color-scheme:dark }
+  --ok:#6CBB98; --warn:#E0AE4C; --bad:#E57B68; --sunrise:#E9BC34; --sunset:#E7853A; --sun-ink:#1F1300; color-scheme:dark }
 
 *{box-sizing:border-box}
 :root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -148,6 +148,8 @@ legend{font-size:.82rem;font-weight:600;padding:0;margin-bottom:8px}
 .wx .cell .v{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:.95rem;font-weight:500}
 .wx .cell .k{font-size:.72rem;color:var(--muted)}
 .wx .cell:nth-child(7){grid-column:1/-1}
+.sunr,.suns{display:inline-block;padding:0 6px;border-radius:5px;color:var(--sun-ink);font-weight:600;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.sunr{background:var(--sunrise)} .suns{background:var(--sunset)}
 .wx .tagline{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px}
 .wx .tag{font-size:.76rem;font-weight:600;padding:2px 9px;border-radius:999px;background:var(--accent);color:var(--accent-ink)}
 .wx .none{grid-column:1/-1;font-size:.85rem;color:var(--muted)}
@@ -616,7 +618,7 @@ function sunTimes(ds,lat,lon){
   return {rise:toDate(Jrise),set:toDate(Jset)};
 }
 function hm(d){return pad(d.getHours())+":"+pad(d.getMinutes())}
-function sunText(ds,pt){var t=sunTimes(ds,pt.lat,pt.lon);return t?hm(t.rise)+"–"+hm(t.set):""}
+function sunHtml(ds,pt){var t=sunTimes(ds,pt.lat,pt.lon);return t?'<span class="sunr">'+hm(t.rise)+'</span> – <span class="suns">'+hm(t.set)+'</span>':""}
 
 /* ---------- Moon drawing (Southern Hemisphere: waxing side lit on the left) ---------- */
 function drawMoon(svg, m){
@@ -705,7 +707,7 @@ function wxShort(ds){
 function renderWx(ds){
   var box=$("wxBox"), w=wxDay(ds), en=entries[ds];
   $("wxLbl").textContent="Weather in "+(en&&en.place?(en.place.name||"your location"):HOME.name);
-  if(!w){box.innerHTML='<div class="cell"><div class="v">'+sunText(ds,placeFor(ds))+'</div><div class="k">Sunrise–sunset</div></div><div class="none">'+(ds>=ymd(new Date())?"The rest of the weather for this day is added the next morning.":"No weather on record for this day.")+'</div>';setSum("wx",ds>=ymd(new Date())?"Added tomorrow":"No data");return}
+  if(!w){box.innerHTML='<div class="cell"><div class="v">'+sunHtml(ds,placeFor(ds))+'</div><div class="k">Sunrise – Sunset</div></div><div class="none">'+(ds>=ymd(new Date())?"The rest of the weather for this day is added the next morning.":"No weather on record for this day.")+'</div>';setSum("wx",ds>=ymd(new Date())?"Added tomorrow":"No data");return}
   var f=wxFlags(ds), dp=f.dp;
   var cells=[
     [w.rain_mm.toFixed(1)+" mm","Rain"],
@@ -714,7 +716,7 @@ function renderWx(ds){
     [w.pressure_hpa.toFixed(0)+(dp===null?"":" ("+(dp>0?"+":"")+dp.toFixed(1)+")"),"Pressure hPa"],
     [Math.round(w.rh_mean)+"%","Humidity"],
     [Math.round(w.tmin)+"–"+Math.round(w.tmax)+"°","Temp °C"],
-    [sunText(ds,placeFor(ds)),"Sunrise–sunset"]
+    [sunHtml(ds,placeFor(ds)),"Sunrise – Sunset"]
   ];
   var tagList=WXF.filter(function(x){return f[x[0]]}).map(function(x){return x[1].replace(/ \(.*\)/,"")});
   if(f.sector) tagList.splice(f.front?1:0,0,windTag(f.sector,placeFor(ds)));
@@ -1376,7 +1378,7 @@ function renderNow(){
   var pr=el("span"); pr.appendChild(el("b",null,Math.round(c.pressure_msl)+" hPa")); if(dp!==null&&Math.abs(dp)>=1) pr.appendChild(document.createTextNode(" "+(dp<0?"↓":"↑")+Math.abs(dp).toFixed(0)+" vs yesterday")); frag.appendChild(pr);
   var h=el("span"); h.appendChild(el("b",null,Math.round(c.relative_humidity_2m)+"%")); h.appendChild(document.createTextNode(" humidity")); frag.appendChild(h);
   var spt=(loc.mode==="here"&&loc.lat!=null)?loc:HOME, st=sunTimes(ymd(new Date()),spt.lat,spt.lon);
-  if(st){var su=el("span"); su.appendChild(document.createTextNode("Sunrise ")); su.appendChild(el("b",null,hm(st.rise))); su.appendChild(document.createTextNode(" · sunset ")); su.appendChild(el("b",null,hm(st.set))); frag.appendChild(su)}
+  if(st){var su=el("span"); su.appendChild(document.createTextNode("Sunrise ")); su.appendChild(el("span","sunr",hm(st.rise))); su.appendChild(document.createTextNode(" · Sunset ")); su.appendChild(el("span","suns",hm(st.set))); frag.appendChild(su)}
   var rain=d.precipitation_sum&&d.precipitation_sum[ti]; if(rain>=0.2){var r=el("span");r.appendChild(el("b",null,rain.toFixed(1)+" mm"));r.appendChild(document.createTextNode(" rain today"));frag.appendChild(r)}
   var dir=c.wind_direction_10m, g=c.wind_gusts_10m;
   var here=(loc.mode==="here"&&loc.lat!=null)?loc:HOME;
@@ -1588,7 +1590,7 @@ $("repCopy").addEventListener("click",function(){
 });
 
 /* ---------- Help & feedback ---------- */
-var APP_VERSION="2026.10.28.3";
+var APP_VERSION="2026.10.28.4";
 /* Optional: a Web3Forms access key sends feedback straight to an inbox. Empty = use the share sheet. */
 var FEEDBACK_KEY="";
 $("appVer").textContent="App version "+APP_VERSION; $("appVer2").textContent="App version "+APP_VERSION;
