@@ -148,6 +148,22 @@ legend{font-size:.82rem;font-weight:600;padding:0;margin-bottom:8px}
 .wx .cell .v{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:.95rem;font-weight:500}
 .wx .cell .k{font-size:.72rem;color:var(--muted)}
 .wx .cell:nth-child(7){grid-column:1/-1}
+.outlook.lvl-1{border-color:var(--warn);box-shadow:0 0 0 1px var(--warn) inset}
+.outlook.lvl-2{border-color:var(--bad);box-shadow:0 0 0 1px var(--bad) inset;background:linear-gradient(var(--surface),var(--surface)) padding-box}
+.olk-days{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.olk-day{background:var(--sunk);border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0;border:1px solid transparent}
+.olk-day.l1{border-color:var(--warn)} .olk-day.l2{border-color:var(--bad)}
+.olk-day .dn{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.olk-lvl{align-self:flex-start;font-size:.8rem;font-weight:700;padding:2px 9px;border-radius:999px;color:var(--accent-ink)}
+.olk-lvl.l0{background:var(--ok)} .olk-lvl.l1{background:var(--warn)} .olk-lvl.l2{background:var(--bad)}
+.olk-why{font-size:.78rem;color:var(--muted);line-height:1.35}
+.olk-tips{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:6px}
+.olk-tips h3{font-size:.95rem;margin:0;font-family:var(--f-display)}
+.olk-tips ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:4px;font-size:.9rem}
+.olk-tips .see{font-size:.84rem;color:var(--muted)}
+.riskbadge{font:inherit;font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:999px;border:0;cursor:pointer;color:var(--accent-ink)}
+.riskbadge.l1{background:var(--warn)} .riskbadge.l2{background:var(--bad)}
+@media (max-width:420px){ .olk-days{grid-template-columns:1fr} .olk-day{flex-direction:row;flex-wrap:wrap;align-items:center;gap:4px 10px} .olk-why{flex-basis:100%} }
 .sunr,.suns{display:inline-block;padding:0 6px;border-radius:5px;color:var(--sun-ink);font-weight:600;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
 .sunr{background:var(--sunrise)} .suns{background:var(--sunset)}
 .wx .tagline{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px}
@@ -285,6 +301,7 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
 
   <div class="syncbar">
     <span class="syncpill" id="syncPill">On this device only</span>
+    <button class="riskbadge" type="button" id="riskBadge" hidden></button>
     <button class="linkbtn" type="button" id="syncNow">Sync now</button>
     <button class="linkbtn" type="button" id="setBtn" aria-expanded="false" aria-controls="settings">Settings</button>
     <button class="linkbtn" type="button" id="repBtn" aria-expanded="false" aria-controls="report">Doctor report</button>
@@ -422,6 +439,16 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
       <div class="nowrow"><span class="nowk">Air now</span><span class="nowv" id="nowAir"><span class="sub">Loading…</span></span></div>
       <div class="nowrow"><span class="nowk" id="nowPolK">Pollen this week</span><span class="nowv" id="nowPol"><span class="sub">Arrives once sync is connected.</span></span></div>
     </div>
+  </section>
+
+  <section class="panel outlook" id="outlook" aria-labelledby="olkh">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap">
+      <h2 id="olkh">Flare outlook</h2>
+      <span class="note" id="olkMode"></span>
+    </div>
+    <div class="olk-days" id="olkDays"><p class="note">Loading the forecast…</p></div>
+    <div class="olk-tips" id="olkTips" hidden></div>
+    <p class="note" id="olkFoot">Based on the weather and air-quality forecast and this week's pollen. Patterns, not a promise, and not medical advice.</p>
   </section>
 
   <section class="panel" aria-labelledby="logh">
@@ -664,7 +691,10 @@ function windLabel(sec,pt){var nick=inCape(pt)?(sec==="SE"?" (Southeaster)":sec=
 function windTag(sec,pt){var nick=inCape(pt)?(sec==="SE"?"Southeaster":sec==="NW"?"Northwester":""):"";return nick||("Strong "+sec+" wind")}
 function wxFlags(ds){
   var w=wxDay(ds); if(!w) return null;
-  var w1=wxDay(prevDay(ds)), w2=wxDay(prevDay(prevDay(ds))), wn=wxDay(addDays(ds,1));
+  return dayFlags(w,wxDay(prevDay(ds)),wxDay(prevDay(prevDay(ds))),wxDay(addDays(ds,1)));
+}
+/* The weather rules for one day, given that day (w), the two before (w1, w2) and the next (wn). */
+function dayFlags(w,w1,w2,wn){
   var prevP=(typeof w.prevPressure==="number")?w.prevPressure:(w1&&w1.pressure_hpa), dir=w.wind_dir_deg, gust=w.gust_max_kmh||0, rain=w.rain_mm||0;
   var dp=(typeof prevP==="number"&&typeof w.pressure_hpa==="number")?w.pressure_hpa-prevP:null;
   /* Cold front, anywhere: pressure falls 4+ hPa into a dip, then recovers, with rain or a temperature drop.
@@ -1018,7 +1048,7 @@ function computeSuspects(rows){
     rows.forEach(function(e){ if(!f[3](e)) return; var hit=f[2](e); if(e.severity>=FLARE){flN++; if(hit) fl++;} else {otN++; if(hit) ot++;} });
     var pf=flN?fl/flN:null, po=otN?ot/otN:null, gap=(pf!==null&&po!==null)?pf-po:null;
     var low=gapLow(fl,flN,ot,otN);
-    return {name:f[1],fl:fl,flN:flN,ot:ot,otN:otN,pf:pf,po:po,gap:gap,low:low,hot:low!==null&&low>0&&flN>=4};
+    return {key:f[0],name:f[1],fl:fl,flN:flN,ot:ot,otN:otN,pf:pf,po:po,gap:gap,low:low,hot:low!==null&&low>0&&flN>=4};
   }).filter(function(r){return r.fl+r.ot>0||r.name.indexOf("Full-moon")===0||r.name.indexOf("(UCT week)")>0||r.name.indexOf("WHO daily")>0||WXF.some(function(x){return x[1]===r.name})});
   out.sort(function(a,b){return rankScore(b)-rankScore(a)||((b.gap===null?-9:b.gap)-(a.gap===null?-9:a.gap))});
   out.forEach(function(r){r.ev=evidence(r)});
@@ -1033,7 +1063,7 @@ function renderSuspects(rows){
     return '<tr class="'+(r.hot?"hot":"")+'"><td>'+r.name+'</td><td>'+pct(r.fl,r.flN)+'</td><td>'+pct(r.ot,r.otN)+'</td><td><span class="lift">'+(r.gap===null?"—":(r.gap>0?"+":"")+Math.round(r.gap*100))+'</span>'+(r.ev?'<span class="ev ev-'+r.ev+'">'+r.ev+'</span>':'')+'</td></tr>';
   }).join("");
 }
-function renderAll(){renderWeek();renderHistory();renderAnalysis()}
+function renderAll(){renderWeek();renderHistory();renderAnalysis();if(typeof fc!=="undefined") renderOutlook()}
 
 /* ---------- Files out and in ---------- */
 function download(name,text,type){
@@ -1176,7 +1206,7 @@ function renderHomeUi(){
 }
 function setHome(h){
   HOME={lat:Math.round(h.lat*1000)/1000,lon:Math.round(h.lon*1000)/1000,name:h.name}; lsSet("home",HOME); homeChosen=true;
-  renderHomeUi(); nowWx=null; fetchNow(); fetchHomeWeather(true); air={}; fetchHomeAir(true); renderNowPollen(); renderAll(); showDateMoon(); updateWxSource();
+  renderHomeUi(); nowWx=null; fetchNow(); fetchHomeWeather(true); air={}; fetchHomeAir(true); fetchForecast(true); renderNowPollen(); renderAll(); showDateMoon(); updateWxSource();
 }
 /* Town picker: "use my location" or search by name (Open-Meteo geocoding). Used in the welcome card and in Settings. */
 function buildTownPick(box){
@@ -1304,7 +1334,7 @@ function locate(prompted){
   navigator.geolocation.getCurrentPosition(function(pos){
     var lat=pos.coords.latitude, lon=pos.coords.longitude, moved=loc.lat==null||kmBetween({lat:lat,lon:lon},loc)>2;
     loc={mode:"here",lat:lat,lon:lon,name:moved?null:loc.name,at:new Date().toISOString()};
-    lsSet("loc",loc); renderLocUi(); renderNowPollen(); nowWx=null; fetchNow();
+    lsSet("loc",loc); renderLocUi(); renderNowPollen(); nowWx=null; fetchNow(); fetchForecast(true);
     (moved||!loc.name?reverseName(lat.toFixed(3),lon.toFixed(3)):Promise.resolve(loc.name)).then(function(n){
       if(loc.mode!=="here") return;
       if(n&&kmBetween({lat:lat,lon:lon},HOME)<4) n=HOME.name;
@@ -1319,7 +1349,7 @@ function locate(prompted){
   },{enableHighAccuracy:false,timeout:15000,maximumAge:prompted?0:10*60*1000});
 }
 $("locBtn").addEventListener("click",function(){locate(true)});
-$("homeBtn").addEventListener("click",function(){loc={mode:"home"};lsSet("loc",loc);renderLocUi();renderNowPollen();nowWx=null;fetchNow()});
+$("homeBtn").addEventListener("click",function(){loc={mode:"home"};lsSet("loc",loc);renderLocUi();renderNowPollen();nowWx=null;fetchNow();fetchForecast(true)});
 /* Refresh the position quietly on open, but only if permission was already given. */
 function refreshLocQuietly(){
   if(loc.mode!=="here"||!navigator.permissions||!navigator.permissions.query) return;
@@ -1589,8 +1619,119 @@ $("repCopy").addEventListener("click",function(){
   else $("repMsg").textContent="Couldn't copy on this device.";
 });
 
+/* ---------- Flare outlook ----------
+   Forecast weather and air for today and the next two days, checked against the same rules as the diary.
+   With 4+ bad days logged, scored against your own suspects (strong or some); otherwise common sinus triggers. */
+var fc=lsGet("fc",null), fcFailed=false;
+function fcPoint(){return (loc.mode==="here"&&loc.lat!=null)?loc:HOME}
+function fcKey(){var p=fcPoint();return p.lat.toFixed(2)+","+p.lon.toFixed(2)}
+function fetchForecast(force){
+  var key=fcKey(); if(!force&&fc&&fc.key===key&&Date.now()-fc.at<3*3600*1000){renderOutlook();return}
+  var p=fcPoint(), ll="&latitude="+p.lat.toFixed(3)+"&longitude="+p.lon.toFixed(3);
+  var aq=fetchT(AQ+ll+"&past_days=1&forecast_days=4",{cache:"no-store"},15000).then(function(r){if(!r.ok) throw 0;return r.json()}).catch(function(){return null});
+  fetchT("https://api.open-meteo.com/v1/forecast?"+ll.slice(1)+WXQ+"&past_days=2&forecast_days=4&timezone=auto",{cache:"no-store"},15000)
+    .then(function(r){if(!r.ok) throw 0;return r.json()}).then(function(j){
+      var d=j.daily, days={};
+      d.time.forEach(function(t,i){
+        if(d.pressure_msl_mean[i]==null) return;
+        days[t]={date:t,rain_mm:d.precipitation_sum[i]||0,wind_max_kmh:d.wind_speed_10m_max[i],gust_max_kmh:d.wind_gusts_10m_max[i],wind_dir_deg:d.wind_direction_10m_dominant[i],
+          tmax:d.temperature_2m_max[i],tmin:d.temperature_2m_min[i],rh_mean:d.relative_humidity_2m_mean[i],pressure_hpa:d.pressure_msl_mean[i]};
+      });
+      return aq.then(function(q){ if(key!==fcKey()) return; fc={key:key,at:Date.now(),days:days,air:q?dailyMeans(q):{}}; fcFailed=false; lsSet("fc",fc); renderOutlook() });
+    }).catch(function(){ if(fc&&fc.key!==key) fc=null; fcFailed=true; renderOutlook() });
+}
+function fcWx(ds){return (fc&&fc.days&&fc.days[ds])||null}
+function fcFlagsFor(ds){
+  var w=fcWx(ds); if(!w) return null;
+  var g=function(d){return fcWx(d)||wxDay(d)};
+  return dayFlags(w,g(prevDay(ds)),g(prevDay(prevDay(ds))),fcWx(addDays(ds,1)));
+}
+/* Which conditions are expected on a day (counting the day before too, like the diary does). */
+function presentOn(ds){
+  var keys={};   /* key -> 2 on the day itself, 1 only the day before */
+  [[fcFlagsFor(ds),2],[fcFlagsFor(prevDay(ds)),1]].forEach(function(x){var f=x[0]; if(!f) return; var put=function(k){keys[k]=Math.max(keys[k]||0,x[1])};
+    WXF.forEach(function(y){if(f[y[0]]) put(y[0])}); if(f.sector) put("wind-"+f.sector)});
+  var air=(fc&&fc.air)||{}; [[ds,2],[prevDay(ds),1]].forEach(function(x){var m=air[x[0]]; if(m){if(m.pm2_5>15) keys.pm25=Math.max(keys.pm25||0,x[1]); if(m.pm10>45) keys.pm10=Math.max(keys.pm10||0,x[1])}});
+  var pr=latestPollenNear(fcPoint());
+  if(pr&&!pr.estimated){if(plv(pr.tree)>=3) keys["pol-tree"]=2; if(plv(pr.grass)>=2) keys["pol-grass"]=2; if(plv(pr.weed)>=2) keys["pol-weed"]=2; if(plv(pr.mould)>=2) keys["pol-mould"]=2}
+  return keys;
+}
+/* Pollen weighs little in the general outlook: in a Cape spring it's high nearly every week, and constant warnings get ignored.
+   Your own diary raises it if pollen turns out to matter for you. */
+var GENERAL={front:.35,pdrop:.25,gusty:.12,humid:.08,rain:.08,lowp:.08,pm25:.2,pm10:.18,"pol-tree":.1,"pol-grass":.08,"pol-weed":.06,"pol-mould":.06};
+var OLK_LABEL={front:"cold front",rain:"rain",gusty:"strong gusts",humid:"humid",pdrop:"pressure drop",lowp:"low pressure",pm25:"fine particles above WHO limit",pm10:"dust above WHO limit",
+  "pol-tree":"high tree pollen","pol-grass":"grass pollen","pol-weed":"weed pollen","pol-mould":"moulds"};
+function olkLabel(k){
+  if(k.indexOf("wind-")===0){var sec=k.slice(5), t=windTag(sec,fcPoint()); return /^Strong /.test(t)?"strong "+SECT_NAME[sec]+" wind":t.toLowerCase()}
+  return OLK_LABEL[k]||k;
+}
+function personalWeights(){
+  var rows=list(), bad=rows.filter(function(e){return e.severity>=FLARE}).length;
+  if(bad<4) return {bad:bad,w:null,n:0};
+  var w={}, n=0;
+  computeSuspects(rows).forEach(function(r){
+    if(!r.key||r.key==="moon"||r.key==="hay"||r.key.indexOf("x-")===0) return;   /* only things a forecast can know */
+    if((r.ev!=="strong"&&r.ev!=="some")||r.flN<3) return;
+    w[r.key]=Math.max(0.08,Math.min(0.6,r.low)); n++;
+  });
+  return {bad:bad,w:n?w:null,n:n};
+}
+function usedEver(name){return list().some(function(e){return (e.treatment||[]).indexOf(name)>=0})}
+function helpedBefore(){
+  return GROUPS.treatment.map(function(t){
+    var ch=[]; list().forEach(function(e){if((e.treatment||[]).indexOf(t)<0) return; var later=entries[addDays(e.date,2)]; if(later) ch.push(later.severity-e.severity)});
+    return {t:t,n:ch.length,c:ch.length?ch.reduce(function(a,b){return a+b},0)/ch.length:0};
+  }).filter(function(x){return x.n>=3&&x.c<=-1}).sort(function(a,b){return a.c-b.c}).slice(0,2);
+}
+var DAYLONG=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+function dayName(ds,i){return i===0?"Today":i===1?"Tomorrow":DAYLONG[parseYmd(ds).getDay()]}
+function cap(t){return t.charAt(0).toUpperCase()+t.slice(1)}
+function renderOutlook(){
+  var failed=fcFailed;
+  var box=$("olkDays"), panel=$("outlook"), badge=$("riskBadge"), tips=$("olkTips"); if(!box) return;
+  if(!fc){
+    box.innerHTML='<p class="note">'+(failed?"The forecast isn't available right now. It loads next time you're online.":"Loading the forecast…")+'</p>';
+    panel.className="panel outlook"; badge.hidden=true; tips.hidden=true; $("olkMode").textContent=""; return;
+  }
+  var pw=personalWeights(), personal=!!pw.w, W={}, pt=fcPoint();
+  if(personal){Object.keys(pw.w).forEach(function(k){W[k]=pw.w[k]}); Object.keys(GENERAL).forEach(function(k){if(W[k]==null) W[k]=GENERAL[k]*0.5})}
+  else{Object.keys(GENERAL).forEach(function(k){W[k]=GENERAL[k]}); if(inCape(pt)){W["wind-SE"]=.12;W["wind-NW"]=.1}}
+  $("olkMode").textContent=personal?"Based on your diary: "+pw.n+" of your suspects":"General outlook · personalises after 4 bad days ("+pw.bad+" so far)";
+  var today=ymd(new Date()), days=[today,addDays(today,1),addDays(today,2)], maxL=0, first=-1, union={};
+  box.innerHTML=days.map(function(ds,i){
+    if(!fcWx(ds)) return '<div class="olk-day"><span class="dn">'+dayName(ds,i)+'</span><span class="olk-why">No forecast</span></div>';
+    var keys=presentOn(ds), ks=Object.keys(keys).filter(function(k){return W[k]}).sort(function(a,b){return W[b]-W[a]});
+    var wt=function(k){return W[k]*(keys[k]===1?0.7:1)};   /* the day before counts, but less */
+    ks.sort(function(a,b){return wt(b)-wt(a)});
+    var score=1-ks.reduce(function(p,k){return p*(1-wt(k))},1), L=score>=0.45?2:score>=0.2?1:0;
+    if(L>maxL){maxL=L;first=i}
+    if(L>0) ks.forEach(function(k){union[k]=1});
+    var why=ks.slice(0,3).map(function(k){return olkLabel(k)+(keys[k]===1?" the day before":"")}).join(", ");
+    return '<div class="olk-day l'+L+'"><span class="dn">'+dayName(ds,i)+'</span><span class="olk-lvl l'+L+'">'+["Low","Elevated","High"][L]+'</span><span class="olk-why">'+esc(why?cap(why):"Nothing stands out")+'</span></div>';
+  }).join("");
+  panel.className="panel outlook"+(maxL?" lvl-"+maxL:"");
+  if(maxL){
+    var when=first===0?"today":first===1?"tomorrow":DAYLONG[parseYmd(days[first]).getDay()];
+    badge.textContent="Flare risk "+(maxL===2?"high":"elevated")+" "+when; badge.className="riskbadge l"+maxL; badge.hidden=false;
+    var k=Object.keys(union), has=function(re){return k.some(function(x){return re.test(x)})}, t=[];
+    t.push("Rinse with saline morning and evening to clear allergens and mucus.");
+    if(usedEver("Steroid spray")||usedEver("Combination spray (steroid + antihistamine)")) t.push("Keep using your daily steroid spray as prescribed; it works best before symptoms build.");
+    if(has(/^pol-|^pm|^wind-/)) t.push("Keep windows closed, and shower and change after time outdoors.");
+    if(has(/^pm|^wind-/)) t.push("In the workshop: extraction on and a dust mask or respirator, even for quick jobs.");
+    if(has(/^pol-/)&&usedEver("Antihistamine")) t.push("If antihistamines help you, keep them on hand for the high-pollen days.");
+    if(has(/^(front|pdrop|lowp|humid|rain)$/)) t.push("Steam or a hot shower can ease sinus pressure. Drink plenty of water.");
+    if(usedEver("Reliever pump (e.g. Venteze, Asthavent)")) t.push("Keep your reliever pump with you.");
+    var hb=helpedBefore();
+    var html='<h3>Be ready</h3><ul>'+t.map(function(x){return '<li>'+esc(x)+'</li>'}).join("")+'</ul>';
+    if(hb.length) html+='<p class="note"><b>What has helped you before:</b> '+hb.map(function(x){return esc(x.t)+' (about '+Math.abs(x.c).toFixed(1)+' points better two days later)'}).join("; ")+'.</p>';
+    html+='<p class="see">See a doctor if you get a fever, severe facial pain, swelling around the eyes, or symptoms lasting more than 10 days.</p>';
+    tips.innerHTML=html; tips.hidden=false;
+  } else { badge.hidden=true; tips.hidden=true }
+}
+$("riskBadge").addEventListener("click",function(){$("outlook").scrollIntoView({behavior:"smooth",block:"start"})});
+
 /* ---------- Help & feedback ---------- */
-var APP_VERSION="2026.10.28.4";
+var APP_VERSION="2026.10.28.5";
 /* Optional: a Web3Forms access key sends feedback straight to an inbox. Empty = use the share sheet. */
 var FEEDBACK_KEY="";
 $("appVer").textContent="App version "+APP_VERSION; $("appVer2").textContent="App version "+APP_VERSION;
@@ -1664,10 +1805,10 @@ $("fbForm").addEventListener("submit",function(ev){
 rebuild();
 renderTonight(); loadForm(ymd(new Date())); renderAll(); updateWxSource(); setSync();
 setInterval(renderTonight, 10*60*1000);
-renderHomeUi(); updateWxSource(); renderNow(); renderNowPollen(); fetchNow(); refreshLocQuietly();
+renderHomeUi(); updateWxSource(); renderNow(); renderNowPollen(); fetchNow(); refreshLocQuietly(); renderOutlook(); fetchForecast(false);
 fetchHomeWeather(false); fetchHomeAir(false); if(!cfg.token) loadPublicPollen(false);
 setInterval(function(){if(document.visibilityState==="visible") fetchNow()}, 15*60*1000);
-document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible"){refreshLocQuietly();fetchNow();fetchHomeWeather(false);fetchHomeAir(false);if(!cfg.token) loadPublicPollen(false)}});
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible"){refreshLocQuietly();fetchNow();fetchForecast(false);fetchHomeWeather(false);fetchHomeAir(false);if(!cfg.token) loadPublicPollen(false)}});
 window.addEventListener("online",fetchNow);
 sync();
 document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible") sync()});
