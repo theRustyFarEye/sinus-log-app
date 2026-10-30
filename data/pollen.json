@@ -7687,6 +7687,86 @@
      "estimated": true
     }
    }
+  },
+  "2026-10-30": {
+   "date": "2026-10-30",
+   "periodStart": "2026-10-24",
+   "periodEnd": "2026-10-30",
+   "link": "https://pollencount.co.za/report/30-october-2026/",
+   "sites": {
+    "Bloemfontein": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Cape Town": {
+     "tree": null,
+     "grass": null,
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Durban": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "George": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Gqeberha": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Johannesburg": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Kimberley": {
+     "tree": "low",
+     "grass": "moderate",
+     "weed": null,
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Potchefstroom": {
+     "tree": "low",
+     "grass": "low",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    },
+    "Pretoria": {
+     "tree": "high",
+     "grass": "moderate",
+     "weed": "low",
+     "mould": "low",
+     "dominant": null,
+     "estimated": false
+    }
+   }
   }
  }
 }
