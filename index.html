@@ -122,6 +122,8 @@ legend{font-size:.82rem;font-weight:600;padding:0;margin-bottom:8px}
 .fsub>summary{padding:9px 0;font-size:.84rem;font-weight:600}
 .fsub>summary .cnt{margin-left:auto;font-size:.75rem;font-weight:600;color:var(--accent)}
 .fsub>.chips{padding:2px 0 10px}
+.alertbox{margin-top:10px;padding:10px 12px;border-radius:8px;border:1.5px solid var(--bad);background:var(--sunk);font-size:.88rem;line-height:1.45}
+.alertbox b{color:var(--bad)} .alertbox a{color:var(--fg)}
 .chipsec{flex-basis:100%;font-family:var(--f-mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:4px}
 .chipsec:first-child{margin-top:0}
 .chip{font:inherit;font-size:.84rem;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--fg);cursor:pointer}
@@ -483,6 +485,10 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
       </details>
       <details class="fsec" id="sec-breathing"><summary><span class="fsec-t">Breathing and chest</span><span class="fsec-s" id="sum-breathing"></span></summary>
         <div class="chips" data-group="breathing"></div>
+        <div class="alertbox" id="chestAlert" role="alert" hidden>
+          <b>Chest pain can be serious.</b> If it's crushing or tight, spreads to your arm, jaw or back, or comes with breathlessness, sweating, nausea or feeling faint, get help now:
+          call <a href="tel:10177"><b>10177</b></a> (ambulance) or <a href="tel:112"><b>112</b></a> from a mobile, or ER24 on <a href="tel:084124"><b>084 124</b></a>. Don't wait to log it.
+        </div>
       </details>
       <details class="fsec" id="sec-exposures"><summary><span class="fsec-t">Exposures in the last 24 hours</span><span class="fsec-s" id="sum-exposures"></span></summary>
         <div class="subs" data-group="exposures"></div>
@@ -558,7 +564,8 @@ var SECTIONS = {
   symptoms:[[null,["Blocked nose","Facial pressure","Headache","Post-nasal drip","Discoloured mucus","Reduced smell","Ear pressure","Ache behind eyes","Fever",
     "Upper tooth or cheek pain","Bad breath or taste","Sore throat","Tiredness","Nosebleed"]]],
   hayfever:[[null,["Sneezing","Itchy nose","Runny nose (clear)","Itchy or watery eyes","Itchy throat or palate","Itchy ears","Red or puffy eyes","Earache","Itchy skin or hives"]]],
-  breathing:[[null,["Dry cough","Cough with phlegm","Night-time cough","Wheezing","Short of breath","Chest tightness","Mouth breathing or snoring"]]],
+  breathing:[[null,["Dry cough","Cough with phlegm","Night-time cough","Wheezing","Short of breath","Chest tightness","Mouth breathing or snoring",
+    "Chest pain","Racing heart or palpitations","Shaky or jittery","Dizzy or light-headed"]]],
   exposures:[
     ["Work and workshop",["Sawdust / sanding","MDF or board dust","Acetate / solvent fumes","Paint, lacquer or oil finish","Glue, resin or epoxy","Welding fumes","Metal grinding or cutting","Laser or CNC fumes","Cleaning chemicals or bleach","Flour, food or spice dust","Farm, animal or lab work","Hair or beauty products"]],
     ["Home and outdoors",["Garden / pollen","Cut grass","Dust (dirt roads)","House dust or vacuuming","Mould or damp","Pets (cats, dogs)","Smoke (fire, braai, second-hand)","Traffic fumes","Perfume or strong scents","Swimming pool (chlorine)","Cold air or temperature swing","Flying or diving","Sick contact (cold or flu)"]],
@@ -780,6 +787,8 @@ Object.keys(GROUPS).forEach(function(g){
 /* Closed panels show what's selected inside them. */
 function setSum(id,text,on){var el=$("sum-"+id); if(!el) return; el.textContent=text; el.classList.toggle("on",!!on)}
 function updateSummaries(){
+  var cp=document.querySelector('[data-group="breathing"] .chip[data-value="Chest pain"]');
+  if(cp){var on=cp.getAttribute("aria-pressed")==="true"; $("chestAlert").hidden=!on; if(on) $("sec-breathing").open=true}
   Object.keys(GROUPS).forEach(function(g){
     var sel=readChips(g); setSum(g,sel.length?sel.length+" · "+sel.join(", "):"None",sel.length>0);
     document.querySelectorAll('[data-group="'+g+'"] .fsub').forEach(function(d){var n=d.querySelectorAll('.chip[aria-pressed="true"]').length;d.querySelector(".cnt").textContent=n?n+" selected":""});
@@ -1520,6 +1529,11 @@ function reportData(){
   /* Things worth raising with a doctor: counts of what was logged, never a diagnosis. */
   function daysWith(group,names){return rows.filter(function(e){return (e[group]||[]).some(function(x){return names.indexOf(x)>=0})}).length}
   var flags=[], n;
+  n=daysWith("breathing",["Chest pain"]); if(n) flags.push("Chest pain on "+n+" day"+(n>1?"s":"")+": please discuss this first");
+  var pal=rows.filter(function(e){return (e.breathing||[]).some(function(x){return /^(Racing heart or palpitations|Shaky or jittery)$/.test(x)})});
+  if(pal.length){var withMed=pal.filter(function(e){return (e.treatment||[]).some(function(t){return t==="Decongestant"||/^Reliever pump/.test(t)})}).length;
+    flags.push("Racing heart, palpitations or shakiness on "+pal.length+" day"+(pal.length>1?"s":"")+(withMed?" ("+withMed+" of them after a decongestant or reliever pump)":""))}
+  n=daysWith("breathing",["Dizzy or light-headed"]); if(n) flags.push("Dizzy or light-headed on "+n+" day"+(n>1?"s":""));
   n=daysWith("breathing",["Wheezing","Short of breath","Chest tightness"]); if(n) flags.push("Wheezing, chest tightness or shortness of breath on "+n+" day"+(n>1?"s":""));
   n=daysWith("symptoms",["Fever"]); if(n) flags.push("Fever on "+n+" day"+(n>1?"s":""));
   n=rows.filter(function(e){return e.severity>=9}).length; if(n) flags.push("Severe congestion (9–10 out of 10) on "+n+" day"+(n>1?"s":""));
@@ -1731,7 +1745,7 @@ function renderOutlook(){
 $("riskBadge").addEventListener("click",function(){$("outlook").scrollIntoView({behavior:"smooth",block:"start"})});
 
 /* ---------- Help & feedback ---------- */
-var APP_VERSION="2026.10.28.5";
+var APP_VERSION="2026.10.30";
 /* Optional: a Web3Forms access key sends feedback straight to an inbox. Empty = use the share sheet. */
 var FEEDBACK_KEY="";
 $("appVer").textContent="App version "+APP_VERSION; $("appVer2").textContent="App version "+APP_VERSION;
