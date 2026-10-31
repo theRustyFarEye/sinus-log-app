@@ -129,6 +129,7 @@ legend{font-size:.82rem;font-weight:600;padding:0;margin-bottom:8px}
 .chipsec{flex-basis:100%;font-family:var(--f-mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:4px}
 .chipsec:first-child{margin-top:0}
 .chip{font:inherit;font-size:.84rem;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--fg);cursor:pointer}
+.chip[data-kind]:not([data-kind="bool"]){-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
 .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .btn{font:inherit;font-weight:600;padding:9px 18px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer}
@@ -493,10 +494,10 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
         </div>
       </details>
       <details class="fsec" id="sec-exposures"><summary><span class="fsec-t">Exposures in the last 24 hours</span><span class="fsec-s" id="sum-exposures"></span></summary>
-        <p class="amt-hint">Tap again for more hours or more times; keep tapping to clear.</p><div class="subs" data-group="exposures"></div>
+        <p class="amt-hint">Tap again for more hours, times or drinks. Press and hold to clear.</p><div class="subs" data-group="exposures"></div>
       </details>
       <details class="fsec" id="sec-treatment"><summary><span class="fsec-t">What you took or did</span><span class="fsec-s" id="sum-treatment"></span></summary>
-        <p class="amt-hint">Tap again to count doses (×1, ×2, ×3, ×4+); keep tapping to clear.</p><div class="subs" data-group="treatment"></div>
+        <p class="amt-hint">Tap again to count doses (×1, ×2, ×3, ×4+). Press and hold to clear.</p><div class="subs" data-group="treatment"></div>
       </details>
       <details class="fsec" id="sec-wx"><summary><span class="fsec-t"><span id="wxLbl">Weather</span> <span class="auto">auto</span></span><span class="fsec-s" id="sum-wx"></span></summary>
         <div class="wx" id="wxBox"></div>
@@ -771,7 +772,7 @@ var $ = function(id){return document.getElementById(id)};
 
 /* Amounts: some chips count doses, hours or drinks. Each tap steps up; after the top step it clears.
    Entries keep their plain lists (so everything else still works) plus a qty map: name -> step 1..4. */
-var LEVELS={dose:["×1","×2","×3","×4+"],hours:["<1 h","1–2 h","3–4 h","5 h+"],drinks:["1 drink","2 drinks","3 drinks","4+ drinks"],times:["×1","×2","×3","×4+"]};
+var LEVELS={dose:["×1","×2","×3","×4+"],hours:["<1 h","1–2 h","3–4 h","5 h+"],drinks:["1 drink","2 drinks","3 drinks","4 drinks","5 drinks","6 drinks","7 drinks","8 drinks","9 drinks","10 drinks","11 drinks","12+ drinks"],times:["×1","×2","×3","×4+"]};
 var HOUR_MID=[0,0.5,1.5,3.5,5];
 var ON_OFF={"Sick contact (cold or flu)":1,"Flying or diving":1,"Cold air or temperature swing":1,"Pets (cats, dogs)":1,"Perfume or strong scents":1,"Poor sleep":1,"Stress":1,
   "Nasal strips":1,"Vaseline in nostrils":1,"Hot drinks or honey":1,"Drank plenty of water":1};
@@ -785,7 +786,8 @@ function kindOf(g,name){
   }
   return "bool";
 }
-function qtyLabel(g,name,lvl){var k=kindOf(g,name);return k==="bool"||!lvl?"":LEVELS[k][Math.min(lvl,4)-1]}
+function maxLvl(k){return k==="bool"?1:LEVELS[k].length}
+function qtyLabel(g,name,lvl){var k=kindOf(g,name);return k==="bool"||!lvl?"":LEVELS[k][Math.min(lvl,maxLvl(k))-1]}
 function withQty(g,name,lvl){var l=qtyLabel(g,name,lvl);return l?name+" "+l:name}
 function setLevel(b,lvl){
   b.dataset.level=String(lvl); b.setAttribute("aria-pressed",lvl>0?"true":"false");
@@ -808,7 +810,14 @@ Object.keys(GROUPS).forEach(function(g){
     var b=document.createElement("button"); b.type="button"; b.className="chip"; b.textContent=name;
     var q=document.createElement("span"); q.className="q"; q.hidden=true; b.appendChild(q);
     b.id="chip-"+g+"-"+i; b.dataset.value=name; b.dataset.group=g; b.dataset.kind=kindOf(g,name); setLevel(b,0);
-    b.addEventListener("click",function(){var max=b.dataset.kind==="bool"?1:4, lvl=+b.dataset.level||0; setLevel(b,lvl>=max?0:lvl+1);updateSummaries()});
+    b.addEventListener("click",function(){if(b._held){b._held=false;return} var max=maxLvl(b.dataset.kind), lvl=+b.dataset.level||0; setLevel(b,lvl>=max?0:lvl+1);updateSummaries()});
+    /* press and hold clears a counting button */
+    if(b.dataset.kind!=="bool"){
+      var hold=null, clear=function(){clearTimeout(hold);hold=null};
+      b.addEventListener("pointerdown",function(){clear(); hold=setTimeout(function(){if(+b.dataset.level>0){b._held=true;setLevel(b,0);updateSummaries();if(navigator.vibrate) try{navigator.vibrate(15)}catch(e){}}},550)});
+      ["pointerup","pointerleave","pointercancel"].forEach(function(ev){b.addEventListener(ev,function(){clear(); if(b._held) setTimeout(function(){b._held=false},350)})});
+      b.addEventListener("contextmenu",function(e){if(+b.dataset.level>0) e.preventDefault()});
+    }
     target.appendChild(b);
   });
 });
@@ -832,7 +841,7 @@ document.querySelectorAll("details.fsec,details.fsub").forEach(function(d){
 });
 function readChips(g){return Array.prototype.map.call(document.querySelectorAll('[data-group="'+g+'"] .chip[aria-pressed="true"]'),function(b){return b.dataset.value})}
 function readQty(){var q={};document.querySelectorAll('.chip[data-group][aria-pressed="true"]').forEach(function(b){if(b.dataset.kind!=="bool") q[b.dataset.value]=+b.dataset.level||1});return q}
-function setChips(g,vals,qty){vals=vals||[];qty=qty||{};document.querySelectorAll('[data-group="'+g+'"] .chip').forEach(function(b){var on=vals.indexOf(b.dataset.value)>=0;setLevel(b,on?(b.dataset.kind==="bool"?1:Math.max(1,Math.min(4,+qty[b.dataset.value]||1))):0)})}
+function setChips(g,vals,qty){vals=vals||[];qty=qty||{};document.querySelectorAll('[data-group="'+g+'"] .chip').forEach(function(b){var on=vals.indexOf(b.dataset.value)>=0;setLevel(b,on?(b.dataset.kind==="bool"?1:Math.max(1,Math.min(maxLvl(b.dataset.kind),+qty[b.dataset.value]||1))):0)})}
 /* the amount step for an item on an entry (older entries: 1) */
 function lvlOf(e,name){return (e.qty&&e.qty[name])||1}
 
@@ -1785,7 +1794,7 @@ function renderOutlook(){
 $("riskBadge").addEventListener("click",function(){$("outlook").scrollIntoView({behavior:"smooth",block:"start"})});
 
 /* ---------- Help & feedback ---------- */
-var APP_VERSION="2026.10.31";
+var APP_VERSION="2026.10.31.2";
 /* Optional: a Web3Forms access key sends feedback straight to an inbox. Empty = use the share sheet. */
 var FEEDBACK_KEY="";
 $("appVer").textContent="App version "+APP_VERSION; $("appVer2").textContent="App version "+APP_VERSION;
