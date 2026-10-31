@@ -124,6 +124,8 @@ legend{font-size:.82rem;font-weight:600;padding:0;margin-bottom:8px}
 .fsub>.chips{padding:2px 0 10px}
 .alertbox{margin-top:10px;padding:10px 12px;border-radius:8px;border:1.5px solid var(--bad);background:var(--sunk);font-size:.88rem;line-height:1.45}
 .alertbox b{color:var(--bad)} .alertbox a{color:var(--fg)}
+.chip .q{font-family:var(--f-mono);font-size:.74rem;font-weight:600;margin-left:6px;padding:0 5px;border-radius:4px;background:var(--accent-ink);color:var(--accent)}
+.amt-hint{font-size:.78rem;color:var(--muted);margin:0 0 8px}
 .chipsec{flex-basis:100%;font-family:var(--f-mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:4px}
 .chipsec:first-child{margin-top:0}
 .chip{font:inherit;font-size:.84rem;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--fg);cursor:pointer}
@@ -491,10 +493,10 @@ tr.hot .lift{background:var(--bad);color:var(--accent-ink)}
         </div>
       </details>
       <details class="fsec" id="sec-exposures"><summary><span class="fsec-t">Exposures in the last 24 hours</span><span class="fsec-s" id="sum-exposures"></span></summary>
-        <div class="subs" data-group="exposures"></div>
+        <p class="amt-hint">Tap again for more hours or more times; keep tapping to clear.</p><div class="subs" data-group="exposures"></div>
       </details>
       <details class="fsec" id="sec-treatment"><summary><span class="fsec-t">What you took or did</span><span class="fsec-s" id="sum-treatment"></span></summary>
-        <div class="subs" data-group="treatment"></div>
+        <p class="amt-hint">Tap again to count doses (×1, ×2, ×3, ×4+); keep tapping to clear.</p><div class="subs" data-group="treatment"></div>
       </details>
       <details class="fsec" id="sec-wx"><summary><span class="fsec-t"><span id="wxLbl">Weather</span> <span class="auto">auto</span></span><span class="fsec-s" id="sum-wx"></span></summary>
         <div class="wx" id="wxBox"></div>
@@ -767,6 +769,31 @@ var entries = {};   /* date -> record */
 var editing = null;
 var $ = function(id){return document.getElementById(id)};
 
+/* Amounts: some chips count doses, hours or drinks. Each tap steps up; after the top step it clears.
+   Entries keep their plain lists (so everything else still works) plus a qty map: name -> step 1..4. */
+var LEVELS={dose:["×1","×2","×3","×4+"],hours:["<1 h","1–2 h","3–4 h","5 h+"],drinks:["1 drink","2 drinks","3 drinks","4+ drinks"],times:["×1","×2","×3","×4+"]};
+var HOUR_MID=[0,0.5,1.5,3.5,5];
+var ON_OFF={"Sick contact (cold or flu)":1,"Flying or diving":1,"Cold air or temperature swing":1,"Pets (cats, dogs)":1,"Perfume or strong scents":1,"Poor sleep":1,"Stress":1,
+  "Nasal strips":1,"Vaseline in nostrils":1,"Hot drinks or honey":1,"Drank plenty of water":1};
+function kindOf(g,name){
+  if(ON_OFF[name]) return "bool";
+  if(g==="treatment"){var sec=SECTIONS.treatment.filter(function(x){return x[1].indexOf(name)>=0})[0]; return sec&&sec[0]==="Protection and routines"?"bool":"dose"}
+  if(g==="exposures"){
+    if(name==="Alcohol") return "drinks";
+    if(/^(Smoking|Vaping|Cannabis)/.test(name)) return "times";
+    return "hours";
+  }
+  return "bool";
+}
+function qtyLabel(g,name,lvl){var k=kindOf(g,name);return k==="bool"||!lvl?"":LEVELS[k][Math.min(lvl,4)-1]}
+function withQty(g,name,lvl){var l=qtyLabel(g,name,lvl);return l?name+" "+l:name}
+function setLevel(b,lvl){
+  b.dataset.level=String(lvl); b.setAttribute("aria-pressed",lvl>0?"true":"false");
+  var l=qtyLabel(b.dataset.group,b.dataset.value,lvl), q=b.querySelector(".q");
+  if(q){q.textContent=l; q.hidden=!l}
+  b.setAttribute("aria-label",b.dataset.value+(l?", "+l:"")+(b.dataset.kind!=="bool"?". Tap again for more":""));
+}
+
 /* Chips */
 Object.keys(GROUPS).forEach(function(g){
   var box = document.querySelector('[data-group="'+g+'"]');
@@ -779,8 +806,9 @@ Object.keys(GROUPS).forEach(function(g){
       box.appendChild(d); target=d.querySelector(".chips");
     }
     var b=document.createElement("button"); b.type="button"; b.className="chip"; b.textContent=name;
-    b.id="chip-"+g+"-"+i; b.setAttribute("aria-pressed","false"); b.dataset.value=name;
-    b.addEventListener("click",function(){b.setAttribute("aria-pressed", b.getAttribute("aria-pressed")==="true"?"false":"true");updateSummaries()});
+    var q=document.createElement("span"); q.className="q"; q.hidden=true; b.appendChild(q);
+    b.id="chip-"+g+"-"+i; b.dataset.value=name; b.dataset.group=g; b.dataset.kind=kindOf(g,name); setLevel(b,0);
+    b.addEventListener("click",function(){var max=b.dataset.kind==="bool"?1:4, lvl=+b.dataset.level||0; setLevel(b,lvl>=max?0:lvl+1);updateSummaries()});
     target.appendChild(b);
   });
 });
@@ -790,7 +818,7 @@ function updateSummaries(){
   var cp=document.querySelector('[data-group="breathing"] .chip[data-value="Chest pain"]');
   if(cp){var on=cp.getAttribute("aria-pressed")==="true"; $("chestAlert").hidden=!on; if(on) $("sec-breathing").open=true}
   Object.keys(GROUPS).forEach(function(g){
-    var sel=readChips(g); setSum(g,sel.length?sel.length+" · "+sel.join(", "):"None",sel.length>0);
+    var sel=readChips(g), q=readQty(); setSum(g,sel.length?sel.length+" · "+sel.map(function(n){return withQty(g,n,q[n])}).join(", "):"None",sel.length>0);
     document.querySelectorAll('[data-group="'+g+'"] .fsub').forEach(function(d){var n=d.querySelectorAll('.chip[aria-pressed="true"]').length;d.querySelector(".cnt").textContent=n?n+" selected":""});
   });
   var t=$("notes").value.trim(); setSum("notes",t?t.replace(/\s+/g," "):"Empty",!!t);
@@ -803,7 +831,10 @@ document.querySelectorAll("details.fsec,details.fsub").forEach(function(d){
   d.addEventListener("toggle",function(){OPEN[d.id]=d.open;try{localStorage.setItem("msl:open",JSON.stringify(OPEN))}catch(e){}});
 });
 function readChips(g){return Array.prototype.map.call(document.querySelectorAll('[data-group="'+g+'"] .chip[aria-pressed="true"]'),function(b){return b.dataset.value})}
-function setChips(g,vals){vals=vals||[];document.querySelectorAll('[data-group="'+g+'"] .chip').forEach(function(b){b.setAttribute("aria-pressed", vals.indexOf(b.dataset.value)>=0?"true":"false")})}
+function readQty(){var q={};document.querySelectorAll('.chip[data-group][aria-pressed="true"]').forEach(function(b){if(b.dataset.kind!=="bool") q[b.dataset.value]=+b.dataset.level||1});return q}
+function setChips(g,vals,qty){vals=vals||[];qty=qty||{};document.querySelectorAll('[data-group="'+g+'"] .chip').forEach(function(b){var on=vals.indexOf(b.dataset.value)>=0;setLevel(b,on?(b.dataset.kind==="bool"?1:Math.max(1,Math.min(4,+qty[b.dataset.value]||1))):0)})}
+/* the amount step for an item on an entry (older entries: 1) */
+function lvlOf(e,name){return (e.qty&&e.qty[name])||1}
 
 /* Severity slider */
 function syncSev(){var v=+$("sev").value;$("sevNum").textContent=v;$("sevNum").style.color=sevColor(v);$("sevWord").textContent=WORDS[v]}
@@ -897,7 +928,7 @@ $("date").addEventListener("change",function(){loadForm($("date").value)});
 function loadForm(dateStr){
   $("date").value=dateStr; var e=entries[dateStr]; editing = e?dateStr:null;
   $("sev").value = e?e.severity:0; syncSev();
-  Object.keys(GROUPS).forEach(function(g){setChips(g, e?e[g]:[])});
+  Object.keys(GROUPS).forEach(function(g){setChips(g, e?e[g]:[], e&&e.qty)});
   $("notes").value = e&&e.notes?e.notes:"";
   updateSummaries();
   $("delBtn").hidden = !e; $("confirm").hidden=true;
@@ -916,6 +947,7 @@ $("form").addEventListener("submit",function(ev){
     moonPhase:m.name, illumination:Math.round(m.illum*1000)/1000, lunarDay:Math.round(m.age*10)/10,
     daysFromFull:Math.round(m.fromFull*10)/10, updatedAt:new Date().toISOString()};
   Object.keys(GROUPS).forEach(function(g){rec[g]=readChips(g)});
+  var qty=readQty(); if(Object.keys(qty).length) rec.qty=qty;
   var prior=entries[ds];
   if(loc.mode==="here"&&loc.lat!=null&&!nearHome(loc)) rec.place={lat:Math.round(loc.lat*100)/100,lon:Math.round(loc.lon*100)/100,name:loc.name||null};
   else if(prior&&prior.place&&loc.mode!=="here"){ /* editing an away entry from home keeps where it was logged */ rec.place=prior.place; if(prior.wx) rec.wx=prior.wx }
@@ -972,7 +1004,7 @@ function renderHistory(){
   if(!rows.length){box.innerHTML='<div class="empty-state">No entries yet. Start by back-filling the last few days of this flare in the week strip above, then log each evening. Every entry gets its moon phase stamped automatically.</div>';return}
   rows.forEach(function(e){
     var b=document.createElement("button"); b.type="button"; b.className="hrow"; b.id="h-"+e.date;
-    var m=moonAt(parseYmd(e.date)), wx=wxShort(e.date), tags=(wx?wx+" — ":"")+[].concat(e.symptoms||[],e.hayfever||[],e.breathing||[],e.exposures||[]).join(", ");
+    var m=moonAt(parseYmd(e.date)), wx=wxShort(e.date), tags=(wx?wx+" — ":"")+[].concat(e.symptoms||[],e.hayfever||[],e.breathing||[],(e.exposures||[]).map(function(n){return withQty("exposures",n,lvlOf(e,n))}),(e.treatment||[]).map(function(n){return withQty("treatment",n,lvlOf(e,n))})).join(", ");
     b.innerHTML='<span class="mono" style="font-size:.85rem">'+nice(parseYmd(e.date))+'</span><span class="pill" style="background:'+sevColor(e.severity)+'">'+e.severity+'</span>'+
       '<svg viewBox="0 0 100 100" width="22" height="22" aria-hidden="true"></svg><span class="tags"></span>';
     b.querySelector(".tags").textContent = tags || (e.notes||"");
@@ -1048,6 +1080,10 @@ function computeSuspects(rows){
   factors.push(["pm25","Fine particles above WHO daily limit (PM2.5 over 15)",function(e){return airHit(e.date,"pm2_5",15)},function(e){return !!airDay(e.date)}]);
   factors.push(["pm10","Dust above WHO daily limit (PM10 over 45)",function(e){return airHit(e.date,"pm10",45)},function(e){return !!airDay(e.date)}]);
   GROUPS.exposures.forEach(function(name){factors.push(["x-"+name,name,function(e){return (e.exposures||[]).indexOf(name)>=0},function(){return true}])});
+  /* dose-response: does more of it go with worse days? */
+  GROUPS.exposures.forEach(function(name){var k=kindOf("exposures",name); if(k==="bool") return;
+    var lbl=k==="hours"?name+" (3 h+)":k==="drinks"?name+" (3+ drinks)":name+" (3+ times)";
+    factors.push(["xh-"+name,lbl,function(e){return (e.exposures||[]).indexOf(name)>=0&&lvlOf(e,name)>=3},function(){return true}])});
   factors.push(["hay","Hay fever symptoms (any)",function(e){return (e.hayfever||[]).length>0},function(){return true}]);
   [["tree",3,"Tree pollen high (UCT week)"],["grass",2,"Grass pollen moderate or higher (UCT week)"],["weed",2,"Weed pollen moderate or higher (UCT week)"],["mould",2,"Moulds moderate or higher (UCT week)"]].forEach(function(x){
     factors.push(["pol-"+x[0],x[2],function(e){var r=pollenFor(e.date);return !!r&&!r.estimated&&plv(r[x[0]])>=x[1]},function(e){var r=pollenFor(e.date);return !!r&&!r.estimated}]);
@@ -1082,7 +1118,7 @@ function download(name,text,type){
 function csvText(){
   var head=["date","place","severity","moonPhase","illumination","daysFromFull","rain_mm","wind_dir","gust_kmh","pressure_hpa","humidity","pm2_5","pm10","pollen_site","tree_pollen","grass_pollen","weed_pollen","mould","symptoms","hayfever","breathing","exposures","treatment","notes"];
   var esc=function(v){v=Array.isArray(v)?v.join("; "):(v===undefined||v===null?"":String(v));return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
-  return head.join(",")+"\n"+list().map(function(e){var m=moonAt(parseYmd(e.date));var w=wxDay(e.date)||{};e=Object.assign({},e,{place:e.place?(e.place.name||(e.place.lat+","+e.place.lon)):HOME.name,moonPhase:m.name,illumination:Math.round(m.illum*100)+"%",daysFromFull:m.fromFull.toFixed(1),rain_mm:w.rain_mm,wind_dir:w.wind_dir_deg===undefined?"":compass(w.wind_dir_deg),gust_kmh:w.gust_max_kmh,pressure_hpa:w.pressure_hpa,humidity:w.rh_mean});var aq=airDay(e.date)||{};e.pm2_5=aq.pm2_5;e.pm10=aq.pm10;var pr=pollenFor(e.date)||{};e.pollen_site=pr.site?(pr.site+(pr.estimated?" (typical)":"")):"";e.tree_pollen=pr.tree;e.grass_pollen=pr.grass;e.weed_pollen=pr.weed;e.mould=pr.mould;return head.map(function(h){return esc(e[h])}).join(",")}).join("\n");
+  return head.join(",")+"\n"+list().map(function(e){var m=moonAt(parseYmd(e.date));var w=wxDay(e.date)||{};var e0=e; e=Object.assign({},e,{exposures:(e.exposures||[]).map(function(n){return withQty("exposures",n,lvlOf(e0,n))}),treatment:(e.treatment||[]).map(function(n){return withQty("treatment",n,lvlOf(e0,n))}),place:e.place?(e.place.name||(e.place.lat+","+e.place.lon)):HOME.name,moonPhase:m.name,illumination:Math.round(m.illum*100)+"%",daysFromFull:m.fromFull.toFixed(1),rain_mm:w.rain_mm,wind_dir:w.wind_dir_deg===undefined?"":compass(w.wind_dir_deg),gust_kmh:w.gust_max_kmh,pressure_hpa:w.pressure_hpa,humidity:w.rh_mean});var aq=airDay(e.date)||{};e.pm2_5=aq.pm2_5;e.pm10=aq.pm10;var pr=pollenFor(e.date)||{};e.pollen_site=pr.site?(pr.site+(pr.estimated?" (typical)":"")):"";e.tree_pollen=pr.tree;e.grass_pollen=pr.grass;e.weed_pollen=pr.weed;e.mould=pr.mould;return head.map(function(h){return esc(e[h])}).join(",")}).join("\n");
 }
 $("csvBtn").addEventListener("click",function(){download("sinus-moon-log-"+ymd(new Date())+".csv",csvText(),"text/csv")});
 $("csvBtn2").addEventListener("click",function(){download("sinus-moon-log-"+ymd(new Date())+".csv",csvText(),"text/csv")});
@@ -1514,14 +1550,16 @@ function reportData(){
   function freq(group){
     return GROUPS[group].map(function(name){
       var a=rows.filter(function(e){return (e[group]||[]).indexOf(name)>=0}).length, f=flares.filter(function(e){return (e[group]||[]).indexOf(name)>=0}).length;
-      return {name:name,all:a,flare:f};
+      var hrs=group==="exposures"&&kindOf(group,name)==="hours"?rows.filter(function(e){return (e[group]||[]).indexOf(name)>=0}).reduce(function(s,e){return s+HOUR_MID[Math.min(4,lvlOf(e,name))]},0):null;
+      return {name:name,all:a,flare:f,hrs:hrs};
     }).filter(function(x){return x.all>0}).sort(function(x,y){return y.all-x.all});
   }
   var byDate={}; rows.forEach(function(e){byDate[e.date]=e});
   var treat=GROUPS.treatment.map(function(t){
     var used=rows.filter(function(e){return (e.treatment||[]).indexOf(t)>=0});
     var ch=[]; used.forEach(function(e){var later=entries[addDays(e.date,2)]; if(later) ch.push(later.severity-e.severity)});
-    return {name:t,days:used.length,avg:used.length?used.reduce(function(a,e){return a+e.severity},0)/used.length:null,change:ch.length>=3?ch.reduce(function(a,b){return a+b},0)/ch.length:null,pairs:ch.length};
+    var kind=kindOf("treatment",t), doses=used.reduce(function(a,e){return a+lvlOf(e,t)},0), plus=used.some(function(e){return lvlOf(e,t)>=4});
+    return {name:t,kind:kind,doses:doses,plus:plus,days:used.length,avg:used.length?used.reduce(function(a,e){return a+e.severity},0)/used.length:null,change:ch.length>=3?ch.reduce(function(a,b){return a+b},0)/ch.length:null,pairs:ch.length};
   }).filter(function(x){return x.days>0}).sort(function(a,b){return b.days-a.days});
   var sus=computeSuspects(rows).filter(function(r){return r.name.indexOf("Full-moon")!==0&&r.name.indexOf("Hay fever")!==0&&r.gap!==null&&r.gap>=0.15&&r.flN>=3&&r.low!==null&&r.low>0}).slice(0,6);
   var notes=flares.filter(function(e){return e.notes}).slice(-8);
@@ -1541,7 +1579,9 @@ function reportData(){
   if(eps.length>=3) flags.push(eps.length+" separate flares in this period, so symptoms keep coming back");
   n=daysWith("symptoms",["Nosebleed"]); if(n) flags.push("Nosebleeds on "+n+" day"+(n>1?"s":""));
   n=daysWith("symptoms",["Upper tooth or cheek pain"]); var fev=daysWith("symptoms",["Discoloured mucus"]); if(n&&fev) flags.push("Discoloured mucus on "+fev+" days and upper tooth or cheek pain on "+n+" days");
-  n=daysWith("treatment",["Reliever pump (e.g. Venteze, Asthavent)"]); if(n) flags.push("Reliever pump used on "+n+" day"+(n>1?"s":""));
+  var rp="Reliever pump (e.g. Venteze, Asthavent)", rpDays=rows.filter(function(e){return (e.treatment||[]).indexOf(rp)>=0});
+  if(rpDays.length){var tot=rpDays.reduce(function(a,e){return a+lvlOf(e,rp)},0), top=Math.max.apply(null,rpDays.map(function(e){return lvlOf(e,rp)}));
+    flags.push("Reliever pump used on "+rpDays.length+" day"+(rpDays.length>1?"s":"")+", "+(top>=4?"at least ":"")+tot+" dose"+(tot>1?"s":"")+" in total"+(top>=2?", up to "+LEVELS.dose[top-1].replace("×","")+" in a day":""))}
   n=daysWith("treatment",["Steroid tablets"]); if(n) flags.push("Steroid tablets taken on "+n+" day"+(n>1?"s":""));
   n=daysWith("treatment",["Antibiotic"]); if(n) flags.push("Antibiotics taken on "+n+" day"+(n>1?"s":""));
   n=daysWith("treatment",["Decongestant"]); if(n>=7) flags.push("Decongestant used on "+n+" days (sprays are usually limited to a few days at a time)");
@@ -1584,8 +1624,8 @@ function renderReport(){
   }
   h+='<section class="three">'+symTable(d.sinus,"Sinus symptoms")+symTable(d.hay,"Hay fever symptoms")+symTable(d.breath,"Breathing and chest")+'</section>';
   h+='<section class="sub">Hay fever symptoms on '+pctOf(d.hayDays,d.rows.length)+' of logged days and '+pctOf(d.hayFlare,d.flares.length)+' of bad days.</section>';
-  var tr=d.treat.length?'<table><thead><tr><th>Treatment</th><th class="n">Days used</th><th class="n">Avg on the day</th><th class="n">2 days later</th></tr></thead><tbody>'+
-    d.treat.map(function(t){return '<tr><td>'+esc(t.name)+'</td><td class="n">'+t.days+'</td><td class="n">'+t.avg.toFixed(1)+'</td><td class="n">'+(t.change===null?"—":(t.change>0?"+":"")+t.change.toFixed(1))+'</td></tr>'}).join("")+
+  var tr=d.treat.length?'<table><thead><tr><th>Treatment</th><th class="n">Days used</th><th class="n">Doses</th><th class="n">Avg on the day</th><th class="n">2 days later</th></tr></thead><tbody>'+
+    d.treat.map(function(t){return '<tr><td>'+esc(t.name)+'</td><td class="n">'+t.days+'</td><td class="n">'+(t.kind==="bool"?"—":(t.plus?"≥":"")+t.doses)+'</td><td class="n">'+t.avg.toFixed(1)+'</td><td class="n">'+(t.change===null?"—":(t.change>0?"+":"")+t.change.toFixed(1))+'</td></tr>'}).join("")+
     '</tbody></table><div class="sub" style="margin-top:4px">"2 days later" is the average change in congestion two days after a day it was used (negative means better), shown when there are 3 or more pairs.</div>':'<p class="empty">No treatments recorded</p>';
   var su=d.sus.length?'<table><thead><tr><th>Factor</th><th class="n">On bad days</th><th class="n">Other days</th></tr></thead><tbody>'+
     d.sus.map(function(r){return '<tr><td>'+esc(r.name)+'</td><td class="n">'+pctOf(r.fl,r.flN)+'</td><td class="n">'+pctOf(r.ot,r.otN)+'</td></tr>'}).join("")+
@@ -1595,7 +1635,7 @@ function renderReport(){
     h+='<section><h4>Flare episodes</h4><table><thead><tr><th>Started</th><th class="n">Days</th><th class="n">Peak</th><th>Taken</th><th>Around the start</th></tr></thead><tbody>'+
       d.eps.slice(-8).map(function(ep){return '<tr><td style="white-space:nowrap">'+shortDate(ep.start)+'</td><td class="n">'+ep.len+'</td><td class="n">'+ep.peak+'/10</td><td>'+esc(ep.treat.join(", ")||"—")+'</td><td>'+esc(ep.tags.join(", ")||"—")+'</td></tr>'}).join("")+'</tbody></table></section>';
   }
-  if(d.exp.length) h+='<section><h4>Exposures recorded</h4><div>'+d.exp.map(function(x){return esc(x.name)+' ('+x.all+' days'+(x.flare?', '+x.flare+' bad':'')+')'}).join(" · ")+'</div></section>';
+  if(d.exp.length) h+='<section><h4>Exposures recorded</h4><div>'+d.exp.map(function(x){return esc(x.name)+' ('+x.all+' day'+(x.all>1?'s':'')+(x.hrs?', about '+Math.round(x.hrs)+' h':'')+(x.flare?', '+x.flare+' bad':'')+')'}).join(" · ")+'</div></section>';
   if(d.notes.length) h+='<section><h4>Notes from bad days</h4><table><tbody>'+d.notes.map(function(e){return '<tr><td style="white-space:nowrap">'+shortDate(e.date)+'</td><td class="n">'+e.severity+'/10</td><td>'+esc(e.notes)+'</td></tr>'}).join("")+'</tbody></table></section>';
   if(qs) h+='<section><h4>Questions for the doctor</h4><div class="qs">'+esc(qs)+'</div></section>';
   h+='<footer class="foot">Self-recorded daily by the patient in Moonlit Sinus Log (therustyfareye.github.io/sinus-log-app). Congestion is the patient\'s own 0–10 rating. Weather: Open-Meteo model data. Pollen: weekly UCT Lung Institute counts from the nearest sampling site. This is a diary summary, not a diagnosis.</footer>';
@@ -1684,7 +1724,7 @@ function personalWeights(){
   if(bad<4) return {bad:bad,w:null,n:0};
   var w={}, n=0;
   computeSuspects(rows).forEach(function(r){
-    if(!r.key||r.key==="moon"||r.key==="hay"||r.key.indexOf("x-")===0) return;   /* only things a forecast can know */
+    if(!r.key||r.key==="moon"||r.key==="hay"||/^xh?-/.test(r.key)) return;   /* only things a forecast can know */
     if((r.ev!=="strong"&&r.ev!=="some")||r.flN<3) return;
     w[r.key]=Math.max(0.08,Math.min(0.6,r.low)); n++;
   });
@@ -1745,7 +1785,7 @@ function renderOutlook(){
 $("riskBadge").addEventListener("click",function(){$("outlook").scrollIntoView({behavior:"smooth",block:"start"})});
 
 /* ---------- Help & feedback ---------- */
-var APP_VERSION="2026.10.30";
+var APP_VERSION="2026.10.31";
 /* Optional: a Web3Forms access key sends feedback straight to an inbox. Empty = use the share sheet. */
 var FEEDBACK_KEY="";
 $("appVer").textContent="App version "+APP_VERSION; $("appVer2").textContent="App version "+APP_VERSION;
